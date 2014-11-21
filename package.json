@@ -1,0 +1,12 @@
+{
+  "name": "monster",
+  "description": "Monster advancement app based on Pathfinder",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.9.5",
+    "jade": "^1.7.0",
+    "request": "2.45.0",
+    "cheerio": "0.17.0"
+  }
+}

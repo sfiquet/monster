@@ -1,15 +1,17 @@
 // calculations
 "use strict"
-var CALCULATION = {};
 
-CALCULATION.Sum = function(obj) {
+function Sum (obj) {
 	this.that = obj;
 	this.components = {};
-};
+}
 
 // set the function and its arguments (as passed to apply())
 // argsArray can be null
-CALCULATION.Sum.prototype.setComponent = function(key, func, argsArray) {
+Sum.prototype.setComponent = function(key, func, argsArray) {
+	if (!this.components[key]){
+		this.components[key] = {};
+	}
 	this.components[key].func = func;
 	
 	if (arguments.length >= 3) {
@@ -24,16 +26,16 @@ CALCULATION.Sum.prototype.setComponent = function(key, func, argsArray) {
 // - func: component function
 // - argsArray: array containing arguments for the function (as passed to apply())
 // returns undefined if the key is not found
-CALCULATION.Sum.prototype.getComponent = function(key) {
+Sum.prototype.getComponent = function(key) {
 	return this.components[key];
 };
 
-CALCULATION.Sum.prototype.removeComponent = function(key) {
+Sum.prototype.removeComponent = function(key) {
 	delete this.component[key];
 };
 
 // calls each component function with its arguments and adds the results together
-CALCULATION.Sum.prototype.calculate = function() {
+Sum.prototype.calculate = function() {
 	var result = 0, 
 		key;
 
@@ -52,6 +54,8 @@ CALCULATION.Sum.prototype.calculate = function() {
 
 // calculates the difference between the expected total and the result of the calculation
 // this is used to identify missing components
-CALCULATION.Sum.prototype.calculateDiscrepancy = function(expectedTotal){
+Sum.prototype.calculateDiscrepancy = function(expectedTotal){
 	return expectedTotal - this.calculate();
 };
+
+module.exports = Sum;

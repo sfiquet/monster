@@ -1,4 +1,6 @@
 "use strict"
+var Sum = require("./calculation");
+
 var MONSTER = {};
 
 // constructor
@@ -25,9 +27,12 @@ MONSTER.Monster = function(properties){
 	this.baseRef  = properties.baseRef || 0;
 	this.baseWill = properties.baseWill || 0;
 	
-	this.setPropertyCalculation("Fort", this.aggregation);
-	this.addCalculationComponent("Fort", this.getBaseFortBonus);
-	this.addCalculationComponent("Fort", this.getLifeForceMod);
+	this.Fort = new Sum(this);
+	this.Fort.setComponent("baseFort", this.getBaseFortBonus);
+	this.Fort.setComponent("lifeForceMod", this.getLifeForceMod);
+//	this.setPropertyCalculation("Fort", this.aggregation);
+//	this.addCalculationComponent("Fort", this.getBaseFortBonus);
+//	this.addCalculationComponent("Fort", this.getLifeForceMod);
 	// TO DO: only do this if the monster has the feat
 	// Alternatively the function could test it
 //	this.addCalculationComponent("Fort", this.featGreatFortitudeBonus);
@@ -401,7 +406,8 @@ MONSTER.Monster.prototype.displayMonster = function() {
 	console.log('components: ' + "not implemented");
 	console.log('hp: ' + this.getHP());
 	console.log('hp formula: ' + this.getHPFormula());
-	console.log('Fort: ' + this.calculateProperty("Fort"));
+//	console.log('Fort: ' + this.calculateProperty("Fort"));
+	console.log('Fort: ' + this.Fort.calculate());
 	console.log('Ref: ' + this.calculateProperty("Ref"));
 	console.log('Will: ' + this.calculateProperty("Will"));
 	console.log("OFFENSE");

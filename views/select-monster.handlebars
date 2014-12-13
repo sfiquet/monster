@@ -1,0 +1,12 @@
+<div>
+	<h2>Select Monster</h2>
+	{{#if monsters}}
+		<ul title="Click on a monster to select it.">
+			{{#each monsters}}
+				<li><a href="{{this.url}}">{{this.name}}</a></li>
+			{{/each}}
+		</ul>
+	{{else}}
+		<p>No monster found</p>
+	{{/if}}
+</div>

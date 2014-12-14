@@ -1,5 +1,5 @@
 // parameter: optional port number
-// if omitted the server is created on port 3000
+// if omitted the server is created on port 8080
 
 /* jshint node: true */
 
@@ -16,6 +16,7 @@ var port = 8080,
 if (process.argv.length > 2) {
 	port = process.argv[2];
 }
+
 // create express app
 express = require('express');
 exphbs  = require('express-handlebars');

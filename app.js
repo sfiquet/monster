@@ -29,11 +29,11 @@ app = express();
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+// serve static files
+app.use(express.static(__dirname + '/public'));
+
 // set up body parsing for posting forms
 app.use(bodyParser.urlencoded({ extended: true }));	// for parsing application/x-www-form-urlencoded
-
-// serve static files
-app.use(express.static(__dirname + 'public'));
 
 // routing
 app.get('/', function(req, res){

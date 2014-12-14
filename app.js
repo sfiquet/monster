@@ -40,26 +40,41 @@ app.get('/', function(req, res){
 //		res.render('home', { title: 'Monster Workshop', body: 'This is a test'});
 	});
 
+// TO DO: change this when using the database
+var isValidMonster = function(monsterStr){
+	var i = 0,
+		len = monsters.length;
+	
+	if (!monsterStr) {
+		return false;  
+	}
+		
+	for (; i < len; i+=1) {
+		if (monsterStr === monsters[i]) {
+			return true;
+		}
+	}
+	return false;
+};
+
+var isValidOptions = function(options){
+	return false;
+};
+
 app.get('/advance', function(req, res){
-/*
-		var monsters = [
-			"Aasimar", 
-			"Aboleth", 
-			"Angel, Astral Deva",
-			"Angel, Planetar",
-			"Angel, Solar"
-			];
-		var templates = [
-			"Advanced",
-			"Giant",
-			"Young"
-		];
-		var stats = "This is where the stats go";
-		res.render('advancement-form', { monsters: monsters, templates: templates, stats: stats});
-*/
-		var stats = "This is where the stats go";
-		res.render('advancement-form', { monster: req.query.monster, options: req.query.options, stats: stats});
-	});
+	var stats = "This is where the stats go";
+	
+	// check that we have valid query parameters
+	if (!isValidMonster(req.query.monster)) {
+		req.query.monster = "";
+	}
+	
+	if (!isValidOptions(req.query.options)) {
+		req.query.options = "";
+	}
+	
+	res.render('advancement-form', { monster: req.query.monster, options: req.query.options, stats: stats});
+});
 	
 app.post('/advance', function(req, res){
 
@@ -94,19 +109,6 @@ var monsters = [
 	"Ape, Dire",
 	"Ape, Gorilla"
 	];
-var getMonsterList = function(searchString){
-	
-};
-
-/*
-app.get('/advance/select-monster', function(req, res){
-	res.render('select-form', { searchString: req.query.search, monsters: getMonsterList(req.query.search)});
-});
-
-app.post('/advance/select-monster', function(req, res){
-	
-};
-*/
 
 // splits a string into word tokens
 var tokenize = function(myString){
@@ -175,17 +177,7 @@ app.get('/advance/search', function(req, res) {
 	// TO DO: change this when the database is implemented
 	var result = buildResultList(req.query.search, monsters);
 //	var result = buildResultList(decodeURIComponent(req.query.search), monsters);
-	/*
-	var i = 0,
-		monsterList = [],
-		max;
-	for (max = result.length; i < max; i += 1) {
-		url = path.join();
-		monsterList.push({url: url, name: result[i]});
-	}
-	
-	res.render('select-monster', { monsters: monsterList});
-	*/
+
 	res.render('select-monster', { monsters: result});
 });
 

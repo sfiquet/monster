@@ -86,7 +86,6 @@ app.post('/advance', function(req, res){
 		res.redirect(url.format({ 
 				pathname: '/advance/search', 
 				query: { search: searchQuery}}));
-//				query: { search: encodeURIComponent(searchQuery)}}));
 		
 	} else if (req.body.submit === "Customize") {
 		// customize button was clicked
@@ -138,7 +137,11 @@ var buildResultList = function(queryString, stringArray) {
 	
 	// no query: return everything
 	if (!queryString) {
-		return stringArray;
+		for (maxMonsters = stringArray.length; i < maxMonsters; i += 1) {
+			// TO DO: add the options parameter
+			result.push({ url: buildAdvanceURL(stringArray[i]), name: stringArray[i] });
+		}
+		return result;
 	}
 	
 	// tokenize
@@ -156,8 +159,7 @@ var buildResultList = function(queryString, stringArray) {
 		}
 		if (match) {
 			// TO DO: add the options parameter
-//			result.push({url: buildAdvanceURL(encodeURIComponent(stringArray[i])), name: stringArray[i]});
-			result.push({url: buildAdvanceURL(stringArray[i]), name: stringArray[i]});
+			result.push({ url: buildAdvanceURL(stringArray[i]), name: stringArray[i] });
 		}
 	}
 	return result;
@@ -177,7 +179,6 @@ var buildAdvanceURL = function(monsterId, options){
 app.get('/advance/search', function(req, res) {
 	// TO DO: change this when the database is implemented
 	var result = buildResultList(req.query.search, monsters);
-//	var result = buildResultList(decodeURIComponent(req.query.search), monsters);
 
 	res.render('select-monster', { monsters: result});
 });

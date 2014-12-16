@@ -1,30 +1,34 @@
 <div class=content>
 	<div>
 		<form action="/advance" name="monster" method="post">
-			<span>
-			{{#if monster}}
-				<h2>{{monster}}</h2>
-			{{else}}
-				<h2>No monster selected</h2>
-			{{/if}}
-			<input name="q" type="search" placeholder="Search">
-			<input type="submit" name="submit" value="Go">
-			</span>
-		</form>
-		<form action="/advance" name="options" method="post">
-			{{#if options}}
-				<p>{{options}}</p>
-			{{else}}
+			<h2>
 				{{#if monster}}
-					<p>Original</p>
+					{{monster}}
 				{{else}}
-					<p>No customization options selected</p>
+					No monster selected
 				{{/if}}
-			{{/if}}
-			<input type="submit" name="submit" value="Customize">
+				<input class="cell-like" name="q" type="search" placeholder="Search">
+				<input class="cell-like" type="submit" name="submit" value="Go">
+			</h2>
 		</form>
 	</div>
 	<div>
+		<form id="advance-options" action="/advance" name="options" method="post">
+			<p>
+				{{#if options}}
+					{{options}}
+				{{else}}
+					{{#if monster}}
+						Original
+					{{else}}
+						No customization
+					{{/if}}
+				{{/if}}
+				<input type="submit" name="submit" value="Customize">
+			</p>
+		</form>
+	</div>
+	<div id="advance-stats">
 		{{#if stats}}
 			{{stats}}
 		{{else}}

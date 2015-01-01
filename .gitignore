@@ -1,4 +1,4 @@
 node_modules/
 npm-debug.log
-dump/
-
+.DS_Store
+.DS_Store?

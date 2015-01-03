@@ -1,4 +1,13 @@
 body {
-  padding: 50px 80px;
+  padding: 0px 80px;
   font: 14px "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+}
+
+#header {
+	border-bottom: 2px solid DarkRed;
+}
+
+#header, h1 {
+	padding: 10px 0px;
+	text-align: center;
 }

@@ -1,0 +1,39 @@
+<div class=content>
+	<div>
+		<form action="/advance" name="monster" method="post">
+			<h2>
+				{{#if monster}}
+					{{monster}}
+				{{else}}
+					No monster selected
+				{{/if}}
+				<input class="cell-like" name="q" type="search" placeholder="Search">
+				<input class="cell-like" type="submit" name="submit" value="Go">
+			</h2>
+		</form>
+	</div>
+	<div>
+		<form id="advance-options" action="/advance" name="options" method="post">
+			<p>
+				{{#if options}}
+					{{options}}
+				{{else}}
+					{{#if monster}}
+						Original
+					{{else}}
+						No customization
+					{{/if}}
+				{{/if}}
+				<input type="submit" name="submit" value="Customize" disabled>
+				Sorry, customization is not yet available!
+			</p>
+		</form>
+	</div>
+	<div id="advance-stats">
+		{{#if stats}}
+			{{stats}}
+		{{else}}
+			<p>Please select a monster</p>
+		{{/if}}
+	</div>
+</div>

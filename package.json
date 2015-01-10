@@ -20,6 +20,7 @@
     "mocha": "^2.0.1"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+  	"start": "NODE_PATH=lib node app.js",
+    "test": "mocha --recursive --reporter spec"
   }
 }

@@ -1,17 +1,19 @@
-"use strict"
+/* jshint node: true */
+"use strict";
 
 var expect = require('chai').expect,
-	app;
+	app = require('../app');
 
 describe('App', function(){
+/*
 	describe('loading', function(){
 		it('loads the app module', function(){
-			try {
-				app = require('../app');
-			} catch(e) {}
+			app = require('../app');
 			expect(app).to.exist;
+			done();
 		});
 	});
+*/
 	
 	describe('set-up', function(){
 /*		before(function(){
@@ -21,15 +23,15 @@ describe('App', function(){
 		});
 */		
 		it('creates the app object', function(){
-			expect(app.app).to.exist;
+			expect(app.app).to.exist();
 		});
 		
-		it('sets up jade as the template engine', function(){
-			expect(app.app.get('view engine')).to.equal('jade');
+		it('sets up handlebars as the template engine', function(){
+			expect(app.app.get('view engine')).to.equal('handlebars');
 		});
 	
 		it('starts the server', function(){
-			expect(app.server).to.exist;
+			expect(app.server).to.exist();
 		});
 	});
 });

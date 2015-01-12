@@ -30,8 +30,5 @@ describe('App', function(){
 			expect(app.app.get('view engine')).to.equal('handlebars');
 		});
 	
-		it('starts the server', function(){
-			expect(app.server).to.exist();
-		});
 	});
 });

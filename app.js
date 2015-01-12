@@ -5,18 +5,13 @@
 
 "use strict";
 
-var port = 8080,
-	express,
+var express,
 	exphbs,
 	bodyParser,
 	url,
 	app,
 	server;
 	
-if (process.argv.length > 2) {
-	port = process.argv[2];
-}
-
 // create express app
 express = require('express');
 exphbs  = require('express-handlebars');
@@ -36,6 +31,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));	// for parsing application/x-www-form-urlencoded
 
 // routing
+
+/**
+ * Home page
+ */
 app.get('/', function(req, res){
 		res.render('home');
 //		res.render('home', { title: 'Monster Workshop', body: 'This is a test'});
@@ -62,6 +61,9 @@ var isValidOptions = function(options){
 	return false;
 };
 
+/**
+ * Advancement page
+ */
 app.get('/advance', function(req, res){
 	var stats = "This is where the stats go";
 	
@@ -76,7 +78,10 @@ app.get('/advance', function(req, res){
 	
 	res.render('advancement-form', { monster: req.query.monster, options: req.query.options, stats: stats});
 });
-	
+
+/**
+ * Event handler for Advancement page
+ */
 app.post('/advance', function(req, res){
 
 	if (req.body.submit === "Go") {
@@ -175,7 +180,9 @@ var buildAdvanceURL = function(monsterId, options){
 	});
 };
 
-// monster search results page
+/**
+ * monster search results page
+ */
 app.get('/advance/search', function(req, res) {
 	// TO DO: change this when the database is implemented
 	var result = buildResultList(req.query.search, monsters);
@@ -183,10 +190,22 @@ app.get('/advance/search', function(req, res) {
 	res.render('select-monster', { monsters: result});
 });
 
-// start the server
-server = app.listen(port, function(){
-		console.log('Listening on port %d', server.address().port);
+/**
+ * start the server
+ */
+function start(){
+	var port = process.env.PORT || 8080;
+	app.listen(port, function(){
+		console.log('Listening on port %d', port);
 	});
+}
+
+/**
+ * Only start server if this script is executed, not if it's require()'d.
+ * This makes it easier to run integration tests on ephemeral ports.
+ */
+if (require.main === module) {
+  start();
+}
 
 exports.app = app;
-exports.server = server;

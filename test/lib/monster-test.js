@@ -196,5 +196,16 @@ describe('Monster', function(){
 			expect(tiger.getCMD()).to.equal(23);
 		});
 		
+		it('calculates the AC', function(){
+			expect(tiger.getAC()).to.equal(14);
+		});
+		
+		it('calculates the touch AC', function(){
+			expect(tiger.getTouchAC()).to.equal(11);
+		});
+		
+		it('calculates the flat-footed AC', function(){
+			expect(tiger.getFlatFootedAC()).to.equal(12);
+		});
 	});
 });

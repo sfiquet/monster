@@ -5,6 +5,37 @@ var expect = require('chai').expect,
 	ref = require('../../lib/reference');
 
 describe('Look-up tables', function(){
+	describe('getCRId', function(){
+		it('gets an order id for the given CR', function(){
+			expect(ref.getCRId('1/8')).to.equal(0);
+			expect(ref.getCRId('1/6')).to.equal(1);
+			expect(ref.getCRId('1/2')).to.equal(4);
+			expect(ref.getCRId(1)).to.equal(5);
+			expect(ref.getCRId(30)).to.equal(34);
+		});
+		it('returns undefined for any invalid CR', function(){
+			expect(ref.getCRId(0)).to.be.undefined();
+			expect(ref.getCRId(-1)).to.be.undefined();
+			expect(ref.getCRId('1/5')).to.be.undefined();
+			expect(ref.getCRId(2.4)).to.be.undefined();
+		});
+	});
+	
+	describe('getCR', function(){
+		it('returns the CR corresponding to the id', function(){
+			expect(ref.getCR(0)).to.equal('1/8');
+			expect(ref.getCR(1)).to.equal('1/6');
+			expect(ref.getCR(4)).to.equal('1/2');
+			expect(ref.getCR(5)).to.equal(1);
+			expect(ref.getCR(10)).to.equal(6);
+		});
+		it('returns undefined for any invalid id', function(){
+			expect(ref.getCR(-1)).to.be.undefined();
+			expect(ref.getCR(2.5)).to.be.undefined();
+			expect(ref.getCR('1/8')).to.be.undefined();
+		});
+	});
+	
 	describe('getXP', function(){
 		it('deduces XP from CR whole values between 1 and 30', function(){
 			expect(ref.getXP(1)).to.equal(400);
@@ -25,6 +56,7 @@ describe('Look-up tables', function(){
 			expect(ref.getXP(-1)).to.be.undefined();			
 		});
 	});
+	
 	describe('getSizeMod', function(){
 		it('returns the size modifier for valid size names', function(){
 			expect(ref.getSizeMod('Fine')).to.equal(8);
@@ -37,6 +69,7 @@ describe('Look-up tables', function(){
 			expect(ref.getSizeMod(0)).to.be.undefined();
 		});
 	});
+	
 	describe('compareSize', function(){
 		it('returns a positive value if the first size is bigger', function(){
 			expect(ref.compareSize('Colossal', 'Gargantuan')).to.be.above(0);
@@ -59,6 +92,7 @@ describe('Look-up tables', function(){
 			expect(ref.compareSize('gargantuan', 'gargantuan')).to.satisfy(isNaN);
 		});
 	});
+	
 	describe('getHitDie', function(){
 		it('returns an integer representing the hit die for the type provided', function(){
 			expect(ref.getHitDie('aberration')).to.equal(8);
@@ -72,6 +106,7 @@ describe('Look-up tables', function(){
 			expect(ref.getHitDie('')).to.be.undefined();
 		});
 	});
+	
 	describe('getConstructHPBonus', function(){
 		it('returns the HP bonus for a construct for the given size', function(){
 			expect(ref.getConstructHPBonus('Fine')).to.equal(0);
@@ -87,6 +122,7 @@ describe('Look-up tables', function(){
 			expect(ref.getConstructHPBonus(0)).to.be.undefined();
 		});
 	});
+	
 	describe('getHitDieBABFactor', function(){
 		it('returns the BAB factor for the given Hit Die', function(){
 			expect(ref.getHitDieBABFactor(6)).to.equal(0.5);
@@ -100,6 +136,7 @@ describe('Look-up tables', function(){
 			expect(ref.getHitDieBABFactor('')).to.be.undefined();
 		});
 	});
+	
 	describe('getAbilityForSkill', function(){
 		it('returns the name of the ability associated with the given skill', function(){
 			expect(ref.getAbilityForSkill('Acrobatics')).to.equal('Dex');

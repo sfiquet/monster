@@ -76,12 +76,12 @@ describe('Monster', function(){
 			expect(myMonster.type).to.equal('magical beast');
 			expect(myMonster.racialHD).to.equal(1);
 			expect(myMonster.naturalArmor).to.equal(0);
-			expect(myMonster.Str).to.equal(10);
-			expect(myMonster.Dex).to.equal(10);
-			expect(myMonster.Con).to.equal(10);
-			expect(myMonster.Int).to.equal(10);
-			expect(myMonster.Wis).to.equal(10);
-			expect(myMonster.Cha).to.equal(10);
+			expect(myMonster.Str).to.be.undefined();
+			expect(myMonster.Dex).to.be.undefined();
+			expect(myMonster.Con).to.be.undefined();
+			expect(myMonster.Int).to.be.undefined();
+			expect(myMonster.Wis).to.be.undefined();
+			expect(myMonster.Cha).to.be.undefined();
 			expect(myMonster.baseFort).to.equal(0);
 			expect(myMonster.baseRef).to.equal(0);
 			expect(myMonster.baseWill).to.equal(0);

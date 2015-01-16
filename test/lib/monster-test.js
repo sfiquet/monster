@@ -4,6 +4,65 @@
 var expect = require('chai').expect,
 	Monster = require('../../lib/monster');
 
+var tigerLiteral = {
+		name: 'Tiger',
+		CR: 4,
+		alignment: 'N',
+		size: 'Large',
+		type: 'animal',
+		racialHD: 6,
+		naturalArmor: 3,
+		Str: 23,
+		Dex: 15,
+		Con: 17,
+		Int: 2,
+		Wis: 12,
+		Cha: 6,
+		baseFort: 5, // those should be deduced from type and HD
+		baseRef: 5,
+		baseWill: 2,
+		melee: {
+			claw: {
+				name: 'claw',
+				type: 'natural',
+				nbAttacks: 2,
+				nbDice: 1,
+				dieType: 8
+			},
+			bite: {
+				name: 'bite',
+				type: 'natural',
+				nbAttacks: 1,
+				nbDice: 2,
+				dieType: 6
+			}
+		}
+	},
+	cubeLiteral = {
+		name: 'Gelatinous Cube',
+		CR: 3,
+		alignment: 'N',
+		size: 'Large',
+		type: 'ooze',
+		racialHD: 4,
+		naturalArmor: 0,
+		Str: 10,
+		Dex: 1,
+		Con: 26,
+		Int: undefined,
+		Wis: 1,
+		Cha: 1,
+		melee: {
+			slam: { 
+				name: 'slam', 
+				type: 'natural', 
+				nbAttacks: 1, 
+				nbDice: 1, 
+				dieType: 6
+			},
+		}
+	};
+
 describe('Monster', function(){
 	describe('Constructor', function(){
 		var myMonster;
@@ -74,25 +133,7 @@ describe('Monster', function(){
 	});
 	
 	describe('Calculated values', function(){
-		var tigerLiteral = {
-				name: 'Tiger',
-				CR: 4,
-				alignment: 'N',
-				size: 'Large',
-				type: 'animal',
-				racialHD: 6,
-				naturalArmor: 3,
-				Str: 23,
-				Dex: 15,
-				Con: 17,
-				Int: 2,
-				Wis: 12,
-				Cha: 6,
-				baseFort: 5, // those should be deduced from type and HD
-				baseRef: 5,
-				baseWill: 2
-			},
-			tiger;
+		var tiger;
 		
 		beforeEach('Create the Monster object', function(){
 			tiger = new Monster(tigerLiteral);
@@ -206,6 +247,38 @@ describe('Monster', function(){
 		
 		it('calculates the flat-footed AC', function(){
 			expect(tiger.getFlatFootedAC()).to.equal(12);
+		});
+		
+		it('calculates untrained skill bonus', function(){
+			expect(tiger.getSkillBonus('Perception')).to.equal(1);
+			tiger.Wis = 1;
+			expect(tiger.getSkillBonus('Perception')).to.equal(-5);
+		});
+	});
+	
+	describe('Melee weapons', function(){
+		it('calculates the attack bonus for a single natural weapon', function(){
+			var cube, tiger;
+		
+			cube = new Monster(cubeLiteral);
+			expect(cube.getMeleeWeaponAttackBonus('slam')).to.equal(2);
+			tiger = new Monster(tigerLiteral);
+			delete tiger.melee.bite;
+			expect(tiger.getMeleeWeaponAttackBonus('claw')).to.equal(9);
+		});
+		
+		it('calculates the damage bonus for a single natural weapon', function(){
+			var cube, tiger;
+		
+			cube = new Monster(cubeLiteral);
+			// single attack
+			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(0);
+			cube.Str = 14;
+			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(3);
+			// multiple attacks
+			tiger = new Monster(tigerLiteral);
+			delete tiger.melee.bite;
+			expect(tiger.getMeleeWeaponDamageBonus('claw')).to.equal(6);
 		});
 	});
 });

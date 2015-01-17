@@ -29,7 +29,7 @@ var cubeLiteral = {
 				nbAttacks: 1, 
 				nbDice: 1, 
 				dieType: 6
-			},
+			}
 		}
 	};
 

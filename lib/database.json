@@ -1,0 +1,106 @@
+[
+{
+	"name": "Black Pudding",
+	"CR": 7,
+	"alignment": "N",
+	"size": "Huge",
+	"type": "ooze",
+	"racialHD": 10,
+	"naturalArmor": 0,
+	"Str": 16,
+	"Dex": 1,
+	"Con": 22,
+	"Wis": 1,
+	"Cha": 1,
+	"baseFort": 3,
+	"baseRef": 3,
+	"baseWill": 3,
+	"melee": {
+		"slam": { 
+			"name": "slam", 
+			"type": "natural", 
+			"nbAttacks": 1, 
+			"nbDice": 2, 
+			"dieType": 6
+		}
+	}
+},
+{
+	"name": "Gelatinous Cube",
+	"CR": 3,
+	"alignment": "N",
+	"size": "Large",
+	"type": "ooze",
+	"racialHD": 4,
+	"naturalArmor": 0,
+	"Str": 10,
+	"Dex": 1,
+	"Con": 26,
+	"Wis": 1,
+	"Cha": 1,
+	"baseFort": 1,
+	"baseRef": 1,
+	"baseWill": 1,
+	"melee": {
+		"slam": { 
+			"name": "slam", 
+			"type": "natural", 
+			"nbAttacks": 1, 
+			"nbDice": 1, 
+			"dieType": 6
+		}
+	}
+},
+{
+	"name": "Gray Ooze",
+	"CR": 4,
+	"alignment": "N",
+	"size": "Medium",
+	"type": "ooze",
+	"racialHD": 4,
+	"naturalArmor": 0,
+	"Str": 16,
+	"Dex": 1,
+	"Con": 26,
+	"Wis": 1,
+	"Cha": 1,
+	"baseFort": 1,
+	"baseRef": 1,
+	"baseWill": 1,
+	"melee": {
+		"slam": { 
+			"name": "slam", 
+			"type": "natural", 
+			"nbAttacks": 1, 
+			"nbDice": 1, 
+			"dieType": 6
+		}
+	}
+},
+{
+	"name": "Ochre Jelly",
+	"CR": 5,
+	"alignment": "N",
+	"size": "Large",
+	"type": "ooze",
+	"racialHD": 6,
+	"naturalArmor": 0,
+	"Str": 14,
+	"Dex": 1,
+	"Con": 22,
+	"Wis": 1,
+	"Cha": 1,
+	"baseFort": 2,
+	"baseRef": 2,
+	"baseWill": 2,
+	"melee": {
+		"slam": { 
+			"name": "slam", 
+			"type": "natural", 
+			"nbAttacks": 1, 
+			"nbDice": 2, 
+			"dieType": 4
+		}
+	}
+}
+]

@@ -1,0 +1,49 @@
+/* jshint node: true */
+'use strict';
+
+var expect = require('chai').expect,
+	Monster = require('../../lib/monster'),
+	Database = require('../../lib/database');
+
+describe('Database', function(){
+	describe('findMonsterList', function(){
+		it('returns a list of all monsters when used without search criteria', function(done){
+			var db = new Database();
+			db.findMonsterList(null, function(err, list){
+				if (err) {
+					return done(err);
+				}
+				expect(list).to.be.an.instanceof(Array);
+				expect(list).to.have.length(4);
+				expect(list[0]).to.have.ownProperty('name');
+				expect(list[0]).to.have.ownProperty('id');
+				done();
+				
+			});
+		});
+		it('returns a list of all monsters matching the search criteria', function(done){
+			var db = new Database();
+			db.findMonsterList('g', function(err, list){
+				if (err) {
+					return done(err);
+				}
+				expect(list).to.be.an.instanceof(Array);
+				expect(list).to.have.length(3);
+				done();
+			});
+		});
+	});
+	describe('findMonster', function(){
+		it('returns the Monster object corresponding to the id given', function(done){
+			var db = new Database();
+			db.findMonster('Gelatinous Cube', function(err, monster){
+				if (err) {
+					return done(err);
+				}
+				expect(monster).to.be.an.instanceof(Monster);
+				expect(monster.name).to.equal('Gelatinous Cube');
+				done();
+			});
+		});
+	});
+});

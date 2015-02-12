@@ -5,10 +5,11 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.10.0",
+    "cheerio": "0.17.0",
     "express": "4.9.5",
     "express-handlebars": "^1.1.0",
     "request": "2.45.0",
-    "cheerio": "0.17.0"
+    "underscore.string": "^3.0.1"
   },
   "devDependencies": {
     "chai": "^1.10.0",
@@ -20,7 +21,7 @@
     "mocha": "^2.0.1"
   },
   "scripts": {
-  	"start": "NODE_PATH=lib node app.js",
+    "start": "NODE_PATH=lib node app.js",
     "test": "mocha --recursive --reporter spec"
   }
 }

@@ -1,0 +1,94 @@
+<p class="profile-title">{{stats.name}} <span class="cr">CR {{stats.CR}}</span></p>
+<p class="xp">XP {{stats.XP}}</p>
+<p class="stat">{{stats.alignment}} {{stats.size}} {{stats.type}}</p>
+<p class="stat">{{{title "Init"}}} {{stats.init}}; {{{title "Senses"}}} 
+	{{#if stats.senses}}
+		{{#each stats.senses}}
+			{{#unless @first}}
+			,
+			{{/unless}}
+			{{this}}
+		{{~/each~}}
+		; 
+	{{/if}}
+	Perception {{stats.perception}}</p>
+	
+<p class="section">DEFENSE</p>
+<p class="stat">
+	{{{title "AC"}}} {{stats.AC}}, touch {{stats.touchAC}}, flat-footed {{stats.flatFootedAC}}
+	{{#if stats.ACModifiers}}
+		(
+		 {{~#each stats.ACModifiers~}}
+			{{~#unless @first~}}
+			, 
+			{{/unless}}
+			{{~this.value}} {{this.name}}
+		{{~/each~}}
+		)
+	{{/if}}
+</p>
+<p class="stat">{{{title "hp"}}} {{stats.hp}} ({{stats.hpFormula}})</p>
+<p class="stat">{{{title "Fort"}}} {{stats.fort}}, {{{title "Ref"}}} {{stats.ref}}, {{{title "Will"}}} {{stats.will}}</p>
+{{#if stats.optDefense}}
+	<p class="stat">
+	{{~#each stats.optDefense~}}
+		{{~#unless @first~}}
+		;
+		{{/unless}}
+		{{{title this.name}}}
+		{{#each this.list}}
+			{{~#unless @first~}}
+			,
+			{{/unless}}
+			{{this}}
+		{{~/each~}}
+	{{~/each~}}
+	</p>
+{{/if}}
+
+<p class="section">OFFENSE</p>
+<p class="stat">{{{title "Speed"}}} {{stats.speed}}</p>
+<p class="stat">{{{title "Melee"}}} {{#each stats.melee}}
+		{{#if @first}}
+			{{this}}
+		{{else}}
+			, {{this}} 
+		{{/if}}
+	{{/each}}
+</p>
+{{#if stats.spaceReach}}
+	<p class="stat">{{{title "Space"}}} {{stats.spaceReach.space}} ft.; {{{title "Reach"}}} {{stats.spaceReach.reach}} ft.
+		{{#if stats.spaceReach.extraReach}}
+			(
+			{{~#each stats.spaceReach.extraReach~}}
+				{{this.length}} ft. with
+				{{#each this.weapons}}
+					{{#if @first}}
+						{{this}}
+					{{else}}
+						{{#if @last}}
+							and {{this}}
+						{{else}}
+							, {{this}}
+						{{/if}}
+					{{/if}}
+				{{/each}}
+			{{~/each~}}
+			)
+		{{/if}}
+	</p>
+{{/if}}
+<p class="stat">{{{title "Special Attacks"}}} ?</p>
+
+<p class="section">STATISTICS</p>
+<p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, {{{title "Con"}}} {{stats.Con}}, {{{title "Int"}}} {{stats.Int}}, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
+<p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
+<p class="stat">{{{title "SQ"}}} ?</p>
+
+<p class="section">ECOLOGY</p>
+<p class="stat">{{{title "Environment"}}} {{stats.environment}}</p>
+<p class="stat">{{{title "Organization"}}} {{stats.organization}}</p>
+<p class="stat">{{{title "Treasure"}}} {{stats.treasure}}</p>
+
+<p class="section">SPECIAL ABILITIES</p>
+<p class="stat">?</p>

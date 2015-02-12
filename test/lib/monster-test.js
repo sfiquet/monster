@@ -27,14 +27,16 @@ var tigerLiteral = {
 				type: 'natural',
 				nbAttacks: 2,
 				nbDice: 1,
-				dieType: 8
+				dieType: 8,
+				extraDamage: ['grab']
 			},
 			bite: {
 				name: 'bite',
 				type: 'natural',
 				nbAttacks: 1,
 				nbDice: 2,
-				dieType: 6
+				dieType: 6,
+				extraDamage: ['grab']
 			}
 		}
 	},
@@ -58,7 +60,8 @@ var tigerLiteral = {
 				type: 'natural', 
 				nbAttacks: 1, 
 				nbDice: 1, 
-				dieType: 6
+				dieType: 6,
+				extraDamage: ['1d6 acid']
 			},
 		}
 	};
@@ -85,6 +88,14 @@ describe('Monster', function(){
 			expect(myMonster.baseFort).to.equal(0);
 			expect(myMonster.baseRef).to.equal(0);
 			expect(myMonster.baseWill).to.equal(0);
+			expect(myMonster.senses).to.exist();
+			expect(myMonster.senses).to.be.an.instanceof(Array);
+			expect(myMonster.senses).to.be.empty();
+			expect(myMonster.defensiveAbilities).to.be.undefined();
+			expect(myMonster.immune).to.be.undefined();
+			expect(myMonster.space).to.equal(5);
+			expect(myMonster.reach).to.equal(5);
+			expect(myMonster.extraReach).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -96,15 +107,29 @@ describe('Monster', function(){
 					type: 'outsider',
 					racialHD: 6,
 					naturalArmor: 3,
+					space: 10,
+					reach: 5,
+					extraReach: [
+							{length: 20, weapons: ['arms', 'tentacles']}, 
+							{length: 10, weapons: ['bite']}
+							],
 					Str: 23,
 					Dex: 15,
 					Con: 17,
 					Int: 8,
 					Wis: 12,
 					Cha: 6,
-					baseFort: 5, // those should be deduced from type and HD
+					baseFort: 5, // should those be deduced from type and HD?
 					baseRef: 5,
-					baseWill: 2
+					baseWill: 2,
+					senses: [
+							{name: 'darkvision', value: 60, unit: 'ft.'}, 
+							{name: 'scent'}
+							],
+					optDefense: {
+						abilities: ['freedom of movement', 'ferocity'],
+						immune: ['cold', 'fire', 'poison']
+					}
 				};
 			
 			myMonster = new Monster(literal);
@@ -124,6 +149,19 @@ describe('Monster', function(){
 			expect(myMonster.baseFort).to.equal(5);
 			expect(myMonster.baseRef).to.equal(5);
 			expect(myMonster.baseWill).to.equal(2);
+			expect(myMonster.senses).to.have.length(2);
+			expect(myMonster.senses[0]).to.deep.equal({name: 'darkvision', value: 60, unit: 'ft.'});
+			expect(myMonster.senses[1]).to.deep.equal({name: 'scent'});
+			expect(myMonster.optDefense).to.exist();
+			expect(myMonster.optDefense.abilities).to.exist();
+			expect(myMonster.optDefense.abilities).to.deep.equal(['freedom of movement', 'ferocity']);
+			expect(myMonster.optDefense.immune).to.exist();
+			expect(myMonster.optDefense.immune).to.deep.equal(['cold', 'fire', 'poison']);
+			expect(myMonster.space).to.equal(10);
+			expect(myMonster.reach).to.equal(5);
+			expect(myMonster.extraReach).to.have.length(2);
+			expect(myMonster.extraReach[0]).to.deep.equal({length: 20, weapons: ['arms', 'tentacles']});
+			expect(myMonster.extraReach[1]).to.deep.equal({length: 10, weapons: ['bite']});
 		});
 		
 		it('creates an object even if not called with new', function(){
@@ -249,6 +287,24 @@ describe('Monster', function(){
 			expect(tiger.getFlatFootedAC()).to.equal(12);
 		});
 		
+		it('keeps a Dex penalty when calculating the flat-footed AC', function(){
+			tiger.Dex = 1;
+			expect(tiger.getAC()).to.equal(7);
+			expect(tiger.getTouchAC()).to.equal(4);
+			expect(tiger.getFlatFootedAC()).to.equal(7);
+		});
+		
+		it('provides all the AC modifiers', function(){
+			var ACModifiers = tiger.getACModifiers();
+			expect(ACModifiers).to.exist();
+			expect(ACModifiers).to.have.ownProperty('Dex');
+			expect(ACModifiers.Dex).to.equal(2);
+			expect(ACModifiers).to.have.ownProperty('size');
+			expect(ACModifiers.size).to.equal(-1);
+			expect(ACModifiers).to.have.ownProperty('natural');
+			expect(ACModifiers.natural).to.equal(3);
+		});
+		
 		it('calculates untrained skill bonus', function(){
 			expect(tiger.getSkillBonus('Perception')).to.equal(1);
 			tiger.Wis = 1;
@@ -279,6 +335,30 @@ describe('Monster', function(){
 			tiger = new Monster(tigerLiteral);
 			delete tiger.melee.bite;
 			expect(tiger.getMeleeWeaponDamageBonus('claw')).to.equal(6);
+		});
+		
+		it('rounds down the damage bonus if not a whole number', function(){
+			var cube;
+		
+			cube = new Monster(cubeLiteral);
+			cube.Str = 16;
+			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(4);
+		});
+		
+		it('produces the melee weapon formula', function(){
+			var cube, tiger;
+		
+			cube = new Monster(cubeLiteral);
+			// single attack
+			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +2 (1d6 plus 1d6 acid)');
+			cube.Str = 14;
+			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid)');
+			cube.melee.slam.extraDamage.push('grab');
+			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid plus grab)');
+			// multiple attacks
+			tiger = new Monster(tigerLiteral);
+			delete tiger.melee.bite;
+			expect(tiger.getMeleeWeaponFormula('claw')).to.equal('2 claws +9 (1d8+6 plus grab)');
 		});
 	});
 });

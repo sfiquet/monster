@@ -5,8 +5,24 @@
 	"alignment": "N",
 	"size": "Huge",
 	"type": "ooze",
+	"senses": [
+		{
+			"name": "blindsight", 
+			"value": 60,
+			"unit": "ft."
+		}
+	],
+	"optDefense": {
+		"abilities": [
+			"split",
+			"ooze traits"
+		]
+	},
 	"racialHD": 10,
 	"naturalArmor": 0,
+	"speed": "20 ft., climb 20 ft.",
+	"space": 15,
+	"reach": 10,
 	"Str": 16,
 	"Dex": 1,
 	"Con": 22,
@@ -21,9 +37,13 @@
 			"type": "natural", 
 			"nbAttacks": 1, 
 			"nbDice": 2, 
-			"dieType": 6
+			"dieType": 6,
+			"extraDamage": ["2d6 acid", "grab"]
 		}
-	}
+	},
+	"environment": "any underground",
+	"organization": "solitary",
+	"treasure": "none"
 },
 {
 	"name": "Gelatinous Cube",
@@ -31,8 +51,24 @@
 	"alignment": "N",
 	"size": "Large",
 	"type": "ooze",
+	"senses": [
+		{
+			"name": "blindsight", 
+			"value": 60,
+			"unit": "ft."
+		}
+	],
+	"optDefense": {
+		"immune": [
+			"electricity",
+			"ooze traits"
+		]
+	},
 	"racialHD": 4,
 	"naturalArmor": 0,
+	"speed": "15 ft.",
+	"space": 10,
+	"reach": 5,
 	"Str": 10,
 	"Dex": 1,
 	"Con": 26,
@@ -47,9 +83,13 @@
 			"type": "natural", 
 			"nbAttacks": 1, 
 			"nbDice": 1, 
-			"dieType": 6
+			"dieType": 6,
+			"extraDamage": ["1d6 acid"]
 		}
-	}
+	},
+	"environment": "any underground",
+	"organization": "solitary",
+	"treasure": "incidental"
 },
 {
 	"name": "Gray Ooze",
@@ -57,8 +97,25 @@
 	"alignment": "N",
 	"size": "Medium",
 	"type": "ooze",
+	"senses": [
+		{
+			"name": "blindsight", 
+			"value": 60,
+			"unit": "ft."
+		}
+	],
+	"optDefense": {
+		"abilities": [
+			"ooze traits"
+		],
+		"immune": [
+			"cold",
+			"fire"
+		]
+	},
 	"racialHD": 4,
 	"naturalArmor": 0,
+	"speed": "10 ft.",
 	"Str": 16,
 	"Dex": 1,
 	"Con": 26,
@@ -73,9 +130,13 @@
 			"type": "natural", 
 			"nbAttacks": 1, 
 			"nbDice": 1, 
-			"dieType": 6
+			"dieType": 6,
+			"extraDamage": ["1d6 acid", "grab"]
 		}
-	}
+	},
+	"environment": "cold marshes and underground",
+	"organization": "solitary",
+	"treasure": "none"
 },
 {
 	"name": "Ochre Jelly",
@@ -83,8 +144,29 @@
 	"alignment": "N",
 	"size": "Large",
 	"type": "ooze",
+	"senses": [
+		{
+			"name": "blindsight", 
+			"value": 60,
+			"unit": "ft."
+		}
+	],
+	"optDefense": {
+		"abilities": [
+			"split"
+		],
+		"immune": [
+			"electricity",
+			"mind-affecting effects",
+			"ooze traits",
+			"slashing and piercing damage"
+		]
+	},
 	"racialHD": 6,
 	"naturalArmor": 0,
+	"speed": "10 ft., climb 10 ft.",
+	"space": 10,
+	"reach": 5,
 	"Str": 14,
 	"Dex": 1,
 	"Con": 22,
@@ -99,8 +181,12 @@
 			"type": "natural", 
 			"nbAttacks": 1, 
 			"nbDice": 2, 
-			"dieType": 4
+			"dieType": 4,
+			"extraDamage": ["1d4 acid", "grab"]
 		}
-	}
+	},
+	"environment": "temperate underground or marshes",
+	"organization": "solitary",
+	"treasure": "none"
 }
 ]

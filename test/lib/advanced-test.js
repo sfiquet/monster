@@ -78,7 +78,7 @@ describe('Advanced Template', function(){
 			expect(monster.getCMD()).to.equal(13);
 			expect(monster.getAC()).to.equal(8);
 			expect(monster.getTouchAC()).to.equal(6);
-			expect(monster.getFlatFootedAC()).to.equal(11);
+			expect(monster.getFlatFootedAC()).to.equal(8);
 			expect(monster.getSkillBonus('Perception')).to.equal(-3);
 			expect(monster.getMeleeWeaponAttackBonus('slam')).to.equal(4);
 			expect(monster.getMeleeWeaponDamageBonus('slam')).to.equal(3);

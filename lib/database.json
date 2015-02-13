@@ -69,6 +69,10 @@
 	"speed": "15 ft.",
 	"space": 10,
 	"reach": 5,
+	"extraReach": [
+			{"distance": 20, "weapons": ["arms", "tentacles"]}, 
+			{"distance": 10, "weapons": ["bite"]}
+			],
 	"Str": 10,
 	"Dex": 1,
 	"Con": 26,

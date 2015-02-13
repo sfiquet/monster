@@ -61,18 +61,7 @@
 		{{#if stats.spaceReach.extraReach}}
 			(
 			{{~#each stats.spaceReach.extraReach~}}
-				{{this.length}} ft. with
-				{{#each this.weapons}}
-					{{#if @first}}
-						{{this}}
-					{{else}}
-						{{#if @last}}
-							and {{this}}
-						{{else}}
-							, {{this}}
-						{{/if}}
-					{{/if}}
-				{{/each}}
+				{{this}}
 			{{~/each~}}
 			)
 		{{/if}}

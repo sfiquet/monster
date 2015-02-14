@@ -72,7 +72,20 @@
 <p class="stat">{{{title "Special Attacks"}}} ?</p>
 
 <p class="section">STATISTICS</p>
-<p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, {{{title "Con"}}} {{stats.Con}}, {{{title "Int"}}} {{stats.Int}}, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
+<p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, 
+	{{{title "Con"}}} 
+	{{#if stats.Con}}
+		{{stats.Con~}}
+	{{else}}
+		—
+	{{~/if~}}
+	, {{{title "Int"}}} 
+	{{#if stats.Int}}
+		{{stats.Int~}}
+	{{else}}
+		—
+	{{~/if~}}
+	, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
 <p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
 
 {{#if stats.SQ}}

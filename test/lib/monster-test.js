@@ -96,6 +96,7 @@ describe('Monster', function(){
 			expect(myMonster.space).to.equal(5);
 			expect(myMonster.reach).to.equal(5);
 			expect(myMonster.extraReach).to.be.undefined();
+			expect(myMonster.SQ).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -110,8 +111,8 @@ describe('Monster', function(){
 					space: 10,
 					reach: 5,
 					extraReach: [
-							{length: 20, weapons: ['arms', 'tentacles']}, 
-							{length: 10, weapons: ['bite']}
+							{distance: 20, weapons: ['arms', 'tentacles']}, 
+							{distance: 10, weapons: ['bite']}
 							],
 					Str: 23,
 					Dex: 15,
@@ -160,8 +161,8 @@ describe('Monster', function(){
 			expect(myMonster.space).to.equal(10);
 			expect(myMonster.reach).to.equal(5);
 			expect(myMonster.extraReach).to.have.length(2);
-			expect(myMonster.extraReach[0]).to.deep.equal({length: 20, weapons: ['arms', 'tentacles']});
-			expect(myMonster.extraReach[1]).to.deep.equal({length: 10, weapons: ['bite']});
+			expect(myMonster.extraReach[0]).to.deep.equal({distance: 20, weapons: ['arms', 'tentacles']});
+			expect(myMonster.extraReach[1]).to.deep.equal({distance: 10, weapons: ['bite']});
 		});
 		
 		it('creates an object even if not called with new', function(){

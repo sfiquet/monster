@@ -28,6 +28,10 @@
 	"Con": 22,
 	"Wis": 1,
 	"Cha": 1,
+	"SQ": [
+			[{"text": "ooze traits", "url": "http://paizo.com/pathfinderRPG/prd/monsters/creatureTypes.html#ooze"}], 
+			[{"text": "suction"}]
+		],
 	"baseFort": 3,
 	"baseRef": 3,
 	"baseWill": 3,
@@ -69,15 +73,14 @@
 	"speed": "15 ft.",
 	"space": 10,
 	"reach": 5,
-	"extraReach": [
-			{"distance": 20, "weapons": ["arms", "tentacles"]}, 
-			{"distance": 10, "weapons": ["bite"]}
-			],
 	"Str": 10,
 	"Dex": 1,
 	"Con": 26,
 	"Wis": 1,
 	"Cha": 1,
+	"SQ": [
+			[{"text": "transparent"}]
+		],
 	"baseFort": 1,
 	"baseRef": 1,
 	"baseWill": 1,
@@ -125,6 +128,9 @@
 	"Con": 26,
 	"Wis": 1,
 	"Cha": 1,
+	"SQ": [
+			[{"text": "transparent"}]
+		],
 	"baseFort": 1,
 	"baseRef": 1,
 	"baseWill": 1,

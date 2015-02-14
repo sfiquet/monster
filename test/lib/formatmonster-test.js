@@ -154,6 +154,16 @@ describe('Formatting of monster data for display', function(){
 				Int: undefined,
 				Wis: 1,
 				Cha: 1,
+				SQ: 
+					[
+						[
+							{text: 'change shape', link: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
+							{text: ' (2 of the following forms: bat, Small centipede, toad, or wolf; '},
+							{text: 'polymorph', magic: true},
+							{text: ')'}
+						],
+						[{text: 'amphibious'}]
+					],
 				baseFort: 1,
 				baseRef: 1,
 				baseWill: 1,
@@ -204,6 +214,16 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.Con).to.equal(26);
 			expect(profile.Int).to.be.undefined();
 			expect(profile.Wis).to.equal(1);
+			expect(profile.Cha).to.equal(1);
+			expect(profile.SQ).to.deep.equal([
+						[
+							{text: 'change shape', link: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
+							{text: ' (2 of the following forms: bat, Small centipede, toad, or wolf; '},
+							{text: 'polymorph', magic: true},
+							{text: ')'}
+						],
+						[{text: 'amphibious'}]
+					]);
 			expect(profile.BAB).to.equal('+3');
 			expect(profile.CMB).to.equal('+4');
 			expect(profile.CMD).to.equal(9);

@@ -91,12 +91,12 @@ describe('Monster', function(){
 			expect(myMonster.senses).to.exist();
 			expect(myMonster.senses).to.be.an.instanceof(Array);
 			expect(myMonster.senses).to.be.empty();
-			expect(myMonster.defensiveAbilities).to.be.undefined();
-			expect(myMonster.immune).to.be.undefined();
 			expect(myMonster.space).to.equal(5);
 			expect(myMonster.reach).to.equal(5);
 			expect(myMonster.extraReach).to.be.undefined();
 			expect(myMonster.SQ).to.be.undefined();
+			expect(myMonster.optDefense).to.be.undefined();
+			expect(myMonster.specialAtk).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -130,7 +130,17 @@ describe('Monster', function(){
 					optDefense: {
 						abilities: ['freedom of movement', 'ferocity'],
 						immune: ['cold', 'fire', 'poison']
-					}
+					},
+					specialAtk: [
+						{
+							name: 'bleed', 
+							url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed', 
+							details: [{ text: '2d6' }]
+						},
+						{
+							name: 'corrosion'
+						}
+					]
 				};
 			
 			myMonster = new Monster(literal);
@@ -163,6 +173,9 @@ describe('Monster', function(){
 			expect(myMonster.extraReach).to.have.length(2);
 			expect(myMonster.extraReach[0]).to.deep.equal({distance: 20, weapons: ['arms', 'tentacles']});
 			expect(myMonster.extraReach[1]).to.deep.equal({distance: 10, weapons: ['bite']});
+			expect(myMonster.specialAtk).to.have.length(2);
+			expect(myMonster.specialAtk[0]).to.deep.equal({name: 'bleed', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed', details: [{ text: '2d6' }]});
+			expect(myMonster.specialAtk[1]).to.deep.equal({name: 'corrosion'});
 		});
 		
 		it('creates an object even if not called with new', function(){

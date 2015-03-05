@@ -69,7 +69,18 @@
 	</p>
 {{/if}}
 
-<p class="stat">{{{title "Special Attacks"}}} ?</p>
+{{#if stats.specialAttacks}}
+	<p class="stat">{{{title "Special Attacks"}}}
+		{{#each stats.specialAttacks}}
+			{{~#unless @first~}}
+				,
+			{{/unless}}
+			{{#each this~}}
+				{{{format this}}}
+			{{~/each~}}
+		{{/each~}}
+	</p>
+{{/if}}
 
 <p class="section">STATISTICS</p>
 <p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, 

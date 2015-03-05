@@ -45,6 +45,27 @@
 			"extraDamage": ["2d6 acid", "grab"]
 		}
 	},
+	"specialAtk": [
+		{
+			"name": "constrict", 
+			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+			"details": [
+				{
+					"calc": "damage",
+					"type": "weapon",
+					"nbDice": 2,
+					"dieType": 6,
+					"strengthFactor": 1.5
+				},
+				{
+					"text": " plus 2d6 acid"
+				}
+			]
+		}, 
+		{
+			"name": "corrosion"
+		}
+	],
 	"environment": "any underground",
 	"organization": "solitary",
 	"treasure": "none"
@@ -94,6 +115,14 @@
 			"extraDamage": ["1d6 acid"]
 		}
 	},
+	"specialAtk": [
+		{
+			"name": "engulf"
+		}, 
+		{
+			"name": "paralysis"
+		}
+	],
 	"environment": "any underground",
 	"organization": "solitary",
 	"treasure": "incidental"
@@ -144,6 +173,27 @@
 			"extraDamage": ["1d6 acid", "grab"]
 		}
 	},
+	"specialAtk": [
+		{
+			"name": "acid"
+		}, 
+		{
+			"name": "constrict",
+			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+			"details": [
+				{
+					"calc": "damage",
+					"type": "weapon",
+					"nbDice": 1,
+					"dieType": 6,
+					"strengthFactor": 0.5
+				},
+				{
+					"text": " plus 1d6 acid"
+				}
+			]
+		}
+	],
 	"environment": "cold marshes and underground",
 	"organization": "solitary",
 	"treasure": "none"
@@ -195,6 +245,24 @@
 			"extraDamage": ["1d4 acid", "grab"]
 		}
 	},
+	"specialAtk": [
+		{
+			"name": "constrict",
+			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+			"details": [
+				{
+					"calc": "damage",
+					"type": "weapon",
+					"nbDice": 2,
+					"dieType": 4,
+					"strengthFactor": 1.5
+				},
+				{
+					"text": " plus 1d4 acid"
+				}
+			]
+		}
+	],
 	"environment": "temperate underground or marshes",
 	"organization": "solitary",
 	"treasure": "none"

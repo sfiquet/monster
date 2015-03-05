@@ -123,6 +123,68 @@ describe('Formatting of monster data for display', function(){
 		});
 	});
 	
+	describe('getSpecialAttacks', function(){
+		
+		it('returns undefined if there are no special attacks', function(){
+			var monster = new Monster();
+			expect(format.getSpecialAttacks(monster)).to.be.undefined();
+		});
+		
+		it('formats the output text correctly when there is no calculation', function(){
+			var monster, attacks;
+			
+			monster = new Monster({specialAtk: [
+							{
+								name: 'bleed', 
+								url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed',
+								details: [{text: '2d6'}]
+							}
+						]
+					});
+			attacks = format.getSpecialAttacks(monster);
+			expect(attacks).to.have.length(1);
+			expect(attacks[0]).to.have.length(4);
+			expect(attacks[0]).to.deep.equal([
+					{
+						text: 'bleed', 
+						url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed'
+					}, 
+					{text: ' ('}, 
+					{text: '2d6'}, 
+					{text: ')'}
+				]);
+		});
+		
+		it('calculates a damage formula and builds a text chunk for it', function(){
+			var monster, attacks;
+			
+			monster = new Monster({Str: 16, specialAtk: [
+							{
+								name: 'constrict', 
+								details: [
+									{
+										calc: 'damage',
+										type: 'weapon',
+										nbDice: 2, 
+										dieType: 6, 
+										strengthFactor: 1.5
+									}
+								]
+							}
+						]
+					});
+			attacks = format.getSpecialAttacks(monster);
+			expect(attacks).to.have.length(1);
+			expect(attacks[0]).to.have.length(4);
+			expect(attacks[0]).to.deep.equal([
+					{text: 'constrict'}, 
+					{text: ' ('}, 
+					{text: '2d6+4'}, 
+					{text: ')'}
+				]);
+		});
+	});
+	
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',
@@ -157,7 +219,7 @@ describe('Formatting of monster data for display', function(){
 				SQ: 
 					[
 						[
-							{text: 'change shape', link: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
+							{text: 'change shape', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
 							{text: ' (2 of the following forms: bat, Small centipede, toad, or wolf; '},
 							{text: 'polymorph', magic: true},
 							{text: ')'}
@@ -177,6 +239,32 @@ describe('Formatting of monster data for display', function(){
 						extraDamage: ['1d6 acid']
 					},
 				},
+				specialAtk: [
+					{
+						name: 'constrict', 
+						url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict',
+						details: [
+							{
+								calc: 'damage',
+								type: 'weapon',
+								nbDice: 2,
+								dieType: 6,
+								strengthFactor: 1.5,
+							},
+							{ text: ' plus ' },
+							{
+								calc: 'damage',
+								type: 'extra',
+								nbDice: 2,
+								dieType: 6,
+							},
+							{ text: ' acid' }
+						]
+					}, 
+					{
+						name: 'corrosion'
+					}
+				],
 				environment: 'any underground',
 				organization: 'solitary',
 				treasure: 'incidental'
@@ -217,7 +305,7 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.Cha).to.equal(1);
 			expect(profile.SQ).to.deep.equal([
 						[
-							{text: 'change shape', link: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
+							{text: 'change shape', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
 							{text: ' (2 of the following forms: bat, Small centipede, toad, or wolf; '},
 							{text: 'polymorph', magic: true},
 							{text: ')'}
@@ -230,6 +318,20 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.environment).to.equal('any underground');
 			expect(profile.organization).to.equal('solitary');
 			expect(profile.treasure).to.equal('incidental');
+			expect(profile.specialAttacks).to.deep.equal([
+				[
+					{text: 'constrict', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict'}, 
+					{text: ' ('},
+					{text: '2d6'},
+					{text: ' plus '},
+					{text: '2d6'},
+					{text: ' acid'},
+					{text: ')'}
+				],
+				[
+					{text: 'corrosion'}
+				]
+			]);
 		});
 	});
 });

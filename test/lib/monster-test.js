@@ -97,6 +97,7 @@ describe('Monster', function(){
 			expect(myMonster.SQ).to.be.undefined();
 			expect(myMonster.optDefense).to.be.undefined();
 			expect(myMonster.specialAtk).to.be.undefined();
+			expect(myMonster.specialAbilities).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -140,6 +141,22 @@ describe('Monster', function(){
 						{
 							name: 'corrosion'
 						}
+					],
+					specialAbilities: [
+						{
+							title: 'Acid (Ex)',
+							description: [
+								{text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC '}, 
+								{calc: 'DC', baseStat: 'Con'}, 
+								{text: ' Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.'}
+							]
+						},
+						{
+							title: 'Corrosion (Ex)',
+							description: [
+								{text: ' An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+							]
+						}
 					]
 				};
 			
@@ -176,6 +193,26 @@ describe('Monster', function(){
 			expect(myMonster.specialAtk).to.have.length(2);
 			expect(myMonster.specialAtk[0]).to.deep.equal({name: 'bleed', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed', details: [{ text: '2d6' }]});
 			expect(myMonster.specialAtk[1]).to.deep.equal({name: 'corrosion'});
+			expect(myMonster.specialAbilities).to.have.length(2);
+			expect(myMonster.specialAbilities[0]).to.deep.equal(
+				{
+					title: 'Acid (Ex)',
+					description: [
+						{text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC '}, 
+						{calc: 'DC', baseStat: 'Con'}, 
+						{text: ' Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.'}
+					]
+				}
+			);
+			expect(myMonster.specialAbilities[1]).to.deep.equal(
+				{
+					title: 'Corrosion (Ex)',
+					description: [
+						{text: ' An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+					]
+				}
+			);
+
 		});
 		
 		it('creates an object even if not called with new', function(){
@@ -373,6 +410,72 @@ describe('Monster', function(){
 			tiger = new Monster(tigerLiteral);
 			delete tiger.melee.bite;
 			expect(tiger.getMeleeWeaponFormula('claw')).to.equal('2 claws +9 (1d8+6 plus grab)');
+		});
+	});
+	
+	describe('DC', function(){
+		it('calculates a DC based on Str', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Str")).to.equal(19);
+			tiger.Str = 10;
+			expect(tiger.getDC("Str")).to.equal(13);
+			tiger.Str = 6;
+			expect(tiger.getDC("Str")).to.equal(11);
+		});
+		
+		it('calculates a DC based on Dex', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Dex")).to.equal(15);
+			tiger.Dex = 10;
+			expect(tiger.getDC("Dex")).to.equal(13);
+			tiger.Dex = 6;
+			expect(tiger.getDC("Dex")).to.equal(11);
+		});
+		
+		it('calculates a DC based on Con', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Con")).to.equal(16);
+			tiger.Con = 10;
+			expect(tiger.getDC("Con")).to.equal(13);
+			tiger.Con = 6;
+			expect(tiger.getDC("Con")).to.equal(11);
+		});
+		
+		it('calculates a DC based on Int', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Int")).to.equal(9);
+			tiger.Int = 10;
+			expect(tiger.getDC("Int")).to.equal(13);
+			tiger.Int = 16;
+			expect(tiger.getDC("Int")).to.equal(16);
+		});
+		
+		it('calculates a DC based on Wis', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Wis")).to.equal(14);
+			tiger.Wis = 10;
+			expect(tiger.getDC("Wis")).to.equal(13);
+			tiger.Wis = 6;
+			expect(tiger.getDC("Wis")).to.equal(11);
+		});
+		
+		it('calculates a DC based on Cha', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC("Cha")).to.equal(11);
+			tiger.Cha = 10;
+			expect(tiger.getDC("Cha")).to.equal(13);
+			tiger.Cha = 16;
+			expect(tiger.getDC("Cha")).to.equal(16);
+		});
+		
+		it('returns undefined if the stat is invalid for the monster', function(){
+			var monster = new Monster();
+			expect(monster.getDC('Str')).to.be.undefined();	
+		});
+		
+		it('returns undefined if the given stat is not a valid stat', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getDC('blah')).to.be.undefined();
 		});
 	});
 });

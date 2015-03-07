@@ -185,6 +185,104 @@ describe('Formatting of monster data for display', function(){
 		});
 	});
 	
+	describe('getSpecialAbilities', function(){
+		it('returns undefined if there are no special abilities', function(){
+			var monster = new Monster();
+			expect(format.getSpecialAbilities(monster)).to.be.undefined();
+		});
+		
+		it('outputs the text correctly when there is no calculation', function(){
+			var monster, abilities;
+			 
+			monster = new Monster({ specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [
+						{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+					]
+				}]
+			});
+			
+			abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.instanceof(Array);
+			expect(abilities).to.have.length(1);
+			expect(abilities[0]).to.deep.equal([
+					{text: 'Corrosion (Ex)', isTitle: true}, 
+					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}]);
+		});
+		
+		it('works on multiple special abilities when there is no calculation', function(){
+			var monster, abilities;
+			 
+			monster = new Monster({ specialAbilities: 
+				[
+					{
+						title: 'Corrosion (Ex)',
+						description: [
+							{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+						]
+					},
+					{
+						title: 'Split (Ex)',
+						description: [
+							{ text: 'Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original\'s current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points.' }
+						]	
+					},
+					{
+						title: 'Suction (Ex)',
+						description: [
+							{ text: 'The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding\'s CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location.' }
+						]
+					}
+				]
+			});
+			
+			abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.instanceof(Array);
+			expect(abilities).to.have.length(3);
+			expect(abilities[0]).to.deep.equal([
+					{text: 'Corrosion (Ex)', isTitle: true}, 
+					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}]);
+			expect(abilities[1]).to.deep.equal([
+					{text: 'Split (Ex)', isTitle: true}, 
+					{text: 'Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original\'s current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points.'}]);
+			expect(abilities[2]).to.deep.equal([
+					{text: 'Suction (Ex)', isTitle: true}, 
+					{text: 'The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding\'s CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location.'}]);
+		});
+
+		it('performs a DC calculation and outputs the result as a text chunk', function(){
+			var monster, abilities;
+			
+			monster = new Monster(
+				{
+					Con: 22, 
+					racialHD: 10,
+					specialAbilities : [
+						{
+							title: 'Acid (Ex)',
+							description: [
+								{text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC '}, 
+								{calc: 'DC', baseStat: 'Con'}, 
+								{text: 'Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.'}
+							]
+						}
+					]
+				}
+			);
+			
+			abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.instanceof(Array);
+			expect(abilities).to.have.length(1);
+			expect(abilities[0]).to.be.instanceof(Array);
+			expect(abilities[0]).to.have.length(4);
+			expect(abilities[0][0]).to.deep.equal({ text: 'Acid (Ex)', isTitle: true });
+			expect(abilities[0][1]).to.deep.equal({ text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC ' });
+			expect(abilities[0][2]).to.deep.equal({ text: '21' });
+			expect(abilities[0][3]).to.deep.equal({ text: 'Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.' });
+		});
+	});
+	
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',
@@ -267,7 +365,17 @@ describe('Formatting of monster data for display', function(){
 				],
 				environment: 'any underground',
 				organization: 'solitary',
-				treasure: 'incidental'
+				treasure: 'incidental',
+				specialAbilities: [
+					{
+						title: 'Acid (Ex)',
+						description: [
+							{
+								text: 'A gelatinous cube\'s acid does not harm metal or stone.'
+							}
+						]
+					}
+				]
 		};
 		
 		it('gets the data in the correct format', function(){
@@ -332,6 +440,10 @@ describe('Formatting of monster data for display', function(){
 					{text: 'corrosion'}
 				]
 			]);
+			expect(profile.specialAbilities).to.deep.equal([[
+				{ text: 'Acid (Ex)', isTitle: true },
+				{ text: 'A gelatinous cube\'s acid does not harm metal or stone.' }
+			]]);
 		});
 	});
 });

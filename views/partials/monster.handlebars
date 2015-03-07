@@ -117,5 +117,13 @@
 <p class="stat">{{{title "Organization"}}} {{stats.organization}}</p>
 <p class="stat">{{{title "Treasure"}}} {{stats.treasure}}</p>
 
-<p class="section">SPECIAL ABILITIES</p>
-<p class="stat">?</p>
+{{#if stats.specialAbilities}}
+	<p class="section">SPECIAL ABILITIES</p>
+	{{#each stats.specialAbilities}}
+		<p class="stat">
+			{{#each this}}
+				{{{format this}}}
+			{{/each}}
+		</p>
+	{{/each}}
+{{/if}}

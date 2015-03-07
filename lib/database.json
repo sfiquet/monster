@@ -68,7 +68,55 @@
 	],
 	"environment": "any underground",
 	"organization": "solitary",
-	"treasure": "none"
+	"treasure": "none",
+	"specialAbilities": [
+		{
+			"title": "Acid (Ex)",
+			"description": [
+				{
+					"text": "A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding's acid, its clothing and armor take the same amount of damage from the acid. A DC"
+				}, 
+				{
+					"calc": "DC", 
+					"baseStat": "Con"
+				}, 
+				{
+					"text": "Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon's wielder succeeds on a DC"
+				},
+				{
+					"calc": "DC", 
+					"baseStat": "Con"
+				}, 
+				{
+					"text": "Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based."
+				}
+			]
+		},
+		{
+			"title": "Corrosion (Ex)",
+			"description": [
+				{
+					"text": "An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor."
+				}
+			]
+		},
+		{
+			"title": "Split (Ex)",
+			"description": [
+				{
+					"text": "Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original's current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+				}
+			]
+		},
+		{
+			"title": "Suction (Ex)",
+			"description": [
+				{
+					"text": "The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding's CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location."
+				}
+			]
+		}
+	]
 },
 {
 	"name": "Gelatinous Cube",
@@ -125,7 +173,55 @@
 	],
 	"environment": "any underground",
 	"organization": "solitary",
-	"treasure": "incidental"
+	"treasure": "incidental",
+	"specialAbilities": [
+		{
+			"title": "Acid (Ex)",
+			"description": [
+				{
+					"text": "A gelatinous cube's acid does not harm metal or stone."
+				}
+			]
+		},
+		{
+			"title": "Engulf (Ex)",
+			"description": [
+				{
+					"text": "Although it moves slowly, a gelatinous cube can simply engulf Large or smaller creatures in its path as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make attacks of opportunity against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity can attempt a DC"
+				},
+				{
+					"calc": "DC",
+					"baseStat": "Str"
+				},
+				{
+					"text": "Reflex save to avoid being engulfed—on a success, they are pushed back or aside (opponent's choice) as the cube moves forward. Engulfed creatures are subject to the cube's paralysis and acid, gain the pinned condition, are in danger of suffocating, and are trapped within its body until they are no longer pinned. The save DC is Strength-based."
+				}
+			]
+		},
+		{
+			"title": "Paralysis (Ex)",
+			"description": [
+				{
+					"text": "A gelatinous cube secretes an anesthetizing slime. A target hit by a cube's melee or engulf attack must succeed on a DC"
+				},
+				{
+					"calc": "DC",
+					"baseStat": "Con"
+				},
+				{
+					"text": "Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based."
+				}
+			]
+		},
+		{
+			"title": "Transparent (Ex)",
+			"description": [
+				{
+					"text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
+				}
+			]
+		}
+	]
 },
 {
 	"name": "Gray Ooze",
@@ -196,7 +292,39 @@
 	],
 	"environment": "cold marshes and underground",
 	"organization": "solitary",
-	"treasure": "none"
+	"treasure": "none",
+	"specialAbilities": [
+		{
+			"title": "Acid (Ex)",
+			"description": [
+				{
+					"text": "The digestive acid that covers a gray ooze dissolves metals and organic material, but not stone. Each slam and constrict attack deals 1d6 additional acid damage. Armor or clothing worn by a creature grappled by a gray ooze takes the same amount of acid damage unless the wearer succeeds on a DC"
+				},
+				{
+					"calc": "DC",
+					"baseStat": "Con"
+				},
+				{
+					"text": "Reflex saving throw. A wooden or metal weapon that strikes a gray ooze takes 1d6 acid damage unless the weapon's wielder succeeds on a DC"
+				},
+				{
+					"calc": "DC",
+					"baseStat": "Con"
+				},
+				{
+					"text": "Reflex save. The ooze's touch deals 12 points of acid damage per round to wooden or metal objects, but the ooze must remain in contact with the material for 1 full round in order to deal this damage. The save DCs are Constitution-based."
+				}
+			]
+		},
+		{
+			"title": "Transparent (Ex)",
+			"description": [
+				{
+					"text": "Due to its lack of vivid coloration, a gray ooze is difficult to discern from its surroundings in most environments. A DC 15 Perception check is required to notice the gray ooze. Any creature that fails to notice a gray ooze and walks into it automatically suffers damage as if struck by the ooze's slam attack and is immediately subject to a grab attempt by the ooze."
+				}
+			]
+		}
+	]
 },
 {
 	"name": "Ochre Jelly",
@@ -265,6 +393,24 @@
 	],
 	"environment": "temperate underground or marshes",
 	"organization": "solitary",
-	"treasure": "none"
+	"treasure": "none",
+	"specialAbilities": [
+		{
+			"title": "Acid (Ex)",
+			"description": [
+				{
+					"text": "An ochre jelly secretes a digestive acid that dissolves only flesh (not bone) when it strikes a foe—creatures not made of flesh (including most constructs and oozes, skeletal undead, plants, and incorporeal creatures) are immune to the ochre jelly's acid damage."
+				}
+			]
+		},
+		{
+			"title": "Split (Ex)",
+			"description": [
+				{
+					"text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+				}
+			]
+		}
+	]
 }
 ]

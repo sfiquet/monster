@@ -26,14 +26,22 @@ describe('Helpers', function(){
 	
 	describe('format', function(){
 		it('formats the text according with link and em tags', function(){
-			expect(helpers.format({ text: 'some text', url: 'www.example.com', magic: true })).to.equal(
+			expect(helpers.format({ text: 'some text', url: 'www.example.com', isMagic: true })).to.equal(
 				'<em><a href="www.example.com">some text</a></em>');
-			expect(helpers.format({ text: 'some text', url: 'www.example.com', magic: false })).to.equal(
+			expect(helpers.format({ text: 'some text', url: 'www.example.com', isMagic: false })).to.equal(
 				'<a href="www.example.com">some text</a>');
 			expect(helpers.format({ text: 'some text', url: 'www.example.com' })).to.equal(
 				'<a href="www.example.com">some text</a>');
-			expect(helpers.format({ text: 'some text', magic: true })).to.equal('<em>some text</em>');
+			expect(helpers.format({ text: 'some text', isMagic: true })).to.equal('<em>some text</em>');
 			expect(helpers.format({ text: 'some text' })).to.equal('some text');
+		});
+		
+		it('formats the text with strong tags', function(){
+			expect(helpers.format({ text: 'some text', isTitle: true })).to.equal('<strong>some text</strong>');
+			expect(helpers.format({ text: 'some text', isTitle: false })).to.equal('some text');
+			expect(helpers.format({ text: 'some text', isTitle: true, isMagic: true })).to.equal('<strong><em>some text</em></strong>');
+			expect(helpers.format({ text: 'some text', isTitle: true, url: 'www.example.com' })).to.equal('<strong><a href="www.example.com">some text</a></strong>');
+			expect(helpers.format({ text: 'some text', isTitle: true, url: 'www.example.com', isMagic: true })).to.equal('<strong><em><a href="www.example.com">some text</a></em></strong>');
 		});
 	});
 });

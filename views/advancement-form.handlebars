@@ -1,6 +1,6 @@
 <div class=content>
 	<div>
-		<form action="/advance" name="monster" method="post">
+		<form action={{postTo}} name="monster" method="post">
 			<h2>
 				{{#if monster}}
 					{{monster}}
@@ -13,7 +13,7 @@
 		</form>
 	</div>
 	<div>
-		<form id="advance-options" action="/advance" name="options" method="post">
+		<form id="advance-options" action={{postTo}} name="options" method="post">
 			<p>
 				{{#if options}}
 					{{options}}
@@ -24,8 +24,7 @@
 						No customization
 					{{/if}}
 				{{/if}}
-				<input type="submit" name="submit" value="Customize" disabled>
-				Sorry, customization is not yet available!
+				<input type="submit" name="submit" value="Customize">
 			</p>
 		</form>
 	</div>

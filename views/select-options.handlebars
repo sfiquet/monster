@@ -1,0 +1,31 @@
+<form action={{postTo}} method="post">
+	<h2>Customisation</h2>
+	<p>Select your templates</p>
+	<div>	
+		{{#if options.advanced}}
+			<input type="checkbox" name="advanced" checked>
+		{{else}}
+			<input type="checkbox" name="advanced">
+		{{/if}}
+		Advanced
+	</div>
+	<div>
+		{{#if options.giant}}
+			<input type="checkbox" name="giant" checked>
+		{{else}}
+			<input type="checkbox" name="giant">
+		{{/if}}
+		Giant
+	</div>
+	<div>
+		{{#if options.young}}
+			<input type="checkbox" name="young" checked>
+		{{else}}
+			<input type="checkbox" name="young">
+		{{/if}}
+		Young
+	</div>
+	<div>
+		<button type="submit">Apply</button>
+	</div>
+</form>

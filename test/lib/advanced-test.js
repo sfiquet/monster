@@ -83,5 +83,18 @@ describe('Advanced Template', function(){
 			expect(monster.getMeleeWeaponAttackBonus('slam')).to.equal(4);
 			expect(monster.getMeleeWeaponDamageBonus('slam')).to.equal(3);
 		});
+		it('doesn\'t increase Int if 2 or less', function(){
+			var monster;
+			monster = new Monster(cubeLiteral);
+			monster.Int = 1;
+			advanced.apply(monster);
+			expect(monster.Int).to.equal(1);
+			monster.Int = 2;
+			advanced.apply(monster);
+			expect(monster.Int).to.equal(2);
+			monster.Int = 3;
+			advanced.apply(monster);
+			expect(monster.Int).to.equal(7);
+		});
 	});
 });

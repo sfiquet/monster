@@ -14,6 +14,16 @@ body {
 	text-align: center;
 }
 
+/* Links */
+a {
+	text-decoration: none;
+	color: DarkRed;
+}
+
+a:active, a:hover {
+	text-decoration: underline;
+}
+
 /* Stat Blocks */
 .profile-title, .section {
 	font: normal 16px 'Lato', sans-serif;

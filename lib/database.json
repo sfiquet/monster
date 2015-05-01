@@ -28,6 +28,18 @@
 	"Con": 22,
 	"Wis": 1,
 	"Cha": 1,
+	"specialCMB": [
+			{
+				"name": "grapple",
+				"components": [
+					{
+						"name": "grab",
+						"type": "melee",
+						"bonus": 4
+					}
+				]
+			}
+		],
 	"SQ": [
 			[{"text": "ooze traits", "url": "http://paizo.com/pathfinderRPG/prd/monsters/creatureTypes.html#ooze"}], 
 			[{"text": "suction"}]
@@ -253,6 +265,18 @@
 	"Con": 26,
 	"Wis": 1,
 	"Cha": 1,
+	"specialCMB": [
+			{
+				"name": "grapple",
+				"components": [
+					{
+						"name": "grab",
+						"type": "melee",
+						"bonus": 4
+					}
+				]
+			}
+		],
 	"SQ": [
 			[{"text": "transparent"}]
 		],
@@ -360,6 +384,18 @@
 	"Con": 22,
 	"Wis": 1,
 	"Cha": 1,
+	"specialCMB": [
+			{
+				"name": "grapple",
+				"components": [
+					{
+						"name": "grab",
+						"type": "melee",
+						"bonus": 4
+					}
+				]
+			}
+		],
 	"baseFort": 2,
 	"baseRef": 2,
 	"baseWill": 2,

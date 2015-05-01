@@ -98,6 +98,7 @@ describe('Monster', function(){
 			expect(myMonster.optDefense).to.be.undefined();
 			expect(myMonster.specialAtk).to.be.undefined();
 			expect(myMonster.specialAbilities).to.be.undefined();
+			expect(myMonster.specialCMB).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -476,6 +477,118 @@ describe('Monster', function(){
 		it('returns undefined if the given stat is not a valid stat', function(){
 			var tiger = new Monster(tigerLiteral);
 			expect(tiger.getDC('blah')).to.be.undefined();
+		});
+	});
+	
+	describe('Special CMB', function(){
+		it('returns the list of maneuvers that have a special CMB', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMB = [
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'grab', 
+						type: 'melee', 
+						bonus: 4 
+					} ]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ { 
+						name: 'Improved Overrun', 
+						type: 'feat', 
+						bonus: 2 
+					} ] 
+				}];
+			expect(tiger.getSpecialCMBList()).to.deep.equal(['grapple', 'overrun']);
+		});
+		
+		it('returns an empty array if there are no maneuvers with special CMB', function(){
+			var monster = new Monster();
+			expect(monster.getSpecialCMBList()).to.deep.equal([]);
+		});
+		
+		it('calculates the correct CMB for the given special maneuver', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMB = [
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'grab', 
+						type: 'melee', 
+						bonus: 4 
+					} ]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ { 
+						name: 'Improved Overrun', 
+						type: 'feat', 
+						bonus: 2 
+					} ] 
+				}];
+			expect(tiger.getCMB()).to.equal(11);
+			expect(tiger.getCMB('grapple')).to.equal(15);
+			expect(tiger.getCMB('overrun')).to.equal(13);
+		});
+		
+		it('calculates the correct CMB when there are several components for a given maneuver', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMB = [
+				{ 
+					name: 'grapple', 
+					components: [ 
+						{ 
+							name: 'grab', 
+							type: 'melee', 
+							bonus: 4 
+						},
+						{
+							name: 'Improved Grapple',
+							type: 'feat',
+							bonus: 2
+						},
+						{
+							name: 'Greater Grapple',
+							type: 'feat',
+							bonus: 2
+						}
+					]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ 
+						{ 
+							name: 'Improved Overrun', 
+							type: 'feat', 
+							bonus: 2 
+						},
+						{
+							name: 'Greater Overrun',
+							type: 'feat',
+							bonus: 2
+						}
+					] 
+				}];
+			expect(tiger.getCMB()).to.equal(11);
+			expect(tiger.getCMB('grapple')).to.equal(19);
+			expect(tiger.getCMB('overrun')).to.equal(15);
+		});
+		
+		it('returns the default CMB if given an invalid maneuver name', function(){
+			var monster = new Monster();
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMB = [
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'grab', 
+						type: 'melee', 
+						bonus: 4 
+					} ]
+				}];
+			expect(tiger.getCMB()).to.equal(11);
+			expect(tiger.getCMB('blah')).to.equal(11);
 		});
 	});
 });

@@ -283,6 +283,66 @@ describe('Formatting of monster data for display', function(){
 		});
 	});
 	
+	describe('getCMB', function(){
+		it('returns a string containing the monster\'s CMB when there are no extra bonuses', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17
+			});
+			expect(monster.getCMB()).to.equal(11);
+			expect(format.getCMB(monster)).to.equal('+11');
+		});
+		
+		it('includes the special CMBs between parentheses after the CMB', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMB: [
+						{
+							name: 'grapple',
+							components: [{type: 'melee', name: 'grab', bonus: 4}]
+						}
+					]
+			});
+			
+			expect(format.getCMB(monster)).to.equal('+11 (+15 grapple)');
+		});
+		
+		it('separates the special CMBs with commas', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMB: [
+						{
+							name: 'grapple',
+							components: [{type: 'melee', name: 'grab', bonus: 4}]
+						},
+						{
+							name: 'bull rush',
+							components: [{type: 'feat', name: 'Improved Bull Rush', bonus: 2}]
+						}
+					]
+			});
+			
+			expect(format.getCMB(monster)).to.equal('+11 (+15 grapple, +13 bull rush)');
+		});
+	});
+	
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',

@@ -343,6 +343,132 @@ describe('Formatting of monster data for display', function(){
 		});
 	});
 	
+	describe('getCMD', function(){
+		it('returns a string containing the monster\'s CMD when there are no extra bonuses', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17
+			});
+			expect(monster.getCMD()).to.equal(23);
+			expect(format.getCMD(monster)).to.equal('23');
+		});
+		
+		it('includes the special CMDs between parentheses after the CMD', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMD: [
+						{
+							name: 'trip',
+							components: [{type: 'racial', name: 'racial', bonus: 8}]
+						}
+					]
+			});
+			
+			expect(format.getCMD(monster)).to.equal('23 (31 vs. trip)');
+		});
+		
+		it('separates the special CMDs with commas', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMD: [
+						{
+							name: 'trip',
+							components: [{type: 'racial', name: 'racial', bonus: 8}]
+						},
+						{
+							name: 'bull rush',
+							components: [{type: 'feat', name: 'Improved Bull Rush', bonus: 2}]
+						}
+					]
+			});
+			
+			expect(format.getCMD(monster)).to.equal('23 (31 vs. trip, 25 vs. bull rush)');
+		});
+		
+		it('returns a "can\'t be..." message when the creature is immune to a maneuver', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMD: [
+						{
+							name: 'trip',
+							cantFail: true,
+							components: [{type: 'feat', name: 'Improved Trip', bonus: 2}]
+						}
+					]
+			});
+			
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be tripped)');
+		});
+		
+		it('uses the correct past participle in the "can\'t be" messages for standard immune maneuvers', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMD: [
+						{ name: 'trip', cantFail: true }
+					]
+			});
+			
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be tripped)');
+			monster.specialCMD[0].name = 'grapple';
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be grappled)');
+			monster.specialCMD[0].name = 'disarm';
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be disarmed)');
+			monster.specialCMD[0].name = 'overrun';
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be overrun)');
+			monster.specialCMD[0].name = 'bull rush';
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be bull rushed)');
+			monster.specialCMD[0].name = 'sunder';
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be sundered)');
+		});
+		
+		it('makes up the past participle by adding -ed for non-standard immune maneuvers', function(){
+			var monster = new Monster({
+					size: 'Large',
+					type: 'animal',
+					racialHD: 6,
+					naturalArmor: 3,
+					Str: 23,
+					Dex: 15,
+					Con: 17,
+					specialCMD: [
+						{ name: 'blah', cantFail: true }
+					]
+			});
+			
+			expect(format.getCMD(monster)).to.equal('23 (can\'t be blahed)');
+		});
+		
+	});
+	
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',
@@ -482,7 +608,7 @@ describe('Formatting of monster data for display', function(){
 					]);
 			expect(profile.BAB).to.equal('+3');
 			expect(profile.CMB).to.equal('+4');
-			expect(profile.CMD).to.equal(9);
+			expect(profile.CMD).to.equal('9');
 			expect(profile.environment).to.equal('any underground');
 			expect(profile.organization).to.equal('solitary');
 			expect(profile.treasure).to.equal('incidental');

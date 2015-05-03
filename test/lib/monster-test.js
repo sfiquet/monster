@@ -591,4 +591,162 @@ describe('Monster', function(){
 			expect(tiger.getCMB('blah')).to.equal(11);
 		});
 	});
+	
+	describe('getListOfValues', function(){
+		it('returns the list of all values with the given parameters', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMB = [
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'grab', 
+						type: 'melee', 
+						bonus: 4 
+					} ]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ { 
+						name: 'Improved Overrun', 
+						type: 'feat', 
+						bonus: 2 
+					} ] 
+				}];
+			expect(tiger.getListOfValues('specialCMB', 'name')).to.deep.equal(['grapple', 'overrun']);
+		});
+		
+		it('returns an empty array if the array does not exist', function(){
+			var monster = new Monster();
+			expect(monster.getListOfValues('specialCMB', 'name')).to.deep.equal([]);
+		});
+		
+		it('returns an undefined value for each object that doesn\'t have the given attribute', function(){
+			var monster = new Monster();
+			monster.specialCMB = [
+					{ one: 1, two: 2 }, 
+					{ name: 'grapple' }, 
+					{ blah: 'blah' }];
+			expect(monster.getListOfValues('specialCMB', 'name')).to.deep.equal([undefined, 'grapple', undefined]);
+		});
+		
+	});
+	
+	describe('Special CMD', function(){
+		it('returns the list of maneuvers that have a special CMD', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMD = [
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'Improved Grapple', 
+						type: 'feat', 
+						bonus: 2 
+					} ]
+				}, 
+				{ 
+					name: 'trip', 
+					components: [ { 
+						name: 'racial', 
+						type: 'racial', 
+						bonus: 8 
+					} ] 
+				}];
+			expect(tiger.getSpecialCMDList()).to.deep.equal(['grapple', 'trip']);
+		});
+		
+		it('returns an empty array if there are no maneuvers with special CMD', function(){
+			var monster = new Monster();
+			expect(monster.getSpecialCMDList()).to.deep.equal([]);
+		});
+		
+		it('calculates the correct CMD for the given special maneuver', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMD = [
+				{ 
+					name: 'trip', 
+					components: [ { 
+						name: 'racial', 
+						type: 'racial', 
+						bonus: 8 
+					} ]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ { 
+						name: 'Improved Overrun', 
+						type: 'feat', 
+						bonus: 2 
+					} ] 
+				}];
+			expect(tiger.getCMD()).to.equal(23);
+			expect(tiger.getCMD('trip')).to.equal(31);
+			expect(tiger.getCMD('overrun')).to.equal(25);
+		});
+		
+		it('calculates the correct CMD when there are several components for a given maneuver', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMD = [
+				{ 
+					name: 'trip', 
+					components: [ 
+						{ 
+							name: 'trip', 
+							type: 'racial', 
+							bonus: 8
+						},
+						{
+							name: 'Improved Trip',
+							type: 'feat',
+							bonus: 2
+						}
+					]
+				}, 
+				{ 
+					name: 'overrun', 
+					components: [ 
+						{ 
+							name: 'Improved Overrun', 
+							type: 'feat', 
+							bonus: 2 
+						},
+						{
+							name: 'overrun',
+							type: 'racial',
+							bonus: 4
+						}
+					] 
+				}];
+			expect(tiger.getCMD()).to.equal(23);
+			expect(tiger.getCMD('trip')).to.equal(33);
+			expect(tiger.getCMD('overrun')).to.equal(29);
+		});
+		
+		it('returns the default CMD if given an invalid maneuver name', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMD = [
+				{ 
+					name: 'trip', 
+					components: [ { 
+						name: 'trip', 
+						type: 'racial', 
+						bonus: 8
+					} ]
+				}];
+			expect(tiger.getCMD()).to.equal(23);
+			expect(tiger.getCMD('blah')).to.equal(23);
+		});
+		
+		it('returns Number.POSITIVE_INFINITY if the monster is immune to the maneuver', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.specialCMD = [
+				{ 
+					name: 'trip',
+					cantFail: true,
+					components: [{ name: 'Improved Trip', type: 'feat', bonus: 2 }]
+				}];
+			expect(tiger.getCMD()).to.equal(23);
+			expect(tiger.getCMD('trip')).to.equal(Number.POSITIVE_INFINITY);
+		});
+		
+	});
 });

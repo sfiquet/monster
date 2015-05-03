@@ -40,6 +40,22 @@
 				]
 			}
 		],
+	"specialCMD": [
+		{
+			"name": "bull rush",
+			"components": [
+				{
+					"name": "Suction",
+					"type": "special ability",
+					"bonus": 10
+				}
+			]
+		},
+		{
+			"name": "trip",
+			"cantFail": true
+		}
+	],
 	"SQ": [
 			[{"text": "ooze traits", "url": "http://paizo.com/pathfinderRPG/prd/monsters/creatureTypes.html#ooze"}], 
 			[{"text": "suction"}]
@@ -159,6 +175,12 @@
 	"Con": 26,
 	"Wis": 1,
 	"Cha": 1,
+	"specialCMD": [
+		{
+			"name": "trip",
+			"cantFail": true
+		}
+	],
 	"SQ": [
 			[{"text": "transparent"}]
 		],
@@ -277,6 +299,12 @@
 				]
 			}
 		],
+	"specialCMD": [
+		{
+			"name": "trip",
+			"cantFail": true
+		}
+	],
 	"SQ": [
 			[{"text": "transparent"}]
 		],
@@ -396,6 +424,12 @@
 				]
 			}
 		],
+	"specialCMD": [
+		{
+			"name": "trip",
+			"cantFail": true
+		}
+	],
 	"baseFort": 2,
 	"baseRef": 2,
 	"baseWill": 2,

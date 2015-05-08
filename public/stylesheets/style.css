@@ -1,16 +1,63 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic);
 
+/* Grid */
+.grid {
+	max-width: 960px;
+	margin: 0 auto;
+}
+.row {
+	width: 100%;
+	display: flex;
+	/*flex-wrap: wrap;*/
+	justify-content: space-between;
+}
+.col-1 {
+	width: 8.33%;
+}
+.col-2 {
+	width: 16.66%;
+}
+.col-3 {
+	width: 25%;
+}
+.col-4 {
+	width: 33.33%;
+}
+.col-5 {
+	width: 41.66%;
+}
+.col-6 {
+	width: 50%;
+}
+.col-7 {
+	width: 58.33%;
+}
+.col-8 {
+	width: 66.66%;
+}
+.col-9 {
+	width: 75%;
+}
+.col-10 {
+	width: 83.33%;
+}
+.col-11 {
+	width: 91.66%;
+}
+.col-12 {
+	width: 100%;
+}
+
+/* Page styles */
 body {
-  padding: 0px 80px;
-  font: 14px "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+  font: 100% "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
 }
 
 #header {
 	border-bottom: 2px solid DarkRed;
 }
 
-#header, h1 {
-	padding: 10px 0px;
+#header h1 {
 	text-align: center;
 }
 
@@ -26,7 +73,7 @@ a:active, a:hover {
 
 /* Stat Blocks */
 .profile-title, .section {
-	font: normal 16px 'Lato', sans-serif;
+	font: normal 1.2em 'Lato', sans-serif;
 	text-transform: uppercase;
 }
 
@@ -35,7 +82,7 @@ a:active, a:hover {
 	letter-spacing: 1px;
 	background-color: DarkRed;
 	color: white;
-	margin: 25px 0 5px 0;
+	margin: 5px 0 5px 0;
 	padding: 2px 0 2px 5px;
 }
 
@@ -50,8 +97,8 @@ a:active, a:hover {
 }
 
 .stat, .indented {
-	font: normal 13px 'Lato', sans-serif;
-	line-height: 1.5em;
+	font: normal 1em 'Lato', sans-serif;
+	line-height: 1.4;
 	margin: 5px 0;
 }
    	
@@ -60,12 +107,12 @@ a:active, a:hover {
 }
 
 .xp {
-	font: normal 14px 'Lato', sans-serif;
+	font: normal 1.1em 'Lato', sans-serif;
 	font-weight: bold;
 	margin: 0;
 }
 	
 .cr {
-	float: right;
+	text-align: right;
 	padding: 0 5px 0 0;
 }

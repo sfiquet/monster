@@ -1,4 +1,11 @@
-<p class="profile-title">{{stats.name}} <span class="cr">CR {{stats.CR}}</span></p>
+<div class="row">
+	<div class="col-10">
+		<p class="profile-title">{{stats.name}}
+	</div>
+	<div class="col-2 cr profile-title">
+		CR {{stats.CR}}
+	</div>
+</div>
 <p class="xp">XP {{stats.XP}}</p>
 <p class="stat">{{stats.alignment}} {{stats.size}} {{stats.type}}</p>
 <p class="stat">{{{title "Init"}}} {{stats.init}}; {{{title "Senses"}}} 

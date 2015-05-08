@@ -1,5 +1,5 @@
-<div class=content>
-	<div>
+<div class="row">
+	<div class="col-12">
 		<form action={{postTo}} name="monster" method="post">
 			<h2>
 				{{#if monster}}
@@ -7,13 +7,9 @@
 				{{else}}
 					No monster selected
 				{{/if}}
-				<input class="cell-like" name="q" type="search" placeholder="Search">
-				<input class="cell-like" type="submit" name="submit" value="Go">
+				<input name="q" type="search" placeholder="Search">
+				<input type="submit" name="submit" value="Go">
 			</h2>
-		</form>
-	</div>
-	<div>
-		<form id="advance-options" action={{postTo}} name="options" method="post">
 			<p>
 				{{#if options}}
 					{{options}}
@@ -28,7 +24,9 @@
 			</p>
 		</form>
 	</div>
-	<div id="advance-stats">
+</div>
+<div class="row">
+	<div class="col-12" id="advance-stats">
 		{{#if stats}}
 			{{>monster}}
 		{{else}}

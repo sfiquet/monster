@@ -469,6 +469,48 @@ describe('Formatting of monster data for display', function(){
 		
 	});
 	
+	describe('getSkills', function(){
+		it('returns undefined when the creature has no skill bonus', function(){
+			var monster = new Monster();
+			expect(format.getSkills(monster)).to.be.undefined();
+		});
+		
+		it('returns an array of chunks for the template to display', function(){
+			var monster,
+				skills;
+			
+			monster = new Monster({
+				Str: 18,
+				speed: { land: 20, climb: 20 }
+			});
+			skills = format.getSkills(monster);
+			expect(skills).to.be.instanceof(Array);
+			expect(skills).to.have.length(1);
+			expect(skills[0]).to.have.length(2);
+			expect(skills[0][0]).to.deep.equal({ text: 'Climb', url: 'http://paizo.com/pathfinderRPG/prd/skills/climb.html#climb' });
+			expect(skills[0][1]).to.deep.equal( { text: '+12' });
+		});
+	});
+	
+	describe('getSpeed', function(){
+		it('returns undefined when the monster has no speed', function(){
+			var monster = new Monster();
+			monster.speed = undefined;
+			expect(format.getSpeed(monster)).to.be.undefined();
+		});
+		
+		it('returns an array of text chunks', function(){
+			var monster = new Monster({
+				speed: { land: 30, climb: 20, swim: 10 },
+			});
+			
+			expect(format.getSpeed(monster)).to.deep.equal([
+					{ text: '30 ft.'}, 
+					{ text : 'climb 20 ft.' }, 
+					{ text: 'swim 10 ft.' }]);
+		});
+	});
+	
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',
@@ -491,7 +533,7 @@ describe('Formatting of monster data for display', function(){
 				},
 				racialHD: 4,
 				naturalArmor: 0,
-				speed: '15 ft.',
+				speed: { land: 15 },
 				space: 10,
 				reach: 5,
 				Str: 10,
@@ -589,7 +631,7 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.ref).to.equal('-4');
 			expect(profile.will).to.equal('-4');
 			expect(profile.optDefense).to.deep.equal([{name: 'Immune', list: ['electricity', 'ooze traits']}]);
-			expect(profile.speed).to.equal('15 ft.');
+			expect(profile.speed).to.deep.equal([{ text: '15 ft.' }]);
 			expect(profile.spaceReach).to.deep.equal({space: 10, reach: 5, extraReach: undefined});
 			expect(profile.Str).to.equal(10);
 			expect(profile.Dex).to.equal(1);
@@ -597,6 +639,10 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.Int).to.be.undefined();
 			expect(profile.Wis).to.equal(1);
 			expect(profile.Cha).to.equal(1);
+			expect(profile.BAB).to.equal('+3');
+			expect(profile.CMB).to.equal('+4');
+			expect(profile.CMD).to.equal('9');
+			expect(profile.skills).to.be.undefined();
 			expect(profile.SQ).to.deep.equal([
 						[
 							{text: 'change shape', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},
@@ -606,9 +652,6 @@ describe('Formatting of monster data for display', function(){
 						],
 						[{text: 'amphibious'}]
 					]);
-			expect(profile.BAB).to.equal('+3');
-			expect(profile.CMB).to.equal('+4');
-			expect(profile.CMD).to.equal('9');
 			expect(profile.environment).to.equal('any underground');
 			expect(profile.organization).to.equal('solitary');
 			expect(profile.treasure).to.equal('incidental');

@@ -54,7 +54,14 @@
 {{/if}}
 
 <p class="section">OFFENSE</p>
-<p class="stat">{{{title "Speed"}}} {{stats.speed}}</p>
+<p class="stat">{{{title "Speed"}}}
+	{{~#each stats.speed~}}
+		{{~#unless @first~}}
+			,
+		{{/unless}}
+		{{format this}}
+	{{~/each~}}
+</p>
 <p class="stat">{{{title "Melee"}}} {{#each stats.melee}}
 		{{#if @first}}
 			{{this}}
@@ -105,6 +112,19 @@
 	{{~/if~}}
 	, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
 <p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
+
+{{#if stats.skills}}
+	<p class="stat">{{{title "Skills"}}}
+		{{#each stats.skills}}
+			{{~#unless @first~}}
+				,
+			{{/unless}}
+			{{#each this}}
+				{{{format this}}}
+			{{/each~}}
+		{{/each}}
+	</p>
+{{/if}}
 
 {{#if stats.SQ}}
 	<p class="stat">{{{title "SQ"}}}

@@ -362,6 +362,18 @@ describe('Monster', function(){
 			tiger.Wis = 1;
 			expect(tiger.getSkillBonus('Perception')).to.equal(-5);
 		});
+		
+		it('calculates untrained climb bonus when there is a climb speed', function(){
+			expect(tiger.getSkillBonus('Climb')).to.equal(6);
+			tiger.speed = { land: 30, climb: 15 };
+			expect(tiger.getSkillBonus('Climb')).to.equal(14);
+		});
+		
+		it('calculates untrained swim bonus when there is a swim speed', function(){
+			expect(tiger.getSkillBonus('Swim')).to.equal(6);
+			tiger.speed = { land: 30, swim: 15 };
+			expect(tiger.getSkillBonus('Swim')).to.equal(14);
+		});
 	});
 	
 	describe('Melee weapons', function(){
@@ -748,5 +760,28 @@ describe('Monster', function(){
 			expect(tiger.getCMD('trip')).to.equal(Number.POSITIVE_INFINITY);
 		});
 		
+	});
+	
+	describe('getSkillsList', function(){
+		it('returns an empty array when the monster has no skills with bonuses', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getSkillsList()).to.deep.equal([]);
+		});
+		
+		it('returns Climb and Swim when the monster has the corresponding speeds', function(){
+			var tiger = new Monster(tigerLiteral),
+				list;
+			
+			tiger.speed = { land: 30, climb: 20 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Climb']);
+			tiger.speed = { land: 30, swim: 30 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Swim']);
+			tiger.speed = { land: 30, climb: 20, swim: 20 };
+			list = tiger.getSkillsList();
+			expect(list).to.be.an.instanceof(Array);
+			expect(list).to.have.length(2);
+			expect(list).to.include('Climb');
+			expect(list).to.include('Swim');
+		});
 	});
 });

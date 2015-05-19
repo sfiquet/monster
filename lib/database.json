@@ -20,7 +20,10 @@
 	},
 	"racialHD": 10,
 	"naturalArmor": 0,
-	"speed": "20 ft., climb 20 ft.",
+	"speed": {
+		"land": 20, 
+		"climb": 20
+	},
 	"space": 15,
 	"reach": 10,
 	"Str": 16,
@@ -167,7 +170,9 @@
 	},
 	"racialHD": 4,
 	"naturalArmor": 0,
-	"speed": "15 ft.",
+	"speed": {
+		"land": 15
+	},
 	"space": 10,
 	"reach": 5,
 	"Str": 10,
@@ -281,7 +286,9 @@
 	},
 	"racialHD": 4,
 	"naturalArmor": 0,
-	"speed": "10 ft.",
+	"speed": {
+		"land": 10
+	},
 	"Str": 16,
 	"Dex": 1,
 	"Con": 26,
@@ -404,7 +411,10 @@
 	},
 	"racialHD": 6,
 	"naturalArmor": 0,
-	"speed": "10 ft., climb 10 ft.",
+	"speed": {
+		"land": 10, 
+		"climb": 10
+	},
 	"space": 10,
 	"reach": 5,
 	"Str": 14,

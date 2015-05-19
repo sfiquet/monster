@@ -150,4 +150,19 @@ describe('Look-up tables', function(){
 			expect(ref.getAbilityForSkill(2)).to.be.undefined();
 		});
 	});
+	
+	describe('getSkillUrl', function(){
+		it('returns the url associated with the given skill', function(){
+			expect(ref.getSkillUrl('Acrobatics')).to.equal('http://paizo.com/pathfinderRPG/prd/skills/acrobatics.html#acrobatics');
+			expect(ref.getSkillUrl('Use Magic Device')).to.equal('http://paizo.com/pathfinderRPG/prd/skills/useMagicDevice.html#use-magic-device');
+			expect(ref.getSkillUrl('Knowledge')).to.equal('http://paizo.com/pathfinderRPG/prd/skills/knowledge.html#knowledge');
+		});
+		
+		it('returns undefined for skills not associated with an url', function(){
+			expect(ref.getSkillUrl('blarg')).to.be.undefined();
+			expect(ref.getSkillUrl('')).to.be.undefined();
+			expect(ref.getSkillUrl()).to.be.undefined();
+			expect(ref.getSkillUrl('Knowledge (arcana)')).to.be.undefined();
+		});
+	});
 });

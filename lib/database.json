@@ -526,6 +526,10 @@
 	"Int": 11,
 	"Wis": 13,
 	"Cha": 15,
+	"languages": "Common",
+	"SQ": [
+			[{"text": "create spawn"}]
+		],
 	"baseFort": 1,
 	"baseRef": 1,
 	"baseWill": 4,

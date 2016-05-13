@@ -183,6 +183,36 @@ describe('Formatting of monster data for display', function(){
 					{text: ')'}
 				]);
 		});
+
+		it('performs a DC calculation and outputs the result as a text chunk', function() {
+			var monster, attacks;
+			
+			monster = new Monster({Cha: 15, racialHD: 4, specialAtk: [
+							{
+								name: 'energy drain', 
+								details: [
+									{
+										"text": "1 level, DC "
+									},
+									{
+										"calc": "DC",
+										"baseStat": "Cha"
+									}
+								]
+							}
+						]
+					});
+			attacks = format.getSpecialAttacks(monster);
+			expect(attacks).to.have.length(1);
+			expect(attacks[0]).to.have.length(5);
+			expect(attacks[0]).to.deep.equal([
+					{text: 'energy drain'}, 
+					{text: ' ('}, 
+					{text: '1 level, DC '}, 
+					{text: '14'},
+					{text: ')'}
+				]);
+		});
 	});
 	
 	describe('getSpecialAbilities', function(){

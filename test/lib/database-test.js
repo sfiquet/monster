@@ -5,6 +5,10 @@ var expect = require('chai').expect,
 	Monster = require('../../lib/monster'),
 	Database = require('../../lib/database');
 
+// Note: Currently those tests are completely dependent on the content of 
+// database.json. They are totally inadequate to test a database and they will 
+// fail when the content of database.json is modified.
+
 describe('Database', function(){
 	describe('findMonsterList', function(){
 		it('returns a list of all monsters when used without search criteria', function(done){
@@ -14,7 +18,7 @@ describe('Database', function(){
 					return done(err);
 				}
 				expect(list).to.be.an.instanceof(Array);
-				expect(list).to.have.length(4);
+				expect(list).to.have.length(5);
 				expect(list[0]).to.have.ownProperty('name');
 				expect(list[0]).to.have.ownProperty('id');
 				done();
@@ -28,7 +32,7 @@ describe('Database', function(){
 					return done(err);
 				}
 				expect(list).to.be.an.instanceof(Array);
-				expect(list).to.have.length(3);
+				expect(list).to.have.length(4);
 				done();
 			});
 		});

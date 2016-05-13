@@ -52,6 +52,16 @@
 	{{~/each~}}
 	</p>
 {{/if}}
+{{#if stats.weaknesses}}
+	<p class="stat">{{{title "Weaknesses"}}}
+		{{~#each stats.weaknesses~}}
+			{{~#unless @first~}}
+			, 
+			{{/unless}}
+			{{this}}
+		{{~/each~}}
+	</p>
+{{/if}}
 
 <p class="section">OFFENSE</p>
 <p class="stat">{{{title "Speed"}}}

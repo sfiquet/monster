@@ -374,6 +374,21 @@ describe('Monster', function(){
 			tiger.speed = { land: 30, swim: 15 };
 			expect(tiger.getSkillBonus('Swim')).to.equal(14);
 		});
+
+		it('calculates trained skill bonus', function() {
+			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}]);
+			expect(tiger.getSkillBonus('Acrobatics')).to.equal(9); // 4 ranks + 3 class skills + 2 Dex
+		});
+
+		it('applies racial bonus to trained skill bonus', function(){
+			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4, 'racial': 6}]);
+			expect(tiger.getSkillBonus('Acrobatics')).to.equal(15); // 4 ranks + 3 class skills + 2 Dex + 6 racial
+		});
+
+		it('applies racial bonus to untrained skill bonus', function(){
+			tiger.setSkills([{'name': 'Acrobatics', 'racial': 6}]);
+			expect(tiger.getSkillBonus('Acrobatics')).to.equal(8); // 2 Dex + 6 racial
+		});
 	});
 	
 	describe('Melee weapons', function(){
@@ -762,6 +777,24 @@ describe('Monster', function(){
 		
 	});
 	
+	describe('setSkills', function(){
+		it('sets up the skills data in the monster from the JSON representation passed as parameter', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}, {'name': 'Stealth', 'ranks': 4, 'racial': 8}]);
+			expect(tiger.skillOrder).to.exist();
+			expect(tiger.skillOrder).to.be.an.instanceof(Array);
+			expect(tiger.skillOrder).to.have.length(2);
+			expect(tiger.skillOrder[0]).to.equal('Acrobatics');
+			expect(tiger.skillOrder[1]).to.equal('Stealth');
+			expect(tiger.skillSet).to.exist();
+			expect(tiger.skillSet).to.be.an.instanceof(Object);
+			expect(tiger.skillSet).to.deep.equal({
+				'Acrobatics': {'name': 'Acrobatics', 'ranks': 4}, 
+				'Stealth': {'name': 'Stealth', 'ranks': 4, 'racial': 8}
+			});
+		});
+	});
+
 	describe('getSkillsList', function(){
 		it('returns an empty array when the monster has no skills with bonuses', function(){
 			var tiger = new Monster(tigerLiteral);
@@ -782,6 +815,84 @@ describe('Monster', function(){
 			expect(list).to.have.length(2);
 			expect(list).to.include('Climb');
 			expect(list).to.include('Swim');
+		});
+
+		it('returns the correct skills in the correct order', function() {
+			var tiger = new Monster(tigerLiteral);
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
+			]);
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival']);
+		});
+
+		it('adds Climb and Swim to the list when the monster has the corresponding speeds', function(){
+			var tiger = new Monster(tigerLiteral),
+				list;
+			
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, climb: 20 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival', 'Climb']);
+			tiger.speed = { land: 30, swim: 30 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival', 'Swim']);
+			tiger.speed = { land: 30, climb: 20, swim: 20 };
+			list = tiger.getSkillsList();
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival', 'Climb', 'Swim']);
+		});
+
+		it('only adds Climb or Swim when they are not already present in the list', function(){
+			var tiger = new Monster(tigerLiteral),
+				list;
+			
+			// Climb
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Climb', 'ranks': 4},
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, climb: 20 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Climb', 'Stealth', 'Survival']);
+			// Swim
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Swim', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, swim: 30 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Swim']);
+			// both
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Climb', 'ranks': 4},
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Swim', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, climb: 20, swim: 20 };
+			list = tiger.getSkillsList();
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Climb', 'Stealth', 'Swim']);
+			// skill bonus in Climb with Swim speed
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Climb', 'ranks': 4},
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, swim: 30 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Climb', 'Stealth', 'Survival', 'Swim']);
+			// skill bonus in Swim with Climb speed
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Swim', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, climb: 20 };
+			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Swim', 'Climb']);
 		});
 	});
 });

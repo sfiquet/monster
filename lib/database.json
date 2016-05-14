@@ -561,6 +561,25 @@
 			]
 		}
 	],
+	"skills": [
+		{
+			"name": "Intimidate",
+			"ranks": 4
+		},
+		{
+			"name": "Knowledge (religion)",
+			"ranks": 4
+		},
+		{
+			"name": "Perception",
+			"ranks": 4
+		},
+		{
+			"name": "Stealth",
+			"ranks": 4, 
+			"racial": 8
+		}
+	],
 	"environment": "any",
 	"organization": "solitary, pair, gang (3–6), or pack (7–12)",
 	"treasure": "standard",

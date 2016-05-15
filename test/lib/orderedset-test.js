@@ -63,5 +63,34 @@ describe('OrderedSet', function(){
 			expect(keys).to.not.equal(set.order);
 		});
 	});
+
+	describe('getItemByKey', function(){
+		it('returns undefined if the ordered set is empty', function(){
+			var set = new OrderedSet();
+			expect(set.getItemByKey('test')).to.be.undefined();
+		});
+
+		it('returns undefined if the key is not found', function(){
+			var data = [
+				{'name': 'one', 'number': 4}, 
+				{'name': 'two', 'string': 'asd'}, 
+				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
+			];
+			var set = new OrderedSet(data);
+			expect(set.getItemByKey('test')).to.be.undefined();
+		});
+		
+		it('returns the item identified by the key', function(){
+			var data = [
+				{'name': 'one', 'number': 4}, 
+				{'name': 'two', 'string': 'asd'}, 
+				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
+			];
+			var set = new OrderedSet(data);
+			expect(set.getItemByKey('one')).to.deep.equal({'name': 'one', 'number': 4});
+			expect(set.getItemByKey('two')).to.deep.equal({'name': 'two', 'string': 'asd'});
+			expect(set.getItemByKey('three')).to.deep.equal({'name': 'three', 'object': {'name': 'four', 'blah': '123'}});
+		});
+	});
 });
 

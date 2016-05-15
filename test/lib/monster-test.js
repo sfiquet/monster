@@ -2,6 +2,7 @@
 "use strict";
 
 var expect = require('chai').expect,
+	OrderedSet = require('../../lib/orderedset'),
 	Monster = require('../../lib/monster');
 
 var tigerLiteral = {
@@ -47,10 +48,13 @@ var tigerLiteral = {
 			{
 				name: 'Skill Focus',
 				url: 'url/skillfocus',
-				details: {
-					name: 'Perception',
-					url: 'url/perception'
-				}
+				details: 
+				[
+					{
+						name: 'Perception',
+						url: 'url/perception'
+					}
+				]
 			}
 		]
 	},
@@ -372,9 +376,9 @@ describe('Monster', function(){
 		});
 		
 		it('calculates untrained skill bonus', function(){
-			expect(tiger.getSkillBonus('Perception')).to.equal(1);
+			expect(tiger.getSkillBonus('Survival')).to.equal(1);
 			tiger.Wis = 1;
-			expect(tiger.getSkillBonus('Perception')).to.equal(-5);
+			expect(tiger.getSkillBonus('Survival')).to.equal(-5);
 		});
 		
 		it('calculates untrained climb bonus when there is a climb speed', function(){
@@ -402,6 +406,26 @@ describe('Monster', function(){
 		it('applies racial bonus to untrained skill bonus', function(){
 			tiger.setSkills([{'name': 'Acrobatics', 'racial': 6}]);
 			expect(tiger.getSkillBonus('Acrobatics')).to.equal(8); // 2 Dex + 6 racial
+		});
+
+		it('applies the Skill Focus feat correctly', function(){
+			tiger.feats = new OrderedSet([
+				{
+					name: 'Skill Focus',
+					url: 'url/skillfocus',
+					details: [
+						{
+							name: 'Perception',
+							url: 'url/perception'
+						}
+					]
+				}
+			]);
+			expect(tiger.getSkillBonus('Perception')).to.equal(4);
+			tiger.setSkills([{'name': 'Perception', 'ranks': 9}]);
+			expect(tiger.getSkillBonus('Perception')).to.equal(16);
+			tiger.setSkills([{'name': 'Perception', 'ranks': 10}]);
+			expect(tiger.getSkillBonus('Perception')).to.equal(20);
 		});
 	});
 	
@@ -949,10 +973,10 @@ describe('Monster', function(){
 				{
 					name: 'Skill Focus',
 					url: 'url/skillfocus',
-					details: {
+					details: [{
 						name: 'Perception',
 						url: 'url/perception'
-					}
+					}]
 				}
 			);
 		});

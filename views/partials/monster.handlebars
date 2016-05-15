@@ -123,6 +123,27 @@
 	, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
 <p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
 
+{{#if stats.feats}}
+	<p class="stat">{{{title "Feats"}}}
+		{{#each stats.feats~}}
+			{{~#unless @first~}}
+				,
+			{{/unless}}
+			{{{format this.description}}}
+			{{~#if this.details}}
+				(
+				{{~#each this.details~}}
+					{{#unless @first~}}
+						,
+					{{/unless~}}
+					{{{format this}}}
+				{{~/each~}}
+				)
+			{{/if~}}
+		{{~/each~}}
+	</p>
+{{/if}}
+
 {{#if stats.skills}}
 	<p class="stat">{{{title "Skills"}}}
 		{{#each stats.skills}}
@@ -131,7 +152,7 @@
 			{{/unless}}
 			{{#each this}}
 				{{{format this}}}
-			{{/each~}}
+			{{~/each~}}
 		{{/each}}
 	</p>
 {{/if}}

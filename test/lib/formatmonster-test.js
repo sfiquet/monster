@@ -541,6 +541,59 @@ describe('Formatting of monster data for display', function(){
 		});
 	});
 	
+	describe('getFeats', function(){
+		it('returns undefined when the creature has no feat', function(){
+			var monster = new Monster();
+			expect(format.getFeats(monster)).to.be.undefined();
+		});
+
+		it('returns the correct array of chunks when a creature has simple feats with no extra detail', function(){
+			var monster = new Monster({
+				feats: [
+					{name: 'Improved Initiative', url: 'url/improvedinit'},
+					{name: 'Weapon Finesse'}
+				]
+			});
+			expect(format.getFeats(monster)).to.deep.equal([
+					{
+						description: { text: 'Improved Initiative', url: 'url/improvedinit' }
+					},
+					{
+						description: { text: 'Weapon Finesse' }
+					}
+				]);
+		});
+
+		it('returns the correct array of chunks for feats that have extra details', function(){
+			var monster = new Monster({
+				feats: [
+					{
+						name: 'Skill Focus', 
+						url: 'url/skillfocus', 
+						details: [
+							{name: 'Perception', url: 'url/perception'}, 
+							{name: 'Swim', url: 'url/swim'}]
+					},
+					{name: 'Weapon Finesse'}
+				]
+			});
+			expect(format.getFeats(monster)).to.deep.equal(
+				[
+					{ 
+						description: { text: 'Skill Focus', url: 'url/skillfocus' },
+						details: 
+							[
+								{ text: 'Perception', url: 'url/perception'},
+								{ text: 'Swim', url: 'url/swim' },
+							]
+					},
+					{
+						description: { text: 'Weapon Finesse' }
+					}
+				]);
+		});
+	});
+
 	describe('getMonsterProfile', function(){
 		var cubeLiteral = {
 				name: 'Gelatinous Cube',

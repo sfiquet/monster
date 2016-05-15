@@ -38,7 +38,21 @@ var tigerLiteral = {
 				dieType: 6,
 				extraDamage: ['grab']
 			}
-		}
+		},
+		feats: [
+			{
+				name: 'Improved Initiative',
+				url: 'url/improvedinit'
+			},
+			{
+				name: 'Skill Focus',
+				url: 'url/skillfocus',
+				details: {
+					name: 'Perception',
+					url: 'url/perception'
+				}
+			}
+		]
 	},
 	cubeLiteral = {
 		name: 'Gelatinous Cube',
@@ -793,6 +807,15 @@ describe('Monster', function(){
 				'Stealth': {'name': 'Stealth', 'ranks': 4, 'racial': 8}
 			});
 		});
+
+		it('initialises the skills data correctly when there is no JSON available', function(){
+			var tiger = new Monster(tigerLiteral);
+			tiger.setSkills();
+			expect(tiger.skillOrder).to.exist();
+			expect(tiger.skillOrder).to.deep.equal([]);
+			expect(tiger.skillSet).to.exist();
+			expect(tiger.skillSet).to.deep.equal({});
+		});
 	});
 
 	describe('getSkillsList', function(){
@@ -893,6 +916,45 @@ describe('Monster', function(){
 			]);
 			tiger.speed = { land: 30, climb: 20 };
 			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Swim', 'Climb']);
+		});
+	});
+
+	describe('getFeatsList', function(){
+		it('returns an empty array when the monster has no feats', function(){
+			var monster = new Monster();
+			expect(monster.getFeatsList()).to.deep.equal([]);
+		});
+
+		it('return the correct feat names in the correct order', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getFeatsList()).to.deep.equal(['Improved Initiative', 'Skill Focus']);
+		});
+	});
+
+	describe('getFeat', function(){
+		it('returns undefined if the monster doesn\'t have that feat', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getFeat('Improved Familiar')).to.be.undefined();
+		});
+
+		it('returns an object describing the selected feat if the monster has it', function(){
+			var tiger = new Monster(tigerLiteral);
+			expect(tiger.getFeat('Improved Initiative')).to.deep.equal(
+				{
+					name: 'Improved Initiative',
+					url: 'url/improvedinit'
+				}
+			);
+			expect(tiger.getFeat('Skill Focus')).to.deep.equal(
+				{
+					name: 'Skill Focus',
+					url: 'url/skillfocus',
+					details: {
+						name: 'Perception',
+						url: 'url/perception'
+					}
+				}
+			);
 		});
 	});
 });

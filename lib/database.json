@@ -561,6 +561,22 @@
 			]
 		}
 	],
+	"feats": [
+		{
+			"name": "Blind-Fight",
+			"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#blind-fight"
+		},
+		{
+			"name": "Skill Focus",
+			"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#skill-focus",
+			"details": [
+				{
+					"name": "Perception",
+					"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/skills/perception.html#perception"
+				}
+			]
+		}
+	],
 	"skills": [
 		{
 			"name": "Intimidate",

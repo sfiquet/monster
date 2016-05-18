@@ -18,7 +18,10 @@
 		{{~/each~}}
 		; 
 	{{/if}}
-	Perception {{stats.perception}}</p>
+	{{#each stats.perception}}
+		{{{format this}}}
+	{{/each}}
+</p>
 	
 <p class="section">DEFENSE</p>
 <p class="stat">

@@ -21,6 +21,17 @@ describe('Formatting of monster data for display', function(){
 			expect(senses[1]).to.equal('darkvision 60 ft.');
 		});
 	});
+
+	describe('getPerception', function(){
+		it('generates an array of formatable chunks including a link', function(){
+			var monster = new Monster({Wis: 14});
+			expect(format.getPerception(monster)).to.deep.equal(
+				[
+					{text: 'Perception', url: 'http://paizo.com/pathfinderRPG/prd/skills/perception.html#perception'}, 
+					{text: '+2'}
+				]);
+		});
+	});
 	
 	describe('getACModifiers', function(){
 		it('builds the list of non-zero AC modifiers as an array of objects', function(){
@@ -721,7 +732,11 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.type).to.equal('ooze');
 			expect(profile.init).to.equal('-5');
 			expect(profile.senses).to.deep.equal(["blindsight 60 ft."]);
-			expect(profile.perception).to.equal('-5');
+			expect(profile.perception).to.deep.equal(
+				[
+					{text: 'Perception', url: 'http://paizo.com/pathfinderRPG/prd/skills/perception.html#perception'}, 
+					{text: '-5'}
+				]);
 			expect(profile.AC).to.equal(4);
 			expect(profile.touchAC).to.equal(4);
 			expect(profile.flatFootedAC).to.equal(4);

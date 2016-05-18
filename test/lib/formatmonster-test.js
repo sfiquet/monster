@@ -7,6 +7,15 @@ var expect = require('chai').expect,
 	
 describe('Formatting of monster data for display', function(){
 	
+	describe('getType', function(){
+		it('generates a formatable chunk for type including a link', function(){
+			var monster = new Monster({type: 'undead'});
+			expect(format.getType(monster)).to.deep.equal(
+				{text: 'undead', url: 'http://paizo.com/pathfinderRPG/prd/bestiary/creatureTypes.html#undead'} 
+			);
+		});
+	});
+	
 	describe('getSenses', function(){
 		it('generates a descriptive string for each sense', function(){
 			var monster = new Monster(),
@@ -23,7 +32,7 @@ describe('Formatting of monster data for display', function(){
 	});
 
 	describe('getPerception', function(){
-		it('generates an array of formatable chunks including a link', function(){
+		it('generates an array of formatable chunks for perception including a link', function(){
 			var monster = new Monster({Wis: 14});
 			expect(format.getPerception(monster)).to.deep.equal(
 				[
@@ -729,7 +738,7 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.XP).to.equal('800');
 			expect(profile.alignment).to.equal('N');
 			expect(profile.size).to.equal('Large');
-			expect(profile.type).to.equal('ooze');
+			expect(profile.type).to.deep.equal({text: 'ooze', url: 'http://paizo.com/pathfinderRPG/prd/bestiary/creatureTypes.html#ooze'});
 			expect(profile.init).to.equal('-5');
 			expect(profile.senses).to.deep.equal(["blindsight 60 ft."]);
 			expect(profile.perception).to.deep.equal(

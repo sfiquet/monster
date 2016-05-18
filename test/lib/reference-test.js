@@ -165,4 +165,19 @@ describe('Look-up tables', function(){
 			expect(ref.getSkillUrl('Knowledge (arcana)')).to.be.undefined();
 		});
 	});
+
+	describe('getTypeUrl', function(){
+		it('returns the url associated with the given monster type', function(){
+			expect(ref.getTypeUrl('aberration')).to.equal('http://paizo.com/pathfinderRPG/prd/bestiary/creatureTypes.html#aberration');
+			expect(ref.getTypeUrl('vermin')).to.equal('http://paizo.com/pathfinderRPG/prd/bestiary/creatureTypes.html#vermin');
+			expect(ref.getTypeUrl('magical beast')).to.equal('http://paizo.com/pathfinderRPG/prd/bestiary/creatureTypes.html#magical-beast');
+		});
+		
+		it('returns undefined for types not associated with an url', function(){
+			expect(ref.getTypeUrl('blarg')).to.be.undefined();
+			expect(ref.getTypeUrl('')).to.be.undefined();
+			expect(ref.getTypeUrl()).to.be.undefined();
+			expect(ref.getTypeUrl('outsider (native)')).to.be.undefined();
+		});
+	});
 });

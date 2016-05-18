@@ -612,7 +612,15 @@
 			"title": "Resurrection Vulnerability (Su)",
 			"description": [
 				{
-					"text": "A raise dead or similar spell cast on a wight destroys it (Will negates). Using the spell in this way does not require a material component."
+					"text": "A "
+				},
+				{
+					"text": "raise dead",
+					"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/spells/raiseDead.html#raise-dead",
+					"isMagic": true
+				},
+				{
+					"text": " or similar spell cast on a wight destroys it (Will negates). Using the spell in this way does not require a material component."
 				}
 			]
 		}

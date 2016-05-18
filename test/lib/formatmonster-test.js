@@ -521,6 +521,24 @@ describe('Formatting of monster data for display', function(){
 			expect(skills[0][1]).to.deep.equal( { text: '+12' });
 		});
 	});
+
+	describe('getRacialModifiers', function(){
+		it('returns undefined when the creature has no racial modifier', function(){
+			var monster = new Monster();
+			expect(format.getRacialModifiers(monster)).to.be.undefined();
+		});
+
+		it('returns an array of chunks for display in the template', function(){
+			var monster = new Monster();
+			monster.setSkills([{'name': 'Acrobatics', 'ranks': 4, 'racial': 6}]);
+			expect(format.getRacialModifiers(monster)).to.deep.equal([
+				[
+					{text: '+6'}, 
+					{text: 'Acrobatics', url: 'http://paizo.com/pathfinderRPG/prd/skills/acrobatics.html#acrobatics'}
+				]
+			]);
+		});
+	});
 	
 	describe('getSpeed', function(){
 		it('returns undefined when the monster has no speed', function(){

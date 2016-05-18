@@ -943,6 +943,25 @@ describe('Monster', function(){
 		});
 	});
 
+	describe('getRacialModifier', function(){
+		it('returns undefined if monster doesn\'t have the given skill', function(){
+			var monster = new Monster();
+			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined();
+		});
+
+		it('returns undefined if there is no racial modifier for the given skill', function(){
+			var monster = new Monster();
+			monster.setSkills([{name: 'Acrobatics', ranks: 4}]);
+			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined();
+		});
+
+		it('returns the correct racial modifier for the given skill', function(){
+			var monster = new Monster();
+			monster.setSkills([{name: 'Acrobatics', ranks: 4, racial: 7}]);
+			expect(monster.getRacialModifier('Acrobatics')).to.equal(7);
+		});
+	});
+
 	describe('getFeatsList', function(){
 		it('returns an empty array when the monster has no feats', function(){
 			var monster = new Monster();

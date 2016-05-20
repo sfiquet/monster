@@ -92,5 +92,33 @@ describe('OrderedSet', function(){
 			expect(set.getItemByKey('three')).to.deep.equal({'name': 'three', 'object': {'name': 'four', 'blah': '123'}});
 		});
 	});
+
+	describe('getItemByIndex', function(){
+		it('returns undefined if the index is out of bounds', function(){
+			var set = new OrderedSet();
+			expect(set.getItemByIndex(-1)).to.be.undefined();
+			expect(set.getItemByIndex(0)).to.be.undefined();
+
+			var data = [
+				{'name': 'one', 'number': 4}, 
+				{'name': 'two', 'string': 'asd'}, 
+				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
+			];
+			set = new OrderedSet(data);
+			expect(set.getItemByIndex(3)).to.be.undefined();
+		});
+
+		it('returns the idem identified by the index', function(){
+			var data = [
+				{'name': 'one', 'number': 4}, 
+				{'name': 'two', 'string': 'asd'}, 
+				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
+			];
+			var set = new OrderedSet(data);
+			expect(set.getItemByIndex(0)).to.deep.equal({'name': 'one', 'number': 4});
+			expect(set.getItemByIndex(1)).to.deep.equal({'name': 'two', 'string': 'asd'});
+			expect(set.getItemByIndex(2)).to.deep.equal({'name': 'three', 'object': {'name': 'four', 'blah': '123'}});
+		});
+	});
 });
 

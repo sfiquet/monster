@@ -92,6 +92,74 @@ describe('Look-up tables', function(){
 			expect(ref.compareSize('gargantuan', 'gargantuan')).to.satisfy(isNaN);
 		});
 	});
+
+	describe('getSizeIndex', function(){
+		it('returns the correct index for valid sizes', function(){
+			expect(ref.getSizeIndex('Fine')).to.equal(0);
+			expect(ref.getSizeIndex('Diminutive')).to.equal(1);
+			expect(ref.getSizeIndex('Tiny')).to.equal(2);
+			expect(ref.getSizeIndex('Small')).to.equal(3);
+			expect(ref.getSizeIndex('Medium')).to.equal(4);
+			expect(ref.getSizeIndex('Large')).to.equal(5);
+			expect(ref.getSizeIndex('Huge')).to.equal(6);
+			expect(ref.getSizeIndex('Gargantuan')).to.equal(7);
+			expect(ref.getSizeIndex('Colossal')).to.equal(8);
+		});
+
+		it('returns undefined for invalid sizes', function(){
+			expect(ref.getSizeIndex('fine')).to.be.undefined();
+			expect(ref.getSizeIndex(0)).to.be.undefined();
+		});
+	});
+
+	describe('getSizeName', function(){
+		it('returns the correct size name for the given index', function(){
+			expect(ref.getSizeName(0)).to.equal('Fine');
+			expect(ref.getSizeName(1)).to.equal('Diminutive');
+			expect(ref.getSizeName(2)).to.equal('Tiny');
+			expect(ref.getSizeName(3)).to.equal('Small');
+			expect(ref.getSizeName(4)).to.equal('Medium');
+			expect(ref.getSizeName(5)).to.equal('Large');
+			expect(ref.getSizeName(6)).to.equal('Huge');
+			expect(ref.getSizeName(7)).to.equal('Gargantuan');
+			expect(ref.getSizeName(8)).to.equal('Colossal');
+		});
+
+		it('returns undefined when the index is out of range', function(){
+			expect(ref.getSizeName(-1)).to.be.undefined();
+			expect(ref.getSizeName(9)).to.be.undefined();
+			expect(ref.getSizeName('Colossal')).to.be.undefined();
+		});
+
+		it('returns undefined when the index is not a number', function(){
+			expect(ref.getSizeName('Colossal')).to.be.undefined();
+			expect(ref.getSizeName()).to.be.undefined();
+		});
+	});
+
+	describe('getNextSizeUp', function(){
+		it('returns undefined if there is no size up', function(){
+			expect(ref.getNextSizeUp('Colossal')).to.be.undefined();
+		});
+
+		it('returns the name of the next size up', function(){
+			expect(ref.getNextSizeUp('Fine')).to.equal('Diminutive');
+			expect(ref.getNextSizeUp('Medium')).to.equal('Large');
+			expect(ref.getNextSizeUp('Huge')).to.equal('Gargantuan');
+		});
+	});
+	
+	describe('getNextSizeDown', function(){
+		it('returns undefined if there is no size down', function(){
+			expect(ref.getNextSizeDown('Fine')).to.be.undefined();
+		});
+
+		it('returns the name of the next size down', function(){
+			expect(ref.getNextSizeDown('Colossal')).to.equal('Gargantuan');
+			expect(ref.getNextSizeDown('Medium')).to.equal('Small');
+			expect(ref.getNextSizeDown('Tiny')).to.equal('Diminutive');
+		});
+	});
 	
 	describe('getHitDie', function(){
 		it('returns an integer representing the hit die for the type provided', function(){

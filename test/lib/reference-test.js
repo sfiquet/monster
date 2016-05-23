@@ -446,4 +446,52 @@ describe('Look-up tables', function(){
 			expect(ref.getSpace('Colossal')).to.equal(30);
 		});
 	});
+
+	describe('getReach', function(){
+		it('returns undefined for invalid parameters', function(){
+			expect(ref.getReach('WrongSize', 'WrongShape')).to.be.undefined();
+			expect(ref.getReach('WrongSize', 'tall')).to.be.undefined();
+			expect(ref.getReach('Medium', 'WrongShape')).to.be.undefined();
+			expect(ref.getReach()).to.be.undefined();
+		});
+
+		it('returns undefined when there is no shape parameter and the size is Large or bigger', function(){
+			expect(ref.getReach('Large')).to.be.undefined();
+			expect(ref.getReach('Huge')).to.be.undefined();
+			expect(ref.getReach('Gargantuan')).to.be.undefined();
+			expect(ref.getReach('Colossal')).to.be.undefined();
+		});
+		
+		it('returns the correct reach without a shape parameter when the given size does not exceed Medium', function(){
+			expect(ref.getReach('Fine')).to.equal(0);
+			expect(ref.getReach('Diminutive')).to.equal(0);
+			expect(ref.getReach('Tiny')).to.equal(0);
+			expect(ref.getReach('Small')).to.equal(5);
+			expect(ref.getReach('Medium')).to.equal(5);
+		});
+		
+		it('returns the correct reach for the given size for a long monster', function(){
+			expect(ref.getReach('Fine', 'long')).to.equal(0);
+			expect(ref.getReach('Diminutive', 'long')).to.equal(0);
+			expect(ref.getReach('Tiny', 'long')).to.equal(0);
+			expect(ref.getReach('Small', 'long')).to.equal(5);
+			expect(ref.getReach('Medium', 'long')).to.equal(5);
+			expect(ref.getReach('Large', 'long')).to.equal(5);
+			expect(ref.getReach('Huge', 'long')).to.equal(10);
+			expect(ref.getReach('Gargantuan', 'long')).to.equal(15);
+			expect(ref.getReach('Colossal', 'long')).to.equal(20);
+		});
+		
+		it('returns the correct reach for the given size for a tall monster', function(){
+			expect(ref.getReach('Fine', 'tall')).to.equal(0);
+			expect(ref.getReach('Diminutive', 'tall')).to.equal(0);
+			expect(ref.getReach('Tiny', 'tall')).to.equal(0);
+			expect(ref.getReach('Small', 'tall')).to.equal(5);
+			expect(ref.getReach('Medium', 'tall')).to.equal(5);
+			expect(ref.getReach('Large', 'tall')).to.equal(10);
+			expect(ref.getReach('Huge', 'tall')).to.equal(15);
+			expect(ref.getReach('Gargantuan', 'tall')).to.equal(20);
+			expect(ref.getReach('Colossal', 'tall')).to.equal(30);			
+		});
+	});
 });

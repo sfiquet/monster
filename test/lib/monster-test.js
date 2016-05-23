@@ -244,6 +244,11 @@ describe('Monster', function(){
 			myMonster = new Monster({spaceOffset: 1});
 			expect(myMonster.spaceOffset).to.equal(1);
 		});
+
+		it('doesn\'t replace a reach of 0 with the default 5', function(){
+			myMonster = new Monster({reach: 0});
+			expect(myMonster.reach).to.equal(0);
+		});
 	});
 	
 	describe('Calculated values', function(){

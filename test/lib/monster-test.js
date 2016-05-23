@@ -118,6 +118,7 @@ describe('Monster', function(){
 			expect(myMonster.specialAbilities).to.be.undefined();
 			expect(myMonster.specialCMB).to.be.undefined();
 			expect(myMonster.spaceOffset).to.be.undefined();
+			expect(myMonster.shape).to.equal('tall');
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -248,6 +249,11 @@ describe('Monster', function(){
 		it('doesn\'t replace a reach of 0 with the default 5', function(){
 			myMonster = new Monster({reach: 0});
 			expect(myMonster.reach).to.equal(0);
+		});
+
+		it('stores the shape property when provided', function(){
+			myMonster = new Monster({shape: 'long'});
+			expect(myMonster.shape).to.equal('long');
 		});
 	});
 	

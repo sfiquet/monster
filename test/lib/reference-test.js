@@ -148,7 +148,7 @@ describe('Look-up tables', function(){
 			expect(ref.getNextSizeUp('Huge')).to.equal('Gargantuan');
 		});
 	});
-	
+
 	describe('getNextSizeDown', function(){
 		it('returns undefined if there is no size down', function(){
 			expect(ref.getNextSizeDown('Fine')).to.be.undefined();
@@ -246,6 +246,204 @@ describe('Look-up tables', function(){
 			expect(ref.getTypeUrl('')).to.be.undefined();
 			expect(ref.getTypeUrl()).to.be.undefined();
 			expect(ref.getTypeUrl('outsider (native)')).to.be.undefined();
+		});
+	});
+
+	describe('getNextDamageDiceUp', function(){
+		it('returns undefined if the parameters are incorrect', function(){
+			expect(ref.getNextDamageDiceUp(undefined, {nbDice: 1, dieType: 4})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('not a size', {nbDice: 1, dieType: 4})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium', {dieType: 4})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium')).to.be.undefined();
+		});
+
+		it('returns the correct damage dice when the initial damage is 1d6 or less', function(){
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 1})).to.deep.equal({nbDice: 1, dieType: 2});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 2})).to.deep.equal({nbDice: 1, dieType: 3});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 3})).to.deep.equal({nbDice: 1, dieType: 4});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 4})).to.deep.equal({nbDice: 1, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 6})).to.deep.equal({nbDice: 1, dieType: 8});
+		});
+
+		it('returns the correct damage dice for an initial size of Small or lower', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 1})).to.deep.equal({nbDice: 1, dieType: 2});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 2})).to.deep.equal({nbDice: 1, dieType: 3});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 3})).to.deep.equal({nbDice: 1, dieType: 4});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 4})).to.deep.equal({nbDice: 1, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 6})).to.deep.equal({nbDice: 1, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 8})).to.deep.equal({nbDice: 1, dieType: 10});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 10})).to.deep.equal({nbDice: 2, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 2, dieType: 6})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 2, dieType: 8})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 6})).to.deep.equal({nbDice: 3, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 8})).to.deep.equal({nbDice: 4, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 4, dieType: 6})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 4, dieType: 8})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 6, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 6, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 8, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 8, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 12, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 12, dieType: 8})).to.deep.equal({nbDice: 16, dieType: 6});
+
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 1})).to.deep.equal({nbDice: 1, dieType: 2});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 2})).to.deep.equal({nbDice: 1, dieType: 3});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 3})).to.deep.equal({nbDice: 1, dieType: 4});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 4})).to.deep.equal({nbDice: 1, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 6})).to.deep.equal({nbDice: 1, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 8})).to.deep.equal({nbDice: 1, dieType: 10});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 1, dieType: 10})).to.deep.equal({nbDice: 2, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 2, dieType: 6})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 2, dieType: 8})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 3, dieType: 6})).to.deep.equal({nbDice: 3, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 3, dieType: 8})).to.deep.equal({nbDice: 4, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 4, dieType: 6})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 4, dieType: 8})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 6, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 6, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 8, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 8, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 12, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Fine', {nbDice: 12, dieType: 8})).to.deep.equal({nbDice: 16, dieType: 6});
+		});
+
+		it('returns the correct damage dice for an initial size of Medium or higher with damage of 1d8 or higher', function(){
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 8})).to.deep.equal({nbDice: 2, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 10})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 2, dieType: 6})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 2, dieType: 8})).to.deep.equal({nbDice: 3, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 6})).to.deep.equal({nbDice: 4, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 8})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 4, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 4, dieType: 8})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 6, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 6, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 8, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 8, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 12, dieType: 6})).to.deep.equal({nbDice: 16, dieType: 6});
+
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 1, dieType: 8})).to.deep.equal({nbDice: 2, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 1, dieType: 10})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 1, dieType: 12})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 2, dieType: 6})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 2, dieType: 8})).to.deep.equal({nbDice: 3, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 3, dieType: 6})).to.deep.equal({nbDice: 4, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 3, dieType: 8})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 4, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 4, dieType: 8})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 6, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 6, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 8, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 8, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Gargantuan', {nbDice: 12, dieType: 6})).to.deep.equal({nbDice: 16, dieType: 6});
+		});
+
+		it('returns the correct damage dice when the original damage is a non-standard number of d6', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 7, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 9, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 10, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 11, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 6});
+			// those last calculations only work for Small and lower sizes
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 13, dieType: 6})).to.deep.equal({nbDice: 16, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 14, dieType: 6})).to.deep.equal({nbDice: 16, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 15, dieType: 6})).to.deep.equal({nbDice: 16, dieType: 6});
+
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 6})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 7, dieType: 6})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 9, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 10, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 11, dieType: 6})).to.deep.equal({nbDice: 12, dieType: 8});			
+		});
+
+		it('returns the correct damage dice when the original damage is a non-standard number of d8', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 8})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 7, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 9, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 10, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 11, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 8});
+
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 8})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 7, dieType: 8})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 9, dieType: 8})).to.deep.equal({nbDice: 16, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 10, dieType: 8})).to.deep.equal({nbDice: 16, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 11, dieType: 8})).to.deep.equal({nbDice: 16, dieType: 6});			
+		});
+		
+		it('returns the correct damage dice when the original damage has several d4', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 2, dieType: 4})).to.deep.equal({nbDice: 1, dieType: 10});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 4})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 4, dieType: 4})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 6, dieType: 4})).to.deep.equal({nbDice: 4, dieType: 8});
+
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 2, dieType: 4})).to.deep.equal({nbDice: 2, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 4})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 4, dieType: 4})).to.deep.equal({nbDice: 3, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 6, dieType: 4})).to.deep.equal({nbDice: 6, dieType: 6});
+
+			// not much point in testing further as d4 are not used in big numbers
+			// 5d4 is unlikely too and has no calculation
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 4})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 4})).to.be.undefined();
+		});
+
+		it('returns the correct damage dice when the original damage has several d10', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 2, dieType: 10})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 4, dieType: 10})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 6, dieType: 10})).to.deep.equal({nbDice: 12, dieType: 8});
+			// same results for bigger sizes
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 2, dieType: 10})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 4, dieType: 10})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 6, dieType: 10})).to.deep.equal({nbDice: 12, dieType: 8});
+
+			// the calculation only works on numbers that are multiple of 2
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 10})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 10})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 10})).to.be.undefined();
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 10})).to.be.undefined();
+		});
+
+		it('returns the correct damage dice when the original damage is based on d12', function(){
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 1, dieType: 12})).to.deep.equal({nbDice: 2, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 2, dieType: 12})).to.deep.equal({nbDice: 4, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 12})).to.deep.equal({nbDice: 6, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 4, dieType: 12})).to.deep.equal({nbDice: 8, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 12})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 6, dieType: 12})).to.deep.equal({nbDice: 12, dieType: 8});
+			// 7d12 calculation only works for smaller sizes
+			expect(ref.getNextDamageDiceUp('Small', {nbDice: 7, dieType: 12})).to.deep.equal({nbDice: 16, dieType: 6});
+
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 1, dieType: 12})).to.deep.equal({nbDice: 3, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 2, dieType: 12})).to.deep.equal({nbDice: 6, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 12})).to.deep.equal({nbDice: 8, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 4, dieType: 12})).to.deep.equal({nbDice: 12, dieType: 6});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 12})).to.deep.equal({nbDice: 12, dieType: 8});
+			expect(ref.getNextDamageDiceUp('Medium', {nbDice: 6, dieType: 12})).to.deep.equal({nbDice: 16, dieType: 6});
+		});
+	});
+
+	describe('getNextDamageDiceDown', function(){
+		
+	});
+
+	describe('getSpace', function(){
+		it('returns undefined for an invalid size', function(){
+			expect(ref.getSpace('Wrong')).to.be.undefined();
+			expect(ref.getSpace('medium')).to.be.undefined();
+			expect(ref.getSpace(0)).to.be.undefined();
+		});
+
+		it('returns the correct space for the given size', function(){
+			expect(ref.getSpace('Fine')).to.equal(0.5);
+			expect(ref.getSpace('Diminutive')).to.equal(1);
+			expect(ref.getSpace('Tiny')).to.equal(2.5);
+			expect(ref.getSpace('Small')).to.equal(5);
+			expect(ref.getSpace('Medium')).to.equal(5);
+			expect(ref.getSpace('Large')).to.equal(10);
+			expect(ref.getSpace('Huge')).to.equal(15);
+			expect(ref.getSpace('Gargantuan')).to.equal(20);
+			expect(ref.getSpace('Colossal')).to.equal(30);
 		});
 	});
 });

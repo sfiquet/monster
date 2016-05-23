@@ -117,6 +117,7 @@ describe('Monster', function(){
 			expect(myMonster.specialAtk).to.be.undefined();
 			expect(myMonster.specialAbilities).to.be.undefined();
 			expect(myMonster.specialCMB).to.be.undefined();
+			expect(myMonster.spaceOffset).to.be.undefined();
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -237,6 +238,11 @@ describe('Monster', function(){
 		it('creates an object even if not called with new', function(){
 			myMonster = Monster();
 			expect(myMonster).to.be.an.instanceof(Monster);
+		});
+
+		it('stores the spaceOffset property when provided', function(){
+			myMonster = new Monster({spaceOffset: 1});
+			expect(myMonster.spaceOffset).to.equal(1);
 		});
 	});
 	

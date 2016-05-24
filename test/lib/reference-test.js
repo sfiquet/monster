@@ -60,13 +60,38 @@ describe('Look-up tables', function(){
 	describe('getSizeMod', function(){
 		it('returns the size modifier for valid size names', function(){
 			expect(ref.getSizeMod('Fine')).to.equal(8);
+			expect(ref.getSizeMod('Diminutive')).to.equal(4);
+			expect(ref.getSizeMod('Tiny')).to.equal(2);
+			expect(ref.getSizeMod('Small')).to.equal(1);
 			expect(ref.getSizeMod('Medium')).to.equal(0);
+			expect(ref.getSizeMod('Large')).to.equal(-1);
+			expect(ref.getSizeMod('Huge')).to.equal(-2);
 			expect(ref.getSizeMod('Gargantuan')).to.equal(-4);
+			expect(ref.getSizeMod('Colossal')).to.equal(-8);
 		});
 		it('returns undefined for any other value', function(){
 			expect(ref.getSizeMod('fine')).to.be.undefined();
 			expect(ref.getSizeMod('')).to.be.undefined();
 			expect(ref.getSizeMod(0)).to.be.undefined();
+		});
+	});
+	
+	describe('getStealthSizeMod', function(){
+		it('returns the Stealth size modifier for valid size names', function(){
+			expect(ref.getStealthSizeMod('Fine')).to.equal(16);
+			expect(ref.getStealthSizeMod('Diminutive')).to.equal(12);
+			expect(ref.getStealthSizeMod('Tiny')).to.equal(8);
+			expect(ref.getStealthSizeMod('Small')).to.equal(4);
+			expect(ref.getStealthSizeMod('Medium')).to.equal(0);
+			expect(ref.getStealthSizeMod('Large')).to.equal(-4);
+			expect(ref.getStealthSizeMod('Huge')).to.equal(-8);
+			expect(ref.getStealthSizeMod('Gargantuan')).to.equal(-12);
+			expect(ref.getStealthSizeMod('Colossal')).to.equal(-16);
+		});
+		it('returns undefined for any other value', function(){
+			expect(ref.getStealthSizeMod('fine')).to.be.undefined();
+			expect(ref.getStealthSizeMod('')).to.be.undefined();
+			expect(ref.getStealthSizeMod(0)).to.be.undefined();
 		});
 	});
 	

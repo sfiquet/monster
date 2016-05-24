@@ -397,7 +397,7 @@ describe('Monster', function(){
 			tiger.Wis = 1;
 			expect(tiger.getSkillBonus('Survival')).to.equal(-5);
 		});
-		
+
 		it('calculates untrained climb bonus when there is a climb speed', function(){
 			expect(tiger.getSkillBonus('Climb')).to.equal(6);
 			tiger.speed = { land: 30, climb: 15 };
@@ -425,6 +425,14 @@ describe('Monster', function(){
 			expect(tiger.getSkillBonus('Acrobatics')).to.equal(8); // 2 Dex + 6 racial
 		});
 
+		it('applies the stealth size modifiers', function(){
+			// untrained +2 Dex -4 Large
+			expect(tiger.getSkillBonus('Stealth')).to.equal(-2);
+			// trained +2 Dex -4 Large +4 racial +3 class skills +2 ranks
+			tiger.setSkills([{name: 'Stealth', ranks: 2, racial: 4}]);
+			expect(tiger.getSkillBonus('Stealth')).to.equal(7);
+		});
+		
 		it('applies the Skill Focus feat correctly', function(){
 			tiger.feats = new OrderedSet([
 				{

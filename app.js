@@ -58,7 +58,7 @@ app.route('/advance/:monster/:options/options')
  * GET handler for the Home page
  */
 function getHomePage(req, res){
-	res.render('home');
+	res.render('home', { pageTitle: 'Monster Workshop' });
 }
 
 /**

@@ -165,10 +165,10 @@ describe('Giant Template', function(){
 		it('keeps the reach unchanged when the reach is atypical but the typical reach would not be affected by the change of size', function(){
 			var monster;
 			// Diminutive to Tiny
-			monster = new Monster({size: 'Diminutive', reach: 2.5, shape: 'long'});
-			expect(monster.reach).to.equal(2.5);
+			monster = new Monster({size: 'Diminutive', reach: 5, shape: 'long'});
+			expect(monster.reach).to.equal(5);
 			giant.apply(monster);
-			expect(monster.reach).to.equal(2.5);
+			expect(monster.reach).to.equal(5);
 
 			// Small to Medium
 			monster = new Monster({size: 'Small', reach: 10, shape: 'tall'});
@@ -214,11 +214,6 @@ describe('Giant Template', function(){
 
 		it('ignores fractions above 5 ft', function(){
 			var monster;
-			// Tiny to Small
-			monster = new Monster({size: 'Tiny', reach: 2.5, shape: 'long'});
-			expect(monster.reach).to.equal(2.5);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(5);
 
 			// Gargantuan to Colossal, smaller reach than typical
 			monster = new Monster({size: 'Gargantuan', reach: 5, shape: 'tall'});

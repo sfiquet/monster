@@ -1,31 +1,39 @@
 <form action={{postTo}} method="post">
 	<h2>Customisation</h2>
-	<p>Select your templates</p>
-	<div>	
-		{{#if options.advanced}}
-			<input type="checkbox" name="advanced" checked>
-		{{else}}
-			<input type="checkbox" name="advanced">
-		{{/if}}
-		Advanced
+	<div id="templates">
+		<p>Select your templates:</p>
+		<div>	
+			<label>
+				{{#if options.advanced}}
+					<input class="checkbox" type="checkbox" name="advanced" checked>
+				{{else}}
+					<input class="checkbox" type="checkbox" name="advanced">
+				{{/if}}
+				Advanced
+			</label>
+		</div>
+		<div>
+			<label>
+				{{#if options.giant}}
+					<input class="checkbox" type="checkbox" name="giant" checked>
+				{{else}}
+					<input class="checkbox" type="checkbox" name="giant">
+				{{/if}}
+				Giant
+			</label>
+		</div>
+		<div>
+			<label>
+				{{#if options.young}}
+					<input class="checkbox" type="checkbox" name="young" checked>
+				{{else}}
+					<input class="checkbox" type="checkbox" name="young">
+				{{/if}}
+				Young
+			</label>
+		</div>
 	</div>
 	<div>
-		{{#if options.giant}}
-			<input type="checkbox" name="giant" checked>
-		{{else}}
-			<input type="checkbox" name="giant">
-		{{/if}}
-		Giant
-	</div>
-	<div>
-		{{#if options.young}}
-			<input type="checkbox" name="young" checked>
-		{{else}}
-			<input type="checkbox" name="young">
-		{{/if}}
-		Young
-	</div>
-	<div>
-		<button type="submit">Apply</button>
+		<button class= "button" type="submit">Apply</button>
 	</div>
 </form>

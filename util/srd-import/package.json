@@ -1,0 +1,17 @@
+{
+  "name": "srd-import",
+  "version": "1.0.0",
+  "description": "Utility to import monsters from the SRD Excel file",
+  "main": "srd-import.js",
+  "scripts": {
+    "test": "mocha --recursive --reporter spec"
+  },
+  "author": "Sylvie Fiquet",
+  "dependencies": {
+    "xlsx": "^0.8.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
+  }
+}

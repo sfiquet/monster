@@ -498,17 +498,27 @@ function parseFeatChunk(featStr){
 		result = {},
 		errors = [],
 		warnings = [],
-		close;
+		close,
+		name,
+		details,
+		special = [];
 	
 	// split at the opening parenthesis
 	chunks = featStr.split('(');
 	
 	// more than one opening parenthesis? raise an error
+	// although in theory this could happen: Skill Focus(Perception) (some comment)
 	if (chunks.length > 2) {
 		return {errors: [invalidValue(featStr)], warnings: [], data: undefined};
 	}
 
-	result.name = chunks[0].trim();
+	name = chunks[0].trim();
+
+	// look for B for bonus feat
+	if (name.endsWith('B')) {
+		name = name.slice(0, -1);
+		special.push('bonus');
+	}
 	
 	if (chunks.length === 2) {
 		
@@ -516,30 +526,47 @@ function parseFeatChunk(featStr){
 
 		if (close < 0) {
 		
-			result.details = { name: chunks[1].trim() };
+			details = { name: chunks[1].trim() };
 			warnings.push('Closing parenthesis missing: ' + featStr);
 		
 		} else {
 		
-			result.details = { name: chunks[1].slice(0, close).trim() };
+			details = { name: chunks[1].slice(0, close).trim() };
 
 			// check that there isn't anything after the closing parenthesis
-			var endStr = chunks[1].slice(close + 1);
+			var endStr = chunks[1].slice(close + 1).trim();
+
+			// special case: B for bonus feat
+			if (endStr === 'B' && special.length === 0) {
+				special.push('bonus');
 			
-			if (endStr.trim().length > 0) {
+			} else if (endStr.length > 0) {
 				warnings.push('Unexpected data after closing parenthesis: ' + featStr);
 			}
 		}
 		// check that there aren't any square brackets within the details
 		// not handled yet
-		var sq = result.details.name.indexOf('[');
+		var sq = details.name.indexOf('[');
 		if (sq >= 0) {
 			errors.push('Feat sub-details not handled yet');
 		}
 	}
 
 	if (errors.length) {
+		
 		result = undefined;
+
+	} else {
+
+		result.name = name;
+		
+		if (details) {
+			result.details = details;
+		}
+		
+		if (special.length > 0) {
+			result.special = special;
+		}
 	}
 
 	return {errors: errors, warnings: warnings, data: result};
@@ -620,7 +647,7 @@ function extractFeats(featStr){
 		list = [];
 	
 	} else {
-		
+
 		result = parseFeatString(featStr);
 
 		errors = result.errors;

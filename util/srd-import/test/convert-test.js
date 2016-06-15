@@ -370,5 +370,27 @@ describe('Convert', function(){
 			expect(conv.extractFeats('Heavy Armor Proficiency')).to.deep.equal(
 				{name: 'feats', errors: ['Feat not handled yet: "Heavy Armor Proficiency"'], warnings: [], data: undefined});
 		});
+
+		it('identifies and stores bonus feats properly when they have no extra details', function(){
+			expect(conv.extractFeats('RunB, Diehard, Power Attack')).to.deep.equal(
+				{name: 'feats', errors: [], warnings: [], data: [{name: 'Run', special: ['bonus']}, {name: 'Diehard'}, {name: 'Power Attack'}]});
+
+			expect(conv.extractFeats('Diehard, Power Attack, RunB')).to.deep.equal(
+				{name: 'feats', errors: [], warnings: [], data: [{name: 'Diehard'}, {name: 'Power Attack'}, {name: 'Run', special: ['bonus']}]});
+		});
+
+		it('identifies and stores bonus feats properly when they have additional details', function(){
+			expect(conv.extractFeats('Skill Focus (Perception)B, Diehard, Power Attack')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [], 
+					data: [	{name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}, 
+							{name: 'Diehard'}, 
+							{name: 'Power Attack'}]});
+
+			expect(conv.extractFeats('Diehard, Power Attack, Skill Focus (Perception)B')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [], 
+					data: [	{name: 'Diehard'}, 
+							{name: 'Power Attack'},
+							{name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}]});
+		});
 	});
 });

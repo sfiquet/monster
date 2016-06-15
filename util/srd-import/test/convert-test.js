@@ -340,6 +340,7 @@ describe('Convert', function(){
 		
 		it('generates an empty array when there are no feats', function(){
 			expect(conv.extractFeats('')).to.deep.equal({name: 'feats', errors: [], warnings: [], data: []});
+			expect(conv.extractFeats(undefined)).to.deep.equal({name: 'feats', errors: [], warnings: [], data: []});
 		});
 
 		it('generates an array of feat names when the feats are simple', function(){

@@ -614,11 +614,19 @@ function extractFeats(featStr){
 		errors = [],
 		warnings = [];
 
-	result = parseFeatString(featStr);
+	if (featStr === undefined) {
 
-	errors = result.errors;
-	warnings = result.warnings;
-	list = result.data;
+		// there are no feats, same as empty string
+		list = [];
+	
+	} else {
+		
+		result = parseFeatString(featStr);
+
+		errors = result.errors;
+		warnings = result.warnings;
+		list = result.data;
+	}
 
 	if (list) {
 

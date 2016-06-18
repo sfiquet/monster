@@ -10,7 +10,9 @@
 // - data: the required data
 // ***********************************************************************
 
-var feat = require('./feat');
+var feat = require('./feat'),
+	parse = require('./parse'),
+	log = require('./log');
 
 const 	WRONG_FORMAT_VALUE1 = 37288,
 		WRONG_FORMAT_VALUE2 = 41641;
@@ -443,136 +445,6 @@ function extractSpeed(speedStr){
 }
 
 /**
- * parseCommaSeparatedString
- * build a list of chunks that are comma-separated ignoring any commas that are 
- * within parentheses.
- *
- * Note: there can be square brackets (with or without commas) within the 
- * parentheses but it doesn't matter here. Further parsing can be done on
- * the chunks. There are no square brackets outside parentheses.
- */
-function parseCommaSeparatedString(dataStr) {
-	var chunks = [];
-
-	if (typeof dataStr !== 'string') {
-		return undefined;
-	}
-
-	// look for commas
-	var begin = 0;
-	var parens = false;
-	for (var i = 0; i < dataStr.length; i++) {
-
-		// inside parens: look for closing parens only
-		// note: we're not expecting nested parentheses
-		if (parens) {
-
-			if (dataStr[i] === ')') {
-				parens = false;
-			}
-
-		// outside of parens
-		// look for comma and opening parens
-		} else {
-			
-			if (dataStr[i] === ',') {
-				chunks.push(dataStr.slice(begin, i).trim());
-				begin = i+1;
-			
-			} else if (dataStr[i] === '(') {
-				parens = true;
-			}
-		}
-	}
-
-	// add the last chunk
-	if (begin < dataStr.length) {
-		chunks.push(dataStr.slice(begin, dataStr.length).trim());
-	}
-
-	return chunks;
-}
-
-function parseFeatChunk(featStr){
-	var chunks,
-		result = {},
-		errors = [],
-		warnings = [],
-		close,
-		name,
-		details,
-		special = [];
-	
-	// split at the opening parenthesis
-	chunks = featStr.split('(');
-	
-	// more than one opening parenthesis? raise an error
-	// although in theory this could happen: Skill Focus(Perception) (some comment)
-	if (chunks.length > 2) {
-		return {errors: [invalidValue(featStr)], warnings: [], data: undefined};
-	}
-
-	name = chunks[0].trim();
-
-	// look for B for bonus feat
-	if (name.endsWith('B')) {
-		name = name.slice(0, -1);
-		special.push('bonus');
-	}
-	
-	if (chunks.length === 2) {
-		
-		close = chunks[1].indexOf(')');
-
-		if (close < 0) {
-		
-			details = { name: chunks[1].trim() };
-			warnings.push('Closing parenthesis missing: ' + featStr);
-		
-		} else {
-		
-			details = { name: chunks[1].slice(0, close).trim() };
-
-			// check that there isn't anything after the closing parenthesis
-			var endStr = chunks[1].slice(close + 1).trim();
-
-			// special case: B for bonus feat
-			if (endStr === 'B' && special.length === 0) {
-				special.push('bonus');
-			
-			} else if (endStr.length > 0) {
-				warnings.push('Unexpected data after closing parenthesis: ' + featStr);
-			}
-		}
-		// check that there aren't any square brackets within the details
-		// not handled yet
-		var sq = details.name.indexOf('[');
-		if (sq >= 0) {
-			errors.push('Feat sub-details not handled yet');
-		}
-	}
-
-	if (errors.length) {
-		
-		result = undefined;
-
-	} else {
-
-		result.name = name;
-		
-		if (details) {
-			result.details = details;
-		}
-		
-		if (special.length > 0) {
-			result.special = special;
-		}
-	}
-
-	return {errors: errors, warnings: warnings, data: result};
-}
-
-/**
  * parseFeatString
  * parses the feat strings and returns an array of feat objects with properties:
  * - name
@@ -589,11 +461,11 @@ function parseFeatString(featStr) {
 		return {errors: [invalidValue(featStr)], warnings: [], data: undefined};
 	}
 
-	chunks = parseCommaSeparatedString(featStr);
+	chunks = parse.parseCommaSeparatedString(featStr);
 
 	data = chunks.map(function(str){
 
-		result = parseFeatChunk(str);
+		result = parse.parseFeatChunk(str);
 		
 		Array.prototype.push.apply(errors, result.errors);
 		Array.prototype.push.apply(warnings, result.warnings);
@@ -670,6 +542,75 @@ function extractFeats(featStr){
 	return {name: 'feats', errors: errors, warnings: warnings, data: list};
 }
 
+/**
+ * calculateAttackType
+ */
+function calculateAttackType(attackObj){
+	var attack;
+	
+	var naturalAttacks = [
+		'bite',
+		'claw',
+		'gore',
+		'hoof',
+		'pincers',
+		'slam',
+		'sting',
+		'tail slap',
+		'talons',
+		'tentacle',
+		'wing'
+	];
+
+	attack = attackObj.name;
+	if (naturalAttacks.indexOf(attack) >= 0) {
+		return 'natural';
+	}
+}
+
+/**
+ * extractMelee
+ * parses the melee string and converts it to a melee object
+ */
+function extractMelee(meleeStr){
+	var melee = {},
+		result,
+		errors = [],
+		warnings = [],
+		attack,
+		type;
+
+	if (meleeStr !== undefined && meleeStr !== '') {
+		result = parse.parseMeleeString(meleeStr);
+
+		errors = result.errors;
+		warnings = result.warnings;
+
+		if (errors.length === 0) {
+			melee[result.data.name] = result.data;
+
+			for (attack in melee) {
+				
+				type = calculateAttackType(melee[attack]);
+				
+				if (type === undefined) {
+					errors.push(log.logString('Unknown attack', attack));
+
+				} else {
+					melee[attack].type = type;
+				}
+			}
+		}
+
+		if (errors.length) {
+			melee = undefined;
+		}
+	}
+
+
+	return {name: 'melee', errors: errors, warnings: warnings, data: melee};
+}
+
 exports.checkRawMonster = checkRawMonster;
 exports.extractType = extractType;
 exports.extractCR = extractCR;
@@ -679,3 +620,4 @@ exports.extractRacialHD = extractRacialHD;
 exports.extractAbility = extractAbility;
 exports.extractSpeed = extractSpeed;
 exports.extractFeats = extractFeats;
+exports.extractMelee = extractMelee;

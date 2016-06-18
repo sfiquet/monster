@@ -8,60 +8,60 @@ describe('Convert', function(){
 
 	describe('checkRawMonster', function(){
 
-		it('generates an error when the CR is over 30', function(){
+		it('generates an error when the CR is over 30 (temporary)', function(){
 			expect(conv.checkRawMonster({cr: 31})).to.deep.equal([{name: 'CR', errors: ['CR over 30 not handled yet']}]);
 		});
 
-		it('generates an error when the monster has class levels', function(){
+		it('generates an error when the monster has class levels (temporary)', function(){
 			expect(conv.checkRawMonster({class1: 'rogue'})).to.deep.equal([{name: 'Class1', errors: ['Class levels not handled yet']}]);
 		});
 
-		it('generates an error when the HD has extra HP', function(){
+		it('generates an error when the HD has extra HP (temporary)', function(){
 			expect(conv.checkRawMonster({hd: '12d10 plus 12'})).to.deep.equal([{name: 'HD', errors: ['Hit Dice with extra HP not handled yet']}]);
 			expect(conv.checkRawMonster({hd: '11d6+55 plus 15 false life'})).to.deep.equal([{name: 'HD', errors: ['Hit Dice with extra HP not handled yet']}]);
 		});
 
-		it('generates an error when there are extra Fortitude details', function(){
+		it('generates an error when there are extra Fortitude details (temporary)', function(){
 			expect(conv.checkRawMonster({fort: '+8 (+10 vs. nonmagical disease)'})).to.deep.equal([{name: 'Fort', errors: ['Extra Fortitude not handled yet']}]);
 		});
 
-		it('generates an error when there are extra Reflex details', function(){
+		it('generates an error when there are extra Reflex details (temporary)', function(){
 			expect(conv.checkRawMonster({ref: '+5 (+1 vs. traps)'})).to.deep.equal([{name: 'Ref', errors: ['Extra Reflex not handled yet']}]);
 		});
 
-		it('generates an error when there are extra Will details', function(){
+		it('generates an error when there are extra Will details (temporary)', function(){
 			expect(conv.checkRawMonster({will: '+2 (+1 vs. fear)'})).to.deep.equal([{name: 'Will', errors: ['Extra Will not handled yet']}]);
 		});
 
-		it('generates an error when the monster has data in Gear', function(){
+		it('generates an error when the monster has data in Gear (temporary)', function(){
 			expect(conv.checkRawMonster({gear: '+2 longsword, +2 full platemail, +2 heavy steel shield'})).to.deep.equal(
 				[{name: 'Gear', errors: ['Gear not handled yet']}]);
 		});
 
-		it('generates an error when the monster has data in OtherGear', function(){
+		it('generates an error when the monster has data in OtherGear (temporary)', function(){
 			expect(conv.checkRawMonster({othergear: 'bracers of armor +6, mirror of life trapping, ring of evasion, ring of protection +5'})).to.deep.equal(
 				[{name: 'Gear', errors: ['Gear not handled yet']}]);
 		});
 
-		it('generates an error when the treasure contains specific objects', function(){
+		it('generates an error when the treasure contains specific objects (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{treasure: 'standard (sickle, masterwork composite longbow [Str +4] with 20 arrows, wooden armor, other treasure)'})).to.deep.equal(
 				[{name: 'Treasure', errors: ['Gear not handled yet']}]);
 		});
 
-		it('generates an error when the monster has ranged attacks', function(){
+		it('generates an error when the monster has ranged attacks (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{ranged: 'light crossbow +3 (1d8/19-20)'})).to.deep.equal(
 				[{name: 'Ranged', errors: ['Ranged attacks not handled yet']}]);
 		});
 
-		it('generates an error when the monster has alternate forms', function(){
+		it('generates an error when the monster has alternate forms (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{alternatenameform: 'Human Form'})).to.deep.equal(
 				[{name: 'AlternateNameForm', errors: ['Alternate forms not handled yet']}]);
 		});
 
-		it('generates an error when there is a fly speed', function(){
+		it('generates an error when there is a fly speed (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{speed: 'fly 60 ft. (poor)'})).to.deep.equal(
 				[{name: 'Speed', errors: ['Fly speed not handled yet']}]);
@@ -75,7 +75,7 @@ describe('Convert', function(){
 				[{name: 'Speed', errors: ['Fly speed not handled yet']}]);
 		});
 
-		it('generates an error when there is extra details for speeds', function(){
+		it('generates an error when there is extra details for speeds (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{speed: '30 ft. (20 ft. in armor)'})).to.deep.equal(
 				[{name: 'Speed', errors: ['Extra speed in special conditions not handled yet']}]);
@@ -86,7 +86,7 @@ describe('Convert', function(){
 		});
 
 		// useless: the move special abilities have been removed from the excel file
-		it('generates an error when there are special ways to move', function(){
+		it('generates an error when there are special ways to move (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{speed: '20 ft., swim 30 ft.; sprint'})).to.deep.equal(
 				[{name: 'Speed', errors: ['Special ways to move not handled yet']}]);
@@ -326,7 +326,7 @@ describe('Convert', function(){
 				{name: 'speed', errors: [], warnings: [], data: {swim: 60, jet: 240}});
 		});
 
-		it('generates an error when the value contains a special ability, i.e. a chunk without a numeric speed', function(){
+		it('generates an error when the value contains a special ability, i.e. a chunk without a numeric speed (temporary)', function(){
 			expect(conv.extractSpeed('20 ft., swim 30 ft., waverider')).to.deep.equal(
 				{name: 'speed', errors: ['Special abilities that affect movement not handled yet'], warnings: [], data: undefined});
 		});
@@ -353,7 +353,7 @@ describe('Convert', function(){
 				{name: 'feats', errors: [], warnings: [], data: [{name: 'Skill Focus', details: {name: 'Perception'}}]});
 		});
 
-		it('generates an error for feats whose details have details (not handled yet)', function(){
+		it('generates an error for feats whose details have details (temporary)', function(){
 			expect(conv.extractFeats('Skill Focus (Knowledge[religion])')).to.deep.equal(
 				{name: 'feats', errors: ['Feat sub-details not handled yet'], warnings: [], data: undefined});
 		});
@@ -366,7 +366,7 @@ describe('Convert', function(){
 				{name: 'feats', errors: ['Unknown feat: "Fake Feat"'], warnings: [], data: undefined});
 		});
 
-		it('generates an error when a feat is known to affect stats but isn\'t handled currently', function(){
+		it('generates an error when a feat is known to affect stats but isn\'t handled currently (temporary)', function(){
 			expect(conv.extractFeats('Heavy Armor Proficiency')).to.deep.equal(
 				{name: 'feats', errors: ['Feat not handled yet: "Heavy Armor Proficiency"'], warnings: [], data: undefined});
 		});
@@ -391,6 +391,63 @@ describe('Convert', function(){
 					data: [	{name: 'Diehard'}, 
 							{name: 'Power Attack'},
 							{name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}]});
+		});
+	});
+
+	describe('extractMelee', function(){
+		it('generates an empty object when there is no melee data', function(){
+			expect(conv.extractMelee('')).to.deep.equal({name: 'melee', errors: [], warnings: [], data: {}});
+			expect(conv.extractMelee(undefined)).to.deep.equal({name: 'melee', errors: [], warnings: [], data: {}});
+		});
+
+		it('generates the correct melee data for a single natural attack', function(){
+			expect(conv.extractMelee('bite +1 (1d4)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: {bite: {name: 'bite', type: 'natural', nbAttacks: 1, nbDice: 1, dieType: 4}}});
+
+			expect(conv.extractMelee('bite -1 (1d2-5)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: {bite: {name: 'bite', type: 'natural', nbAttacks: 1, nbDice: 1, dieType: 2}}});
+
+			expect(conv.extractMelee('bite +10 (1d8+4)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: {bite: {name: 'bite', type: 'natural', nbAttacks: 1, nbDice: 1, dieType: 8}}});
+
+		});
+
+		it('generates the correct melee data for a single natural attacks with extra damage', function(){
+			expect(conv.extractMelee('bite +10 (1d8+6 plus 1d6 acid)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: 
+					{bite: {name: 'bite', type: 'natural', nbAttacks: 1, nbDice: 1, dieType: 8, extraDamage: ['1d6 acid']}}});
+
+			expect(conv.extractMelee('bite +10 (1d8+6 plus bleed, disease, and grab)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: 
+					{bite: {name: 'bite', type: 'natural', nbAttacks: 1, nbDice: 1, dieType: 8, extraDamage: ['bleed', 'disease', 'grab']}}});
+		});
+
+		it('generates the correct melee data for a single natural attack with multiple attacks', function(){
+			expect(conv.extractMelee('2 claws +1 (1d4)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: 
+					{claw: {name: 'claw', type: 'natural', nbAttacks: 2, nbDice: 1, dieType: 4}}});
+
+			expect(conv.extractMelee('2 claws +1 (1d4 plus poison)')).to.deep.equal(
+				{name: 'melee', errors: [], warnings: [], data: 
+					{claw: {name: 'claw', type: 'natural', nbAttacks: 2, nbDice: 1, dieType: 4, extraDamage: ['poison']}}});
+		});
+
+		it('generates an error for a single weapon (temporary)', function(){
+			expect(conv.extractMelee('longsword +1 (1d8)')).to.deep.equal(
+				{name: 'melee', errors: ['Unknown attack: "longsword"'], warnings: [], data: undefined});
+		});
+
+		it('generates an error when several types of attacks or weapons are involved (temporary)', function(){
+			expect(conv.extractMelee('bite +1 (1d4), 2 claws +2 (1d6)')).to.deep.equal(
+				{name: 'melee', errors: ['Multiple attack types not handled yet'], warnings: [], data: undefined});
+
+			expect(conv.extractMelee('bite +1 (1d4) and 2 claws +2 (1d6)')).to.deep.equal(
+				{name: 'melee', errors: ['Multiple attack types not handled yet'], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there are alternative lists of weapons (separated by "or") (temporary)', function(){
+			expect(conv.extractMelee('bite +1 (1d4) or 2 claws +2 (1d6)')).to.deep.equal(
+				{name: 'melee', errors: ['Alternative lists of attacks not handled yet'], warnings: [], data: undefined});
 		});
 	});
 });

@@ -165,6 +165,7 @@ function createMonster(rawMonster) {
 	addProperty(monster, log, convert.extractAbility('Cha', rawMonster.cha));
 	addProperty(monster, log, convert.extractSpeed(rawMonster.speed));
 	addProperty(monster, log, convert.extractFeats(rawMonster.feats));
+	addProperty(monster, log, convert.extractMelee(rawMonster.melee));
 
 	return {log: log, monster: monster};
 }

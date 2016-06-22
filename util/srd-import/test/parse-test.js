@@ -194,6 +194,11 @@ describe('Parse', function(){
 			expect(parse.parseAttackHeader('+1 club +5')).to.deep.equal(
 				{errors: [createMessage('wrongFormatAttackHeader', '+1 club +5')], warnings: [], data: undefined});
 		});
+
+		it('generates a warning when there are several natural attacks of the same kind but the name doesn\'t end with an S', function(){
+			expect(parse.parseAttackHeader('2 claw +5')).to.deep.equal(
+				{errors: [], warnings: [createMessage('checkFormatAttackHeader', '2 claw +5')], data: {name: 'claw', nbAttacks: 2}});
+		});
 	});
 
 	describe('parseAttackDetails', function(){

@@ -1,7 +1,8 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var log = require('./log');
+var message = require('./message');
+var createMessage = message.createMessage;
 
 /**
  * parseCommaSeparatedString
@@ -149,7 +150,7 @@ function parseFeatChunk(featStr){
 	// more than one opening parenthesis? raise an error
 	// although in theory this could happen: Skill Focus(Perception) (some comment)
 	if (chunks.length > 2) {
-		return {errors: [log.logString('Invalid format', featStr)], warnings: [], data: undefined};
+		return {errors: [createMessage('invalidFormat', featStr)], warnings: [], data: undefined};
 	}
 
 	name = chunks[0].trim();
@@ -167,7 +168,7 @@ function parseFeatChunk(featStr){
 		if (close < 0) {
 		
 			details = { name: chunks[1].trim() };
-			warnings.push(log.logString('Closing parenthesis missing', featStr));
+			warnings.push(createMessage('noClosingParenthesis', featStr));
 		
 		} else {
 		
@@ -181,14 +182,14 @@ function parseFeatChunk(featStr){
 				special.push('bonus');
 			
 			} else if (endStr.length > 0) {
-				warnings.push(log.logString('Unexpected data after closing parenthesis', featStr));
+				warnings.push(createMessage('dataAfterClosingParenthesis', featStr));
 			}
 		}
 		// check that there aren't any square brackets within the details
 		// not handled yet
 		var sq = details.name.indexOf('[');
 		if (sq >= 0) {
-			errors.push('Feat sub-details not handled yet');
+			errors.push(createMessage('featSubDetailsNotHandled'));
 		}
 	}
 
@@ -237,7 +238,7 @@ function parseAttackHeader(headerStr) {
 		if (chunks[0] === '' || chunks[2] !== '') {
 			// the string starts with a number that got matched with the regex
 			// or there is some text after the bonus
-			errors.push(log.logString('Wrong format for attack header', headerStr));
+			errors.push(createMessage('wrongFormatAttackHeader', headerStr));
 
 		} else {
 			nbAttacks = 1;
@@ -247,14 +248,14 @@ function parseAttackHeader(headerStr) {
 	} else if (chunks.length === 5) {
 		// format '2 claws +5' e.g. ['', '2', 'claws +', '5', '']
 		if (chunks[0] !== '' || chunks[4] !== '') {
-			errors.push(log.logString('Wrong format for attack header', headerStr));
+			errors.push(createMessage('wrongFormatAttackHeader', headerStr));
 		
 		} else {
 			nbAttacks = parseInt(chunks[1], 10);
 
 			if (isNaN(nbAttacks)) {
 				// don't think this is even possible
-				errors.push(log.logString('Wrong format for attack header', headerStr));
+				errors.push(createMessage('wrongFormatAttackHeader', headerStr));
 
 			} else {
 				name = chunks[2];
@@ -262,7 +263,7 @@ function parseAttackHeader(headerStr) {
 		}
 
 	} else {
-		errors.push(log.logString('Wrong format for attack header', headerStr));
+		errors.push(createMessage('wrongFormatAttackHeader', headerStr));
 	}
 
 	if (errors.length === 0) {
@@ -270,7 +271,7 @@ function parseAttackHeader(headerStr) {
 		// remove the sign from the attack bonus that didn't get captured
 		last = name.length - 1;
 		if (name[last] !== '+' && name[last] !== '-') {
-			errors.push(log.logString('Wrong format for attack header', headerStr));
+			errors.push(createMessage('wrongFormatAttackHeader', headerStr));
 		
 		} else {
 			name = name.slice(0, -1).trim();
@@ -282,7 +283,7 @@ function parseAttackHeader(headerStr) {
 					name = name.slice(0, -1);
 				
 				} else {
-					warnings.push(log.logString('Check format of attack header (plural missing)', headerStr));
+					warnings.push(createMessage('checkFormatAttackHeader', headerStr));
 				}
 			}
 		}
@@ -317,10 +318,10 @@ function parseDamageRoll(rollStr){
 
 	if (chunks.length < 5) {
 		// either 0 or 1 occurrence of a numeric string, we need at least 2
-		errors.push(log.logString('Wrong format for attack details', rollStr));
+		errors.push(createMessage('wrongFormatAttackDetails', rollStr));
 
 	} else if (chunks[0] !== '' || chunks[2] !== 'd') {
-		errors.push(log.logString('Wrong format for attack details', rollStr));
+		errors.push(createMessage('wrongFormatAttackDetails', rollStr));
 
 	} else {
 		nbDice = parseInt(chunks[1], 10);
@@ -329,7 +330,7 @@ function parseDamageRoll(rollStr){
 		if (chunks.length >= 6) {
 			
 			if (chunks[4] !== '+' && chunks[4] !== '-') {
-				errors.push(log.logString('Wrong format for attack details', rollStr));
+				errors.push(createMessage('wrongFormatAttackDetails', rollStr));
 			
 			} else {
 				bonus = parseInt(chunks[5], 10);
@@ -366,7 +367,7 @@ function parseDamageFormula(formula){
 	
 	if (sep >= 0) {
 	
-		errors.push('Criticals not handled yet');
+		errors.push(createMessage('criticalsNotHandled'));
 		dmgRollStr = formula.slice(0, sep);
 
 	} else {
@@ -427,7 +428,7 @@ function parseExtraDamage(extraStr) {
 	for (i = 1; i < chunks.length; i++) {
 
 		if (chunks[i].indexOf(',') >= 0) {
-			errors.push(log.logString('Wrong format in extra damage', extraStr));
+			errors.push(createMessage('wrongFormatExtraDamage', extraStr));
 			break;
 		}
 		extraDamage.push(chunks[i]);
@@ -555,7 +556,7 @@ function parseAttackChunk(attackStr){
 	var attack = parseAttack(attackStr);
 
 	if (!attack) {
-		errors.push(log.logString('Wrong attack format', attackStr));
+		errors.push(createMessage('wrongAttackFormat', attackStr));
 
 	} else {
 
@@ -596,13 +597,13 @@ function parseMeleeString(meleeStr){
 		result;
 
 	if (typeof meleeStr !== 'string') {
-		return {errors: [log.logValue('Invalid value', meleeStr)], warnings: [], data: undefined};
+		return {errors: [createMessage('invalidValue', meleeStr)], warnings: [], data: undefined};
 	}
 
 	// parse for lists of attacks separated by 'or'
 	bigChunks = parseOrSeparatedString(meleeStr);
 	if (bigChunks.length !== 1) {
-		errors.push('Alternative lists of attacks not handled yet');
+		errors.push(createMessage('alternativeAttackListsNotHandled'));
 	} 
 
 	// parse the string for commas
@@ -610,7 +611,7 @@ function parseMeleeString(meleeStr){
 		chunks = parseCommaSeparatedString(bigChunks[0]);
 	
 		if (chunks.length > 1) {
-			errors.push('Multiple attack types not handled yet');
+			errors.push(createMessage('multipleAttackTypesNotHandled'));
 		}
 	}
 
@@ -619,7 +620,7 @@ function parseMeleeString(meleeStr){
 		chunks = parseAndSeparatedString(bigChunks[0]);
 	
 		if (chunks.length > 1) {
-			errors.push('Multiple attack types not handled yet');
+			errors.push(createMessage('multipleAttackTypesNotHandled'));
 		}
 	}
 

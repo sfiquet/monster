@@ -2,7 +2,10 @@
 'use strict';
 
 var expect = require('chai').expect,
+	log = require('../log'),
+	msg = require('../message'),
 	parse = require('../parse');
+var createMessage = msg.createMessage;
 
 describe('Parse', function(){
 	describe('parseCommaSeparatedString', function(){
@@ -106,26 +109,26 @@ describe('Parse', function(){
 
 		it('generates an error when there are too many parentheses', function(){
 			expect(parse.parseFeatChunk('Skill Focus ((Perception)')).to.deep.equal(
-				{errors: ['Invalid format: "Skill Focus ((Perception)"'], warnings: [], data: undefined});
+				{errors: [createMessage('invalidFormat', 'Skill Focus ((Perception)')], warnings: [], data: undefined});
 
 			expect(parse.parseFeatChunk('Skill Focus (Perception) (some comment)')).to.deep.equal(
-				{errors: ['Invalid format: "Skill Focus (Perception) (some comment)"'], warnings: [], data: undefined});
+				{errors: [createMessage('invalidFormat', 'Skill Focus (Perception) (some comment)')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when there are brackets within the parentheses (temporary)', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Knowledge[planes])')).to.deep.equal(
-				{errors: ['Feat sub-details not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates a warning when there is no closing parenthesis', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception')).to.deep.equal(
-				{errors: [], warnings: ['Closing parenthesis missing: "Skill Focus (Perception"'], 
+				{errors: [], warnings: [createMessage('noClosingParenthesis', 'Skill Focus (Perception')], 
 					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
 		});
 
 		it('generates a warning when there is text after the parentheses', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception) blah blah')).to.deep.equal(
-				{errors: [], warnings: ['Unexpected data after closing parenthesis: "Skill Focus (Perception) blah blah"'], 
+				{errors: [], warnings: [createMessage('dataAfterClosingParenthesis', 'Skill Focus (Perception) blah blah')], 
 					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
 		});
 
@@ -133,7 +136,7 @@ describe('Parse', function(){
 			expect(parse.parseFeatChunk('DiehardM')).to.deep.equal({errors: [], warnings: [], data: {name: 'DiehardM'}});
 
 			expect(parse.parseFeatChunk('Skill Focus (Perception)M')).to.deep.equal(
-				{errors: [], warnings: ['Unexpected data after closing parenthesis: "Skill Focus (Perception)M"'], 
+				{errors: [], warnings: [createMessage('dataAfterClosingParenthesis', 'Skill Focus (Perception)M')], 
 					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
 		});
 	});
@@ -164,32 +167,32 @@ describe('Parse', function(){
 
 		it('generates an error when the format is incorrect', function(){
 			expect(parse.parseAttackHeader('')).to.deep.equal(
-				{errors: ['Wrong format for attack header: ""'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', '')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackHeader('bite')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "bite"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', 'bite')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackHeader('5')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "5"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', '5')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackHeader('bite +5 weird')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "bite +5 weird"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', 'bite +5 weird')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackHeader('2 claws +4 text 3')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "2 claws +4 text 3"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', '2 claws +4 text 3')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackHeader('bite 2 claws +4 text')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "bite 2 claws +4 text"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', 'bite 2 claws +4 text')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when the format is correct but not handled yet (temporary)', function(){
 			// this case is actually valid, will need to be dealt with later
 			expect(parse.parseAttackHeader('dagger +10/+5')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "dagger +10/+5"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', 'dagger +10/+5')], warnings: [], data: undefined});
 
 			// this case is actually valid, will need to be dealt with later
 			expect(parse.parseAttackHeader('+1 club +5')).to.deep.equal(
-				{errors: ['Wrong format for attack header: "+1 club +5"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongFormatAttackHeader', '+1 club +5')], warnings: [], data: undefined});
 		});
 	});
 
@@ -242,13 +245,13 @@ describe('Parse', function(){
 
 		it('generates an error when criticals are provided (temporary)', function(){
 			expect(parse.parseAttackDetails('2d4+3/x3')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackDetails('2d4+3/15-20')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 
 			expect(parse.parseAttackDetails('2d4+3/19-20/x3')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 		});
 	});
 
@@ -261,19 +264,19 @@ describe('Parse', function(){
 
 		it('generates an error when the formula contains criticals (temporary)', function(){
 			expect(parse.parseDamageFormula('1d8+3/19-20/x3')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 
 			expect(parse.parseDamageFormula('1d8+3/x3')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 			
 			expect(parse.parseDamageFormula('1d8+3/19-20')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 
 			expect(parse.parseDamageFormula('1d8+3/')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 
 			expect(parse.parseDamageFormula('1d8+3/text')).to.deep.equal(
-				{errors: ['Criticals not handled yet'], warnings: [], data: undefined});
+				{errors: [createMessage('criticalsNotHandled')], warnings: [], data: undefined});
 		});
 	});
 
@@ -302,21 +305,21 @@ describe('Parse', function(){
 		});
 
 		it('generates an error when the format is wrong', function(){
-			expect(parse.parseDamageRoll('2')).to.deep.equal({errors:['Wrong format for attack details: "2"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('d4')).to.deep.equal({errors:['Wrong format for attack details: "d4"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('2s4')).to.deep.equal({errors:['Wrong format for attack details: "2s4"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('d')).to.deep.equal({errors:['Wrong format for attack details: "d"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('s2d4')).to.deep.equal({errors:['Wrong format for attack details: "s2d4"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll(' 2d4')).to.deep.equal({errors:['Wrong format for attack details: " 2d4"'], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('2')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', '2')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('d4')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 'd4')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('2s4')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', '2s4')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('d')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 'd')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('s2d4')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 's2d4')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll(' 2d4')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', ' 2d4')], warnings: [], data: undefined});
 
-			expect(parse.parseDamageRoll('2+1')).to.deep.equal({errors:['Wrong format for attack details: "2+1"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('d4+1')).to.deep.equal({errors:['Wrong format for attack details: "d4+1"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('2s4+1')).to.deep.equal({errors:['Wrong format for attack details: "2s4+1"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('d+1')).to.deep.equal({errors:['Wrong format for attack details: "d+1"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll('s2d4+1')).to.deep.equal({errors:['Wrong format for attack details: "s2d4+1"'], warnings: [], data: undefined});
-			expect(parse.parseDamageRoll(' 2d4+1')).to.deep.equal({errors:['Wrong format for attack details: " 2d4+1"'], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('2+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', '2+1')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('d4+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 'd4+1')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('2s4+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', '2s4+1')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('d+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 'd+1')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('s2d4+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', 's2d4+1')], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll(' 2d4+1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', ' 2d4+1')], warnings: [], data: undefined});
 
-			expect(parse.parseDamageRoll('2d4!1')).to.deep.equal({errors:['Wrong format for attack details: "2d4!1"'], warnings: [], data: undefined});
+			expect(parse.parseDamageRoll('2d4!1')).to.deep.equal({errors:[createMessage('wrongFormatAttackDetails', '2d4!1')], warnings: [], data: undefined});
 		});
 	});
 
@@ -351,7 +354,7 @@ describe('Parse', function(){
 
 		it('generates an error if there are commas after the first "and"', function(){
 			expect(parse.parseExtraDamage('grab and poison, 1d4 acid and enerdy drain')).to.deep.equal(
-				{errors:['Wrong format in extra damage: "grab and poison, 1d4 acid and enerdy drain"'], warnings: [], data: undefined});
+				{errors:[createMessage('wrongFormatExtraDamage', 'grab and poison, 1d4 acid and enerdy drain')], warnings: [], data: undefined});
 
 		});
 	});
@@ -400,7 +403,7 @@ describe('Parse', function(){
 
 		it('generates an error when the format is wrong', function(){
 			expect(parse.parseAttackChunk('2 claws +10 (1d6+5 plus disease)(more stuff)')).to.deep.equal(
-				{errors: ['Wrong attack format: "2 claws +10 (1d6+5 plus disease)(more stuff)"'], warnings: [], data: undefined});
+				{errors: [createMessage('wrongAttackFormat', '2 claws +10 (1d6+5 plus disease)(more stuff)')], warnings: [], data: undefined});
 			// more testing in parseAttack
 		});
 	});
@@ -408,25 +411,25 @@ describe('Parse', function(){
 	describe('parseMeleeString', function(){
 		it('generates an error if the value is not a string', function(){
 			expect(parse.parseMeleeString(undefined)).to.deep.equal(
-				{errors:['Invalid value: undefined'], warnings: [], data: undefined});
+				{errors:[createMessage('invalidValue', undefined)], warnings: [], data: undefined});
 			
 			expect(parse.parseMeleeString(5)).to.deep.equal(
-				{errors:['Invalid value: 5'], warnings: [], data: undefined});
+				{errors:[createMessage('invalidValue', 5)], warnings: [], data: undefined});
 		});
 
 		it('generates an error if there are alternative lists of attacks separated by "or" (temporary)', function(){
 			expect(parse.parseMeleeString('greatsword +3 (1d10+2) or 2 claws +1 (2d4+2)')).to.deep.equal(
-				{errors:['Alternative lists of attacks not handled yet'], warnings: [], data: undefined});
+				{errors:[createMessage('alternativeAttackListsNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates an error if there are multiple attack types separated by commas (temporary)', function(){
 			expect(parse.parseMeleeString('sting +16 (2d6+4 plus poison), 2 claws +16 (1d6+4 plus grab)')).to.deep.equal(
-				{errors:['Multiple attack types not handled yet'], warnings: [], data: undefined});
+				{errors:[createMessage('multipleAttackTypesNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates an error if there are multiple attack types separated by "and" (temporary)', function(){
 			expect(parse.parseMeleeString('sting +16 (2d6+4 plus poison) and 2 claws +16 (1d6+4 plus grab)')).to.deep.equal(
-				{errors:['Multiple attack types not handled yet'], warnings: [], data: undefined});
+				{errors:[createMessage('multipleAttackTypesNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates attack data for a single attack', function(){

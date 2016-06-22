@@ -2,98 +2,90 @@
 'use strict';
 
 var expect = require('chai').expect,
-	conv = require('../convert');
+	conv = require('../convert'),
+	message = require('../message');
+
+var createMessage = message.createMessage;
 
 describe('Convert', function(){
 
 	describe('checkRawMonster', function(){
 
 		it('generates an error when the CR is over 30 (temporary)', function(){
-			expect(conv.checkRawMonster({cr: 31})).to.deep.equal([{name: 'CR', errors: ['CR over 30 not handled yet']}]);
+			expect(conv.checkRawMonster({cr: 31})).to.deep.equal([{name: 'CR', errors: [createMessage('highCRNotHandled')]}]);
 		});
 
 		it('generates an error when the monster has class levels (temporary)', function(){
-			expect(conv.checkRawMonster({class1: 'rogue'})).to.deep.equal([{name: 'Class1', errors: ['Class levels not handled yet']}]);
+			expect(conv.checkRawMonster({class1: 'rogue'})).to.deep.equal([{name: 'Class1', errors: [createMessage('classLevelsNotHandled')]}]);
 		});
 
 		it('generates an error when the HD has extra HP (temporary)', function(){
-			expect(conv.checkRawMonster({hd: '12d10 plus 12'})).to.deep.equal([{name: 'HD', errors: ['Hit Dice with extra HP not handled yet']}]);
-			expect(conv.checkRawMonster({hd: '11d6+55 plus 15 false life'})).to.deep.equal([{name: 'HD', errors: ['Hit Dice with extra HP not handled yet']}]);
+			expect(conv.checkRawMonster({hd: '12d10 plus 12'})).to.deep.equal([{name: 'HD', errors: [createMessage('extraHPNotHandled')]}]);
+			expect(conv.checkRawMonster({hd: '11d6+55 plus 15 false life'})).to.deep.equal([{name: 'HD', errors: [createMessage('extraHPNotHandled')]}]);
 		});
 
 		it('generates an error when there are extra Fortitude details (temporary)', function(){
-			expect(conv.checkRawMonster({fort: '+8 (+10 vs. nonmagical disease)'})).to.deep.equal([{name: 'Fort', errors: ['Extra Fortitude not handled yet']}]);
+			expect(conv.checkRawMonster({fort: '+8 (+10 vs. nonmagical disease)'})).to.deep.equal([{name: 'Fort', errors: [createMessage('extraFortitudeNotHandled')]}]);
 		});
 
 		it('generates an error when there are extra Reflex details (temporary)', function(){
-			expect(conv.checkRawMonster({ref: '+5 (+1 vs. traps)'})).to.deep.equal([{name: 'Ref', errors: ['Extra Reflex not handled yet']}]);
+			expect(conv.checkRawMonster({ref: '+5 (+1 vs. traps)'})).to.deep.equal([{name: 'Ref', errors: [createMessage('extraReflexNotHandled')]}]);
 		});
 
 		it('generates an error when there are extra Will details (temporary)', function(){
-			expect(conv.checkRawMonster({will: '+2 (+1 vs. fear)'})).to.deep.equal([{name: 'Will', errors: ['Extra Will not handled yet']}]);
+			expect(conv.checkRawMonster({will: '+2 (+1 vs. fear)'})).to.deep.equal([{name: 'Will', errors: [createMessage('extraWillNotHandled')]}]);
 		});
 
 		it('generates an error when the monster has data in Gear (temporary)', function(){
 			expect(conv.checkRawMonster({gear: '+2 longsword, +2 full platemail, +2 heavy steel shield'})).to.deep.equal(
-				[{name: 'Gear', errors: ['Gear not handled yet']}]);
+				[{name: 'Gear', errors: [createMessage('gearNotHandled')]}]);
 		});
 
 		it('generates an error when the monster has data in OtherGear (temporary)', function(){
 			expect(conv.checkRawMonster({othergear: 'bracers of armor +6, mirror of life trapping, ring of evasion, ring of protection +5'})).to.deep.equal(
-				[{name: 'Gear', errors: ['Gear not handled yet']}]);
+				[{name: 'Gear', errors: [createMessage('gearNotHandled')]}]);
 		});
 
 		it('generates an error when the treasure contains specific objects (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{treasure: 'standard (sickle, masterwork composite longbow [Str +4] with 20 arrows, wooden armor, other treasure)'})).to.deep.equal(
-				[{name: 'Treasure', errors: ['Gear not handled yet']}]);
+				[{name: 'Treasure', errors: [createMessage('gearNotHandled')]}]);
 		});
 
 		it('generates an error when the monster has ranged attacks (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{ranged: 'light crossbow +3 (1d8/19-20)'})).to.deep.equal(
-				[{name: 'Ranged', errors: ['Ranged attacks not handled yet']}]);
+				[{name: 'Ranged', errors: [createMessage('rangedNotHandled')]}]);
 		});
 
 		it('generates an error when the monster has alternate forms (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{alternatenameform: 'Human Form'})).to.deep.equal(
-				[{name: 'AlternateNameForm', errors: ['Alternate forms not handled yet']}]);
+				[{name: 'AlternateNameForm', errors: [createMessage('alternateFormsNotHandled')]}]);
 		});
 
 		it('generates an error when there is a fly speed (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{speed: 'fly 60 ft. (poor)'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Fly speed not handled yet']}]);
+				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
 
 			expect(conv.checkRawMonster(
 				{speed: 'Fly 60 ft. (poor)'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Fly speed not handled yet']}]);
+				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
 
 			expect(conv.checkRawMonster(
 				{speed: '50 ft., fly 100 ft. (good)'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Fly speed not handled yet']}]);
+				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
 		});
 
 		it('generates an error when there is extra details for speeds (temporary)', function(){
 			expect(conv.checkRawMonster(
 				{speed: '30 ft. (20 ft. in armor)'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Extra speed in special conditions not handled yet']}]);
+				[{name: 'Speed', errors: [createMessage('specialSpeedNotHandled')]}]);
 
 			expect(conv.checkRawMonster(
 				{speed: '20 ft., burrow (lava only) 30 ft.'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Extra speed in special conditions not handled yet']}]);
-		});
-
-		// useless: the move special abilities have been removed from the excel file
-		it('generates an error when there are special ways to move (temporary)', function(){
-			expect(conv.checkRawMonster(
-				{speed: '20 ft., swim 30 ft.; sprint'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Special ways to move not handled yet']}]);
-
-			expect(conv.checkRawMonster(
-				{speed: '40 ft., fly 200 ft. (average); cloudwalking, graceful flight'})).to.deep.equal(
-				[{name: 'Speed', errors: ['Fly speed not handled yet', 'Special ways to move not handled yet']}]);
+				[{name: 'Speed', errors: [createMessage('specialSpeedNotHandled')]}]);
 		});
 	});
 
@@ -104,9 +96,9 @@ describe('Convert', function(){
 		});
 
 		it('generates an error when the value is not a string', function(){
-			expect(conv.extractType(null)).to.deep.equal({name: 'type', errors: ['Invalid value: null'], warnings: [], data: undefined});
-			expect(conv.extractType(undefined)).to.deep.equal({name: 'type', errors: ['Invalid value: undefined'], warnings: [], data: undefined});
-			expect(conv.extractType(0)).to.deep.equal({name: 'type', errors: ['Invalid value: 0'], warnings: [], data: undefined});
+			expect(conv.extractType(null)).to.deep.equal({name: 'type', errors: [createMessage('invalidValue', null)], warnings: [], data: undefined});
+			expect(conv.extractType(undefined)).to.deep.equal({name: 'type', errors: [createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+			expect(conv.extractType(0)).to.deep.equal({name: 'type', errors: [createMessage('invalidValue', 0)], warnings: [], data: undefined});
 		});
 	});
 
@@ -121,7 +113,7 @@ describe('Convert', function(){
 		});
 
 		it('generates an error if the raw value is smaller than 1 and not an allowed fraction', function(){
-			expect(conv.extractCR(0.7)).to.deep.equal({name: 'CR', errors: ['Invalid value: 0.7'], warnings: [], data: undefined});
+			expect(conv.extractCR(0.7)).to.deep.equal({name: 'CR', errors: [createMessage('invalidValue', 0.7)], warnings: [], data: undefined});
 		});
 
 		it('generates the given value when the value is an integer >= 1', function(){
@@ -132,7 +124,7 @@ describe('Convert', function(){
 		});
 
 		it('truncates a floating point numeric value and generates a warning', function(){
-			expect(conv.extractCR(4.7)).to.deep.equal({name: 'CR', errors: [], warnings: ['Original value 4.7 converted to 4'], data: 4});
+			expect(conv.extractCR(4.7)).to.deep.equal({name: 'CR', errors: [], warnings: [createMessage('originalValueConverted', 4.7, 4)], data: 4});
 		});
 
 		it('converts to an integer when the value is a string', function(){
@@ -140,18 +132,18 @@ describe('Convert', function(){
 		});
 
 		it('generates a warning when the value is a string but doesn\'t represent an integer', function(){
-			expect(conv.extractCR('5,')).to.deep.equal({name: 'CR', errors: [], warnings: ['Original value "5," converted to 5'], data: 5});			
-			expect(conv.extractCR('5.2')).to.deep.equal({name: 'CR', errors: [], warnings: ['Original value "5.2" converted to 5'], data: 5});			
+			expect(conv.extractCR('5,')).to.deep.equal({name: 'CR', errors: [], warnings: [createMessage('originalValueConverted', '5,', 5)], data: 5});			
+			expect(conv.extractCR('5.2')).to.deep.equal({name: 'CR', errors: [], warnings: [createMessage('originalValueConverted', '5.2', 5)], data: 5});			
 		});
 
 		it('generates an error when the value is a string that cannot be converted to a number', function(){
-			expect(conv.extractCR('')).to.deep.equal({name: 'CR', errors: ['Invalid value: ""'], warnings: [], data: NaN});			
-			expect(conv.extractCR('wrong')).to.deep.equal({name: 'CR', errors: ['Invalid value: "wrong"'], warnings: [], data: NaN});			
+			expect(conv.extractCR('')).to.deep.equal({name: 'CR', errors: [createMessage('invalidValue', '')], warnings: [], data: NaN});			
+			expect(conv.extractCR('wrong')).to.deep.equal({name: 'CR', errors: [createMessage('invalidValue', 'wrong')], warnings: [], data: NaN});			
 		});
 
 		it('generates an error when the data is neither a number nor a string', function(){
-			expect(conv.extractCR(undefined)).to.deep.equal({name: 'CR', errors: ['Invalid value: undefined'], warnings: [], data: undefined});			
-			expect(conv.extractCR(null)).to.deep.equal({name: 'CR', errors: ['Invalid value: null'], warnings: [], data: undefined});			
+			expect(conv.extractCR(undefined)).to.deep.equal({name: 'CR', errors: [createMessage('invalidValue', undefined)], warnings: [], data: undefined});			
+			expect(conv.extractCR(null)).to.deep.equal({name: 'CR', errors: [createMessage('invalidValue', null)], warnings: [], data: undefined});			
 		});
 	});
 
@@ -164,12 +156,12 @@ describe('Convert', function(){
 		});
 
 		it('generates an error when the value is a negative number', function(){
-			expect(conv.extractSpace(-1)).to.deep.equal({name: 'space', errors: ['Invalid value: -1'], warnings: [], data: undefined});
+			expect(conv.extractSpace(-1)).to.deep.equal({name: 'space', errors: [createMessage('invalidValue', -1)], warnings: [], data: undefined});
 		});
 
 		it('generates a value of 2.5 for special values to correct for bad data format and raises a warning', function(){
-			expect(conv.extractSpace(37288)).to.deep.equal({name: 'space', errors: [], warnings: ['2-1/2 ft provided as date 2/01/2002'], data: 2.5});
-			expect(conv.extractSpace(41641)).to.deep.equal({name: 'space', errors: [], warnings: ['2-1/2 ft provided as date 2/01/2014'], data: 2.5});
+			expect(conv.extractSpace(37288)).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('wrongFormatDate2002')], data: 2.5});
+			expect(conv.extractSpace(41641)).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('wrongFormatDate2014')], data: 2.5});
 		});
 
 		it('converts to a number when the value is a string', function(){
@@ -177,28 +169,28 @@ describe('Convert', function(){
 		});
 
 		it('generates a value of 0.5 when the string starts with "1/2" and raises a warning', function(){
-			expect(conv.extractSpace('1/2 ft')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "1/2 ft" converted to 0.5'], data: 0.5});
+			expect(conv.extractSpace('1/2 ft')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '1/2 ft', 0.5)], data: 0.5});
 		});
 
 		it('generates a value of 2.5 when the string starts with "2-1/2" and raises a warning', function(){
-			expect(conv.extractSpace('2-1/2 ft')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "2-1/2 ft" converted to 2.5'], data: 2.5});
+			expect(conv.extractSpace('2-1/2 ft')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '2-1/2 ft', 2.5)], data: 2.5});
 		});
 		
 		it('generates a warning when the value is a string but doesn\'t just represent a number', function(){
-			expect(conv.extractSpace('10 ft')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "10 ft" converted to 10'], data: 10});
-			expect(conv.extractSpace('10,')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "10," converted to 10'], data: 10});
-			expect(conv.extractSpace('5 (coiled)')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "5 (coiled)" converted to 5'], data: 5});
-			expect(conv.extractSpace('5ft.')).to.deep.equal({name: 'space', errors: [], warnings: ['Original value "5ft." converted to 5'], data: 5});
+			expect(conv.extractSpace('10 ft')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '10 ft', 10)], data: 10});
+			expect(conv.extractSpace('10,')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '10,', 10)], data: 10});
+			expect(conv.extractSpace('5 (coiled)')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '5 (coiled)', 5)], data: 5});
+			expect(conv.extractSpace('5ft.')).to.deep.equal({name: 'space', errors: [], warnings: [createMessage('originalValueConverted', '5ft.', 5)], data: 5});
 		});
 
 		it('generates an error when the value is a string that cannot be converted to a number', function(){
-			expect(conv.extractSpace('')).to.deep.equal({name: 'space', errors: ['Invalid value: ""'], warnings: [], data: NaN});
-			expect(conv.extractSpace('wrong')).to.deep.equal({name: 'space', errors: ['Invalid value: "wrong"'], warnings: [], data: NaN});
+			expect(conv.extractSpace('')).to.deep.equal({name: 'space', errors: [createMessage('invalidValue', '')], warnings: [], data: NaN});
+			expect(conv.extractSpace('wrong')).to.deep.equal({name: 'space', errors: [createMessage('invalidValue', 'wrong')], warnings: [], data: NaN});
 		});
 
 		it('generates an error when the data is neither a number nor a string', function(){
-			expect(conv.extractSpace(undefined)).to.deep.equal({name: 'space', errors: ['Invalid value: undefined'], warnings: [], data: undefined});
-			expect(conv.extractSpace(null)).to.deep.equal({name: 'space', errors: ['Invalid value: null'], warnings: [], data: undefined});
+			expect(conv.extractSpace(undefined)).to.deep.equal({name: 'space', errors: [createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+			expect(conv.extractSpace(null)).to.deep.equal({name: 'space', errors: [createMessage('invalidValue', null)], warnings: [], data: undefined});
 		});
 
 	});
@@ -212,50 +204,50 @@ describe('Convert', function(){
 		});
 
 		it('generates an error when the value is a negative number', function(){
-			expect(conv.extractReach(-1)).to.deep.equal({name: 'reach', errors: ['Invalid value: -1'], warnings: [], data: undefined});
+			expect(conv.extractReach(-1)).to.deep.equal({name: 'reach', errors: [createMessage('invalidValue', -1)], warnings: [], data: undefined});
 		});
 
 		it('rounds down the given number to the closest multiple of 5 and raises a warning', function(){
-			expect(conv.extractReach(14)).to.deep.equal({name: 'reach', errors: [], warnings: ['Value 14 is not a multiple of 5 - rounded down to 10'], data: 10});
+			expect(conv.extractReach(14)).to.deep.equal({name: 'reach', errors: [], warnings: [createMessage('notMultipleOf5', 14, 10)], data: 10});
 		});
 
 		it('replaces a value of 2.5 with 5 as this is obviously a typo', function(){
-			expect(conv.extractReach(2.5)).to.deep.equal({name: 'reach', errors: [], warnings: ['Value 2.5 is invalid for Reach - replaced by default 5'], data: 5});
+			expect(conv.extractReach(2.5)).to.deep.equal({name: 'reach', errors: [], warnings: [createMessage('invalidReachConverted')], data: 5});
 		});
 
 		it('replaces a date equivalent of 2.5 with 5 as this is obviously a typo', function(){
 			expect(conv.extractReach(37288)).to.deep.equal({name: 'reach', errors: [], 
-				warnings: ['2-1/2 ft provided as date 2/01/2002', 'Value 2.5 is invalid for Reach - replaced by default 5'], data: 5});
+				warnings: [createMessage('wrongFormatDate2002'), createMessage('invalidReachConverted')], data: 5});
 			expect(conv.extractReach(41641)).to.deep.equal({name: 'reach', errors: [], 
-				warnings: ['2-1/2 ft provided as date 2/01/2014', 'Value 2.5 is invalid for Reach - replaced by default 5'], data: 5});
+				warnings: [createMessage('wrongFormatDate2014'), createMessage('invalidReachConverted')], data: 5});
 		});
 
 		it('generates a warning when the value is a string but doesn\'t just represent a number', function(){
-			expect(conv.extractReach('0 ft')).to.deep.equal({name: 'reach', errors: [], warnings: ['Original value "0 ft" converted to 0'], data: 0});
+			expect(conv.extractReach('0 ft')).to.deep.equal({name: 'reach', errors: [], warnings: [createMessage('originalValueConverted', '0 ft', 0)], data: 0});
 			expect(conv.extractReach('0 Special attacks distraction (DC 15)')).to.deep.equal({name: 'reach', errors: [], 
-				warnings: ['Original value "0 Special attacks distraction (DC 15)" converted to 0'], data: 0});
+				warnings: [createMessage('originalValueConverted', '0 Special attacks distraction (DC 15)', 0)], data: 0});
 		});
 
 		// temporary test until extra reaches are implemented
 		it('generates an error when the value contains extra reaches (temporary)', function(){
-			expect(conv.extractReach('0 (10 with slam)')).to.deep.equal({name: 'reach', errors: ['Extra reaches are not implemented yet'], 
+			expect(conv.extractReach('0 (10 with slam)')).to.deep.equal({name: 'reach', errors: [createMessage('extraReachesNotHandled')], 
 				warnings: [], data: 0});
-			expect(conv.extractReach('5; 15 with slam')).to.deep.equal({name: 'reach', errors: ['Extra reaches are not implemented yet'], 
+			expect(conv.extractReach('5; 15 with slam')).to.deep.equal({name: 'reach', errors: [createMessage('extraReachesNotHandled')], 
 				warnings: [], data: 5});
 			expect(conv.extractReach('15 (30 with arms and tentacles)')).to.deep.equal(
-				{name: 'reach', errors: ['Extra reaches are not implemented yet'], warnings: [], data: 15});
+				{name: 'reach', errors: [createMessage('extraReachesNotHandled')], warnings: [], data: 15});
 			expect(conv.extractReach('20 (60 with arm, 40 with tentacle)')).to.deep.equal(
-				{name: 'reach', errors: ['Extra reaches are not implemented yet'], warnings: [], data: 20});
+				{name: 'reach', errors: [createMessage('extraReachesNotHandled')], warnings: [], data: 20});
 		});
 
 		it('generates an error when the value is a string that cannot be converted to a number', function(){
-			expect(conv.extractReach('')).to.deep.equal({name: 'reach', errors: ['Invalid value: ""'], warnings: [], data: NaN});
-			expect(conv.extractReach('wrong')).to.deep.equal({name: 'reach', errors: ['Invalid value: "wrong"'], warnings: [], data: NaN});
+			expect(conv.extractReach('')).to.deep.equal({name: 'reach', errors: [createMessage('invalidValue', '')], warnings: [], data: NaN});
+			expect(conv.extractReach('wrong')).to.deep.equal({name: 'reach', errors: [createMessage('invalidValue', 'wrong')], warnings: [], data: NaN});
 		});
 
 		it('generates an error when the data is neither a number nor a string', function(){
-			expect(conv.extractReach(undefined)).to.deep.equal({name: 'reach', errors: ['Invalid value: undefined'], warnings: [], data: undefined});
-			expect(conv.extractReach(null)).to.deep.equal({name: 'reach', errors: ['Invalid value: null'], warnings: [], data: undefined});
+			expect(conv.extractReach(undefined)).to.deep.equal({name: 'reach', errors: [createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+			expect(conv.extractReach(null)).to.deep.equal({name: 'reach', errors: [createMessage('invalidValue', null)], warnings: [], data: undefined});
 		});
 	});
 
@@ -264,7 +256,7 @@ describe('Convert', function(){
 		it('generates an error when the monster has class levels (temporary)', function(){
 			var rawMonster = { class1_lvl: 1, hd: '1d4+3' };
 			expect(conv.extractRacialHD(rawMonster)).to.deep.equal(
-				{name: 'racialHD', errors: ['Class levels are not implemented yet'], warnings: [], data: undefined});
+				{name: 'racialHD', errors: [createMessage('classLevelsNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates the correct number of Hit Dice', function(){
@@ -284,16 +276,16 @@ describe('Convert', function(){
 		});
 
 		it('generates an error when the given value is in an invalid format', function(){
-			expect(conv.extractAbility('Dex', '5')).to.deep.equal({name: 'Dex', errors: ['Invalid value: "5"'], warnings: [], data: undefined});
-			expect(conv.extractAbility('Dex','wrong')).to.deep.equal({name: 'Dex', errors: ['Invalid value: "wrong"'], warnings: [], data: undefined});
-			expect(conv.extractAbility('Dex', '')).to.deep.equal({name: 'Dex', errors: ['Invalid value: ""'], warnings: [], data: undefined});
-			expect(conv.extractAbility('Dex', null)).to.deep.equal({name: 'Dex', errors: ['Invalid value: null'], warnings: [], data: undefined});
-			expect(conv.extractAbility('Dex', undefined)).to.deep.equal({name: 'Dex', errors: ['Invalid value: undefined'], warnings: [], data: undefined});
+			expect(conv.extractAbility('Dex', '5')).to.deep.equal({name: 'Dex', errors: [createMessage('invalidValue', '5')], warnings: [], data: undefined});
+			expect(conv.extractAbility('Dex','wrong')).to.deep.equal({name: 'Dex', errors: [createMessage('invalidValue', 'wrong')], warnings: [], data: undefined});
+			expect(conv.extractAbility('Dex', '')).to.deep.equal({name: 'Dex', errors: [createMessage('invalidValue', '')], warnings: [], data: undefined});
+			expect(conv.extractAbility('Dex', null)).to.deep.equal({name: 'Dex', errors: [createMessage('invalidValue', null)], warnings: [], data: undefined});
+			expect(conv.extractAbility('Dex', undefined)).to.deep.equal({name: 'Dex', errors: [createMessage('invalidValue', undefined)], warnings: [], data: undefined});
 		});
 
 		it('generates an error when the data is outside reasonable range', function(){
-			expect(conv.extractAbility('Str', -1)).to.deep.equal({name: 'Str', errors: ['Invalid value: -1'], warnings: [], data: undefined});
-			expect(conv.extractAbility('Str', 101)).to.deep.equal({name: 'Str', errors: ['Invalid value: 101'], warnings: [], data: undefined});
+			expect(conv.extractAbility('Str', -1)).to.deep.equal({name: 'Str', errors: [createMessage('invalidValue', -1)], warnings: [], data: undefined});
+			expect(conv.extractAbility('Str', 101)).to.deep.equal({name: 'Str', errors: [createMessage('invalidValue', 101)], warnings: [], data: undefined});
 		});
 	});
 
@@ -328,11 +320,11 @@ describe('Convert', function(){
 
 		it('generates an error when the value contains a special ability, i.e. a chunk without a numeric speed (temporary)', function(){
 			expect(conv.extractSpeed('20 ft., swim 30 ft., waverider')).to.deep.equal(
-				{name: 'speed', errors: ['Special abilities that affect movement not handled yet'], warnings: [], data: undefined});
+				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when the value is not a string', function(){
-			expect(conv.extractSpeed(30)).to.deep.equal({name: 'speed', errors: ['Invalid value: 30'], warnings: [], data: undefined});
+			expect(conv.extractSpeed(30)).to.deep.equal({name: 'speed', errors: [createMessage('invalidValue', 30)], warnings: [], data: undefined});
 		});
 	});
 
@@ -355,20 +347,20 @@ describe('Convert', function(){
 
 		it('generates an error for feats whose details have details (temporary)', function(){
 			expect(conv.extractFeats('Skill Focus (Knowledge[religion])')).to.deep.equal(
-				{name: 'feats', errors: ['Feat sub-details not handled yet'], warnings: [], data: undefined});
+				{name: 'feats', errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when a feat can\'t be recognised', function(){
 			expect(conv.extractFeats('Fake Feat')).to.deep.equal(
-				{name: 'feats', errors: ['Unknown feat: "Fake Feat"'], warnings: [], data: undefined});
+				{name: 'feats', errors: [createMessage('unknownFeat', 'Fake Feat')], warnings: [], data: undefined});
 
 			expect(conv.extractFeats('Fake Feat (something)')).to.deep.equal(
-				{name: 'feats', errors: ['Unknown feat: "Fake Feat"'], warnings: [], data: undefined});
+				{name: 'feats', errors: [createMessage('unknownFeat', 'Fake Feat')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when a feat is known to affect stats but isn\'t handled currently (temporary)', function(){
 			expect(conv.extractFeats('Heavy Armor Proficiency')).to.deep.equal(
-				{name: 'feats', errors: ['Feat not handled yet: "Heavy Armor Proficiency"'], warnings: [], data: undefined});
+				{name: 'feats', errors: [createMessage('featNotHandled', 'Heavy Armor Proficiency')], warnings: [], data: undefined});
 		});
 
 		it('identifies and stores bonus feats properly when they have no extra details', function(){
@@ -434,20 +426,20 @@ describe('Convert', function(){
 
 		it('generates an error for a single weapon (temporary)', function(){
 			expect(conv.extractMelee('longsword +1 (1d8)')).to.deep.equal(
-				{name: 'melee', errors: ['Unknown attack: "longsword"'], warnings: [], data: undefined});
+				{name: 'melee', errors: [createMessage('unknownAttack', 'longsword')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when several types of attacks or weapons are involved (temporary)', function(){
 			expect(conv.extractMelee('bite +1 (1d4), 2 claws +2 (1d6)')).to.deep.equal(
-				{name: 'melee', errors: ['Multiple attack types not handled yet'], warnings: [], data: undefined});
+				{name: 'melee', errors: [createMessage('multipleAttackTypesNotHandled')], warnings: [], data: undefined});
 
 			expect(conv.extractMelee('bite +1 (1d4) and 2 claws +2 (1d6)')).to.deep.equal(
-				{name: 'melee', errors: ['Multiple attack types not handled yet'], warnings: [], data: undefined});
+				{name: 'melee', errors: [createMessage('multipleAttackTypesNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when there are alternative lists of weapons (separated by "or") (temporary)', function(){
 			expect(conv.extractMelee('bite +1 (1d4) or 2 claws +2 (1d6)')).to.deep.equal(
-				{name: 'melee', errors: ['Alternative lists of attacks not handled yet'], warnings: [], data: undefined});
+				{name: 'melee', errors: [createMessage('alternativeAttackListsNotHandled')], warnings: [], data: undefined});
 		});
 	});
 });

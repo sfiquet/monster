@@ -12,41 +12,11 @@
 
 var feat = require('./feat'),
 	parse = require('./parse'),
-	log = require('./log');
+	message = require('./message');
+var createMessage = message.createMessage;
 
 const 	WRONG_FORMAT_VALUE1 = 37288,
 		WRONG_FORMAT_VALUE2 = 41641;
-
-const 	WRONG_FORMAT_MSG1 = '2-1/2 ft provided as date 2/01/2002',
-		WRONG_FORMAT_MSG2 = '2-1/2 ft provided as date 2/01/2014';
-
-function invalidValue(value, quote) {
-	if (quote === undefined) {
-		return 'Invalid value: ' + value;		
-	} else {
-		return 'Invalid value: ' + quote + value + quote;
-	}
-}
-
-function valueConverted(original, converted, oriQuote, conQuote) {
-	var result = 'Original value ';
-
-	if (oriQuote) {
-		result += oriQuote + original + oriQuote;
-	} else {
-		result += original;
-	}
-	
-	result += ' converted to ';
-	
-	if (conQuote) {
-		result += conQuote + converted + conQuote;
-	} else {
-		result += converted;
-	}
-
-	return result;
-}
 
 /**
  * checkRawMonster
@@ -56,54 +26,53 @@ function checkRawMonster(rawMonster) {
 	var log = [];
 
 	if (rawMonster.cr > 30) {
-		log.push({name: 'CR', errors: ['CR over 30 not handled yet']});
+		log.push({name: 'CR', errors: [createMessage('highCRNotHandled')]});
 	}
 
 	if (rawMonster.class1) {
-		log.push({name: 'Class1', errors: ['Class levels not handled yet']});
+		log.push({name: 'Class1', errors: [createMessage('classLevelsNotHandled')]});
 	}
 
 	if (typeof rawMonster.hd === 'string' && rawMonster.hd.indexOf('plus') >= 0) {
-		log.push({name: 'HD', errors: ['Hit Dice with extra HP not handled yet']});
+		log.push({name: 'HD', errors: [createMessage('extraHPNotHandled')]});
 	}
 
 	if (typeof rawMonster.fort === 'string') {
-		log.push({name: 'Fort', errors: ['Extra Fortitude not handled yet']});
+		log.push({name: 'Fort', errors: [createMessage('extraFortitudeNotHandled')]});
 	}
 
 	if (typeof rawMonster.ref === 'string') {
-		log.push({name: 'Ref', errors: ['Extra Reflex not handled yet']});
+		log.push({name: 'Ref', errors: [createMessage('extraReflexNotHandled')]});
 	}
 
 	if (typeof rawMonster.will === 'string') {
-		log.push({name: 'Will', errors: ['Extra Will not handled yet']});
+		log.push({name: 'Will', errors: [createMessage('extraWillNotHandled')]});
 	}
 
 	if (rawMonster.gear || rawMonster.othergear) {
-		log.push({name: 'Gear', errors: ['Gear not handled yet']});
+		log.push({name: 'Gear', errors: [createMessage('gearNotHandled')]});
 	}
 
 	if (typeof rawMonster.treasure === 'string' && rawMonster.treasure.indexOf('(') >= 0) {
-		log.push({name: 'Treasure', errors: ['Gear not handled yet']});
+		log.push({name: 'Treasure', errors: [createMessage('gearNotHandled')]});
 	}
 
 	if (rawMonster.ranged) {
-		log.push({name: 'Ranged', errors: ['Ranged attacks not handled yet']});
+		log.push({name: 'Ranged', errors: [createMessage('rangedNotHandled')]});
 	}
 
 	if (rawMonster.alternatenameform) {
-		log.push({name: 'AlternateNameForm', errors: ['Alternate forms not handled yet']});
+		log.push({name: 'AlternateNameForm', errors: [createMessage('alternateFormsNotHandled')]});
 	}
 
 	if (typeof rawMonster.speed === 'string') {
 		var errors = [],
-			low, 
-			id;
+			low;
 
 		low = rawMonster.speed.toLowerCase();
 		
 		if (low.indexOf('fly') >= 0) {
-			errors.push('Fly speed not handled yet');
+			errors.push(createMessage('flyNotHandled'));
 		
 		// Extra speeds in special conditions come between brackets.
 		// At this stage, we're not digging very deep.
@@ -112,14 +81,7 @@ function checkRawMonster(rawMonster) {
 		// No point in wrongly reporting extra speed, only do this test when we
 		// don't have fly.
 		} else if (low.indexOf('(') >= 0) {
-			errors.push('Extra speed in special conditions not handled yet');
-		}
-
-		id = low.lastIndexOf(';');
-		if (id >= 0 && low.slice(id).indexOf(')') < 0) {
-			// there is a semi-colon that isn't inside parentheses
-			// special move ability
-			errors.push('Special ways to move not handled yet');
+			errors.push(createMessage('specialSpeedNotHandled'));
 		}
 
 		if (errors.length) {
@@ -142,7 +104,7 @@ function extractType(value) {
 		result = value.toLowerCase();
 	
 	} else {
-		errors.push(invalidValue(value));
+		errors.push(createMessage('invalidValue', value));
 	}
 
 	return {name: 'type', errors: errors, warnings: [], data: result};
@@ -173,14 +135,14 @@ function extractCR(value) {
 			} else if (value === 0.5) {
 				result = '1/2';
 			} else {
-				errors.push(invalidValue(value));
+				errors.push(createMessage('invalidValue', value));
 			}
 
 		} else {
 			result = Math.floor(value);
 
 			if (result !== value) {
-				warnings.push(valueConverted(value, result));
+				warnings.push(createMessage('originalValueConverted', value, result));
 			}
 		}
 
@@ -189,15 +151,15 @@ function extractCR(value) {
 		result = parseInt(value, 10);
 
 		if (isNaN(result)) {
-			errors.push(invalidValue(value, '"'));
+			errors.push(createMessage('invalidValue', value));
 
 		} else if ('' + result !== value) {
-			warnings.push(valueConverted(value, result, '"'));
+			warnings.push(createMessage('originalValueConverted', value, result));
 		}
 
 	// anything else is invalid
 	} else {
-		errors.push(invalidValue(value));
+		errors.push(createMessage('invalidValue', value));
 	}
 
 	return {name: 'CR', errors: errors, warnings: warnings, data: result};
@@ -214,17 +176,17 @@ function extractSpace(value) {
 
 	if (typeof value === 'number') {
 		if (value < 0) {
-			errors.push(invalidValue(value));
+			errors.push(createMessage('invalidValue', value));
 
 		} else if (value === WRONG_FORMAT_VALUE1) {
 			// 2 1/2 ft was stored in excel as date 2/1/2002
 			result = 2.5;
-			warnings.push(WRONG_FORMAT_MSG1);
+			warnings.push(createMessage('wrongFormatDate2002'));
 
 		} else if (value === WRONG_FORMAT_VALUE2) {
 			// 2 1/2 ft was stored in excel as date 2/1/2014
 			result = 2.5;
-			warnings.push(WRONG_FORMAT_MSG2);
+			warnings.push(createMessage('wrongFormatDate2014'));
 
 		} else {
 			result = value;
@@ -234,25 +196,25 @@ function extractSpace(value) {
 
 		if (value.startsWith('1/2')) {
 			result = 0.5; // not sure if that's the right value
-			warnings.push(valueConverted(value, result, '"'));
+			warnings.push(createMessage('originalValueConverted', value, result));
 
 		} else if (value.startsWith('2-1/2')) {
 			result = 2.5;
-			warnings.push(valueConverted(value, result, '"'));
+			warnings.push(createMessage('originalValueConverted', value, result));
 
 		} else {
 			result = parseFloat(value);
 
 			if (isNaN(result)) {
-				errors.push(invalidValue(value, '"'));
+				errors.push(createMessage('invalidValue', value));
 
 			} else if ('' + result !== value) {
-				warnings.push(valueConverted(value, result, '"'));
+				warnings.push(createMessage('originalValueConverted', value, result));
 			}
 		}
 
 	} else {
-		errors.push(invalidValue(value));
+		errors.push(createMessage('invalidValue', value));
 	}
 
 	return {name: 'space', errors: errors, warnings: warnings, data: result};
@@ -282,26 +244,26 @@ function extractReach(value) {
 	if (typeof value === 'number') {
 
 		if (value < 0) {
-			errors.push(invalidValue(value));
+			errors.push(createMessage('invalidValue', value));
 
 		} else if (value === WRONG_FORMAT_VALUE1 || value == WRONG_FORMAT_VALUE2 || value === 2.5) {
 			
 			if (value === WRONG_FORMAT_VALUE1) {
-				warnings.push(WRONG_FORMAT_MSG1);
+				warnings.push(createMessage('wrongFormatDate2002'));
 
 			} else if (value === WRONG_FORMAT_VALUE2) {
-				warnings.push(WRONG_FORMAT_MSG2);
+				warnings.push(createMessage('wrongFormatDate2014'));
 			}
 			// 2 1/2 ft as for space but that makes no sense for reach
 			// make it a square
 			result = 5;
-			warnings.push('Value 2.5 is invalid for Reach - replaced by default 5');
+			warnings.push(createMessage('invalidReachConverted'));
 
 		// make sure the result is a multiple of 5
 		} else if (value % 5 !== 0) {
 
 			result = Math.floor(value / 5) * 5;
-			warnings.push('Value ' + value + ' is not a multiple of 5 - rounded down to ' + result);
+			warnings.push(createMessage('notMultipleOf5', value, result));
 
 		} else {
 			result = value;
@@ -312,18 +274,18 @@ function extractReach(value) {
 		// there'll be extra reaches to deal with later
 
 		if (isNaN(result)) {
-			errors.push(invalidValue(value, '"'));
+			errors.push(createMessage('invalidValue', value));
 
 		} else if ('' + result !== value) {
 			if (hasExtraReaches(value)) {
-				errors.push('Extra reaches are not implemented yet');
+				errors.push(createMessage('extraReachesNotHandled'));
 			} else {
-				warnings.push(valueConverted(value, result, '"'));
+				warnings.push(createMessage('originalValueConverted', value, result));
 			}
 		}
 
 	} else {
-		errors.push(invalidValue(value));
+		errors.push(createMessage('invalidValue', value));
 	}
 
 	return {name: 'reach', errors: errors, warnings: warnings, data: result};
@@ -339,7 +301,7 @@ function extractRacialHD(rawMonster) {
 		chunks;
 
 	if (rawMonster.class1_lvl) {
-		errors.push('Class levels are not implemented yet');
+		errors.push(createMessage('classLevelsNotHandled'));
 	
 	} else {
 		chunks = rawMonster.hd.split('d');
@@ -362,7 +324,7 @@ function extractAbility(ability, value){
 	if (typeof value === 'number') {
 
 		if (value < 0 || value > MAX_ABILITY) {
-			errors.push(invalidValue(value));
+			errors.push(createMessage('invalidValue', value));
 
 		} else {
 			result = value;
@@ -372,11 +334,11 @@ function extractAbility(ability, value){
 
 		// a dash is a valid value, it means undefined
 		if (value !== '-') {
-			errors.push(invalidValue(value, '"'));
+			errors.push(createMessage('invalidValue', value));
 		}
 
 	} else {
-		errors.push(invalidValue(value));
+		errors.push(createMessage('invalidValue', value));
 	}
 
 	return {name: ability, errors: errors, warnings: [], data: result};	
@@ -393,7 +355,7 @@ function extractSpeed(speedStr){
 		chunks;
 
 	if (typeof speedStr !== 'string') {
-		errors.push(invalidValue(speedStr));
+		errors.push(createMessage('invalidValue', speedStr));
 	
 	} else {
 
@@ -431,7 +393,7 @@ function extractSpeed(speedStr){
 			}
 			// check whether we found any value
 			if (isNaN(val)) {
-				errors.push('Special abilities that affect movement not handled yet');
+				errors.push(createMessage('movementAbilitiesNotHandled'));
 			}
 		});
 	}
@@ -458,7 +420,7 @@ function parseFeatString(featStr) {
 		result;
 
 	if (typeof featStr !== 'string') {
-		return {errors: [invalidValue(featStr)], warnings: [], data: undefined};
+		return {errors: [createMessage('invalidValue', featStr)], warnings: [], data: undefined};
 	}
 
 	chunks = parse.parseCommaSeparatedString(featStr);
@@ -490,11 +452,11 @@ function checkFeatList(featList){
 
 		// check if the feat name is known
 		if (!feat.isFeat(item.name)){
-			errors.push('Unknown feat: "' + item.name + '"');
+			errors.push(createMessage('unknownFeat', item.name));
 
 		// check if the feat is currently handled
 		} else if (!feat.isHandled(item.name)) {
-			errors.push('Feat not handled yet: "' + item.name + '"');
+			errors.push(createMessage('featNotHandled', item.name));
 		}
 	});
 
@@ -594,7 +556,7 @@ function extractMelee(meleeStr){
 				type = calculateAttackType(melee[attack]);
 				
 				if (type === undefined) {
-					errors.push(log.logString('Unknown attack', attack));
+					errors.push(createMessage('unknownAttack', attack));
 
 				} else {
 					melee[attack].type = type;

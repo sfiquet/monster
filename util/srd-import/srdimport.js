@@ -176,9 +176,10 @@ function writeLogArray(fdLog, type, logArray) {
 		return;
 	}
 
-	logArray.forEach(function(line){
+	logArray.forEach(function(message){
 	
-		fs.writeSync(fdLog, '    ' + type + ': ' + line + '\n');
+		// note: Message.toString is called automatically
+		fs.writeSync(fdLog, '    ' + type + ': ' + message + '\n');
 	});
 
 }

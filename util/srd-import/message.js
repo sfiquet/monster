@@ -21,6 +21,11 @@ function createMessage(key){
 
 	obj =  Object.create(Message.prototype);
 	obj.logKey = key;
+
+	// make the job of identifying undefined keys easier
+	if (!log.isValidKey(key)) {
+		console.log('Invalid message key:', key);
+	}
 	obj.params = Array.prototype.slice.call(arguments, 1);
 
 	return obj;

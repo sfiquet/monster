@@ -128,7 +128,15 @@ function buildMessageFromKey(key){
 	}
 
 	if (!msg) {
-		msg = 'Unrecognised error';
+
+		// this has a better chance to be helpful than a default message
+		if (key) {
+			msg = key;
+
+		// but when all else fails, a default message will do
+		} else {
+			msg = 'Unrecognised error';
+		}
 	}
 
 	// replace key by its value in the list of arguments 
@@ -139,7 +147,11 @@ function buildMessageFromKey(key){
 	return buildMessage.apply(null, args);
 }
 
+function isValidKey(key){
+	return (messages[key] !== undefined);
+}
+
 exports.messages = messages;
 exports.buildMessage = buildMessage;
 exports.buildMessageFromKey = buildMessageFromKey;
-
+exports.isValidKey = isValidKey;

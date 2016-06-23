@@ -52,15 +52,34 @@ describe('Log', function(){
 			expect(log.buildMessageFromKey('originalValueConverted', 4.7, 4, 'extra value')).to.equal('Original value 4.7 converted to 4 ("extra value")');
 		});
 
-		it('builds a default message string when the message identifier is not recognised', function(){
+		it('uses the message identifier as the message string when the message identifier is not recognised', function(){
 			expect(log.buildMessageFromKey()).to.equal('Unrecognised error');
-			expect(log.buildMessageFromKey('completeRubbish')).to.equal('Unrecognised error');
+			expect(log.buildMessageFromKey('completeRubbish')).to.equal('completeRubbish');
 			
 			expect(log.buildMessageFromKey(undefined, 4)).to.equal('Unrecognised error: 4');
-			expect(log.buildMessageFromKey('completeRubbish', 4)).to.equal('Unrecognised error: 4');
+			expect(log.buildMessageFromKey('completeRubbish', 4)).to.equal('completeRubbish: 4');
 
 			expect(log.buildMessageFromKey(undefined, 'value text')).to.equal('Unrecognised error: "value text"');
-			expect(log.buildMessageFromKey('completeRubbish', 'value text')).to.equal('Unrecognised error: "value text"');
+			expect(log.buildMessageFromKey('completeRubbish', 'value text')).to.equal('completeRubbish: "value text"');
+		});
+	});
+
+	describe('isValidKey', function(){
+		
+		it('returns true when the given parameter is a valid message key', function(){
+			expect(log.isValidKey('invalidFormat')).to.be.true;
+			expect(log.isValidKey('originalValueConverted')).to.be.true;
+		});
+		
+		it('returns false when the given parameter is not a string', function(){
+			expect(log.isValidKey()).to.be.false;
+			expect(log.isValidKey(6)).to.be.false;
+			expect(log.isValidKey({})).to.be.false;
+		});
+
+		it('returns false when the given parameter is not a valid message key', function(){
+			expect(log.isValidKey('')).to.be.false;
+			expect(log.isValidKey('completeRubbish')).to.be.false;
 		});
 	});
 });

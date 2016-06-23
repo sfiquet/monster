@@ -638,6 +638,174 @@ function parseMeleeString(meleeStr){
 	return {errors: errors, warnings: warnings, data: data};
 }
 
+/**
+ * parseNonBracketedSkill
+ */
+function parseNonBracketedSkill(str){
+	var chunks,
+		name,
+		modifier;
+
+	chunks = str.split(/\s*([+-]\d*)\s*/);
+	
+	if (chunks.length !== 3 || chunks[2] !== '') {
+		return;
+	}
+	
+	name = chunks[0].trim();
+	modifier = parseInt(chunks[1], 10);
+
+	return {name: name, modifier: modifier};
+}
+
+/**
+ * parseAlternativeSkillModifiers
+ */
+function parseAlternativeSkillModifiers(str){
+	// temporary implementation
+	return str;
+}
+
+/**
+ * parseBracketedSkill
+ */
+function parseBracketedSkill(str) {
+ 	var reParens = /\s*(\(|\))\s*/,	// capture the brackets
+		chunks,
+		result,
+		name,
+		details,
+		modifier,
+		alternatives;
+
+	// split the string at the brackets
+	// we should end up with the following structure at most:
+	// [ skill name, '(', details, ')', modifier, '(', list of alternative modifiers, ')', '' ]
+	// Since brackets are optional, the minimum we can have is:
+	// [ skill name and modifier ]
+	// in a single chunk which needs its own parsing
+	chunks = str.split(reParens);
+
+	// look for formatting errors
+	// there should be between 1 and 9 chunks
+	if (chunks.length > 9) {
+		return;
+	}
+
+	// 1 chunk = no bracket
+	if (chunks.length === 1) {
+		result = parseNonBracketedSkill(str);
+
+	// 5 chunks: two cases
+	// [ name, '(', details, ')', mod ] or
+	// [ name and mod, '(', list of alternatives, ')', '']
+	} else if (chunks.length === 5){
+
+		// check that we actually have an opening bracket followed by a closing one
+		if (chunks[1] !== '(' || chunks[3] !== ')') {
+			return;
+		}
+
+		// [ name and mod, '(', list of alternatives, ')', '']
+		if (chunks[4] === '') {
+			result = parseNonBracketedSkill(chunks[0]);
+			result.alternatives = parseAlternativeSkillModifiers(chunks[2]);
+
+		// [ name, '(', details, ')', mod ]
+		} else {
+			name = chunks[0].trim();
+			details = chunks[2].trim();
+			modifier = parseNonBracketedSkill(chunks[4]).modifier;
+			result = {name: name, details: details, modifier: modifier};
+		}
+
+	// 9 chunks: we have everything
+	} else if (chunks.length === 9) {
+		// check that our brackets make sense
+		if (chunks[1] !== '(' || chunks[3] !== ')' || chunks[5] !== '(' || chunks[7] !== ')') {
+			return;
+		}
+		name = chunks[0].trim();
+		details = chunks[2].trim();
+		modifier = parseNonBracketedSkill(chunks[4]).modifier;
+		alternatives = parseAlternativeSkillModifiers(chunks[6]);
+		result = {name: name, details: details, modifier: modifier, alternatives: alternatives};
+
+	// any other number of chunks = wrong format
+	} else {
+		return;
+	}
+
+	return result;
+}
+
+/**
+ * parseSkillChunk
+ */
+function parseSkillChunk(str){
+	var errors = [],
+		warnings = [],
+		data;
+
+	data = parseBracketedSkill(str);
+	if (!data) {
+		errors.push(createMessage('wrongSkillFormat', str));
+	} else {
+		if (data.alternatives) {
+			errors.push(createMessage('extraSkillModifiersNotHandled', str));
+		}
+		if (data.details) {
+			errors.push(createMessage('skillDetailsNotHandled', str));
+		}
+	}
+
+	if (errors.length) {
+		data = undefined;
+	}
+
+	return {errors: errors, warnings: warnings, data: data};
+}
+
+/**
+ * parseSkillString
+ */
+function parseSkillString(skillStr){
+	var errors = [],
+		warnings = [],
+		data = {},
+		chunks;
+
+	if (typeof skillStr !== 'string') {
+		return {errors: [createMessage('invalidValue', skillStr)], warnings: [], data: undefined};
+	}
+
+	chunks = parseCommaSeparatedString(skillStr);
+
+	chunks.forEach(function(str){
+
+		var result = parseSkillChunk(str);
+		var name;
+		
+		Array.prototype.push.apply(errors, result.errors);
+		Array.prototype.push.apply(warnings, result.warnings);
+
+		if (result.data) {
+			
+			name = result.data.name;
+
+			if (name !== undefined) {
+			
+				data[name] = result.data;
+			}
+		}
+	});
+
+	if (errors.length) {
+		data = undefined;
+	}
+
+	return {errors: errors, warnings: warnings, data: data};
+}
 
 // ******************************************************************
 // Exports
@@ -656,3 +824,8 @@ exports.parseAttack = parseAttack;
 exports.parseDamageFormula = parseDamageFormula;
 exports.parseMeleeString = parseMeleeString;
 exports.parseAndSeparatedString = parseAndSeparatedString;
+exports.parseAlternativeSkillModifiers = parseAlternativeSkillModifiers;
+exports.parseNonBracketedSkill = parseNonBracketedSkill;
+exports.parseBracketedSkill = parseBracketedSkill;
+exports.parseSkillChunk = parseSkillChunk;
+exports.parseSkillString = parseSkillString;

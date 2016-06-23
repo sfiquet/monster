@@ -444,4 +444,114 @@ describe('Parse', function(){
 			// see parseAttackChunk for more tests
 		});
 	});
+
+	describe('parseNonBracketedSkill', function(){
+		it('parses a string containing a skill name and a modifier', function(){
+			expect(parse.parseNonBracketedSkill('Stealth +4')).to.deep.equal({name: 'Stealth', modifier: 4});
+			expect(parse.parseNonBracketedSkill('Sense Motive +4')).to.deep.equal({name: 'Sense Motive', modifier: 4});
+			expect(parse.parseNonBracketedSkill('Sense Motive -4')).to.deep.equal({name: 'Sense Motive', modifier: -4});
+			expect(parse.parseNonBracketedSkill('Sense Motive +0')).to.deep.equal({name: 'Sense Motive', modifier: 0});
+		});
+
+		it('trims the results', function(){
+			expect(parse.parseNonBracketedSkill('  Stealth  +4  ')).to.deep.equal({name: 'Stealth', modifier: 4});
+		});
+
+		it('returns undefined if the format is not as expected', function(){
+			expect(parse.parseNonBracketedSkill('Sense Motive')).to.be.undefined;
+			expect(parse.parseNonBracketedSkill('Sense Motive +4 Stealth +2')).to.be.undefined;
+			expect(parse.parseNonBracketedSkill('Sense Motive +4 trailing rubbish')).to.be.undefined;
+			expect(parse.parseNonBracketedSkill('Stealth 4')).to.be.undefined;
+		});
+
+		it('works if there is no skill name', function(){
+			expect(parse.parseNonBracketedSkill('+4')).to.deep.equal({name: '', modifier: 4});
+		});
+	});
+
+	describe('parseAlternativeSkillModifiers', function(){
+		it('currently returns the given string (temporary)', function(){
+			expect(parse.parseAlternativeSkillModifiers('anything')).to.equal('anything');
+		});
+	});
+
+	describe('parseBracketedSKill', function(){
+		it('parses a string containing a skill name and a modifier', function(){
+			expect(parse.parseBracketedSkill('Stealth +4')).to.deep.equal(
+				{name: 'Stealth', modifier: 4});
+			// see parseNonBracketedSkill for more in-depth testing
+		});
+
+		it('parses a string containing a skill name, skill details and a modifier', function(){
+			expect(parse.parseBracketedSkill('Craft (alchemy) +4')).to.deep.equal(
+				{name: 'Craft', details: 'alchemy', modifier: 4});
+		});
+
+		it('parses a string containing a skill name, a modifier and a list of alternative modifiers', function(){
+			// note: alternatives should eventually be an array of objects with a value and a text for each element
+			expect(parse.parseBracketedSkill('Acrobatics +10 (+14 balancing, +18 jumping)')).to.deep.equal(
+				{name: 'Acrobatics', modifier: 10, alternatives: '+14 balancing, +18 jumping'});
+		});
+
+		it('parses a string containing a skill name, details, a modifier and a list of alternative modifiers', function(){
+			// note: alternatives should eventually be an array of objects with a value and a text for each element
+			expect(parse.parseBracketedSkill('Knowledge (nature) +4 (+8 on a blue moon)')).to.deep.equal(
+				{name: 'Knowledge', details: 'nature', modifier: 4, alternatives: '+8 on a blue moon'});
+		});
+
+		it('returns undefined if brackets are wrong', function(){
+			expect(parse.parseBracketedSkill('Craft (alchemy +4')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Craft alchemy) +4')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Craft )alchemy( +4')).to.be.undefined;
+			
+			expect(parse.parseBracketedSkill('Acrobatics +4 (+8 jumping')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Acrobatics +4 +8 jumping)')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Acrobatics +4 )+8 jumping(')).to.be.undefined;
+
+			expect(parse.parseBracketedSkill('Knowledge nature) +4 (+8 sometimes)')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Knowledge (nature +4 (+8 sometimes)')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Knowledge (nature) +4 +8 sometimes)')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Knowledge (nature) +4 (+8 sometimes')).to.be.undefined;
+			expect(parse.parseBracketedSkill('Knowledge (nature) +4 )+8 sometimes)')).to.be.undefined;
+		});
+	});
+
+	describe('parseSkillChunk', function(){
+
+		it('parses a skill chunk', function(){
+			expect(parse.parseSkillChunk('Stealth +4')).to.deep.equal({errors: [], warnings: [], data: {name: 'Stealth', modifier: 4}});
+		});
+
+		it('parses a skill chunk with a negative modifier', function(){
+			expect(parse.parseSkillChunk('Stealth -4')).to.deep.equal({errors: [], warnings: [], data: {name: 'Stealth', modifier: -4}});
+		});
+
+		it('generates an error if there are alternative values in special conditions (temporary)', function(){
+			expect(parse.parseSkillChunk('Stealth +4 (+8 in low light)')).to.deep.equal(
+				{errors: [createMessage('extraSkillModifiersNotHandled', 'Stealth +4 (+8 in low light)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error if the skill has details (temporary)', function(){
+			expect(parse.parseSkillChunk('Knowledge(planes) +4')).to.deep.equal(
+				{errors: [createMessage('skillDetailsNotHandled', 'Knowledge(planes) +4')], warnings: [], data: undefined});
+		});
+	});
+
+	describe('parseSkillString', function(){
+		
+		it('generates an error if the value is not a string', function(){
+			expect(parse.parseSkillString(undefined)).to.deep.equal(
+				{errors:[createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+		});
+
+		it('generates an entry in the skills object when there is a single skill', function(){
+			expect(parse.parseSkillString('Stealth +4')).to.deep.equal(
+				{errors:[], warnings: [], data: {Stealth: {name: 'Stealth', modifier: 4}}});
+		});
+
+		it('generates a skill object when there are several skills', function(){
+			expect(parse.parseSkillString('Stealth +4, Swim +8')).to.deep.equal(
+				{errors:[], warnings: [], data: {Stealth: {name: 'Stealth', modifier: 4}, Swim: {name: 'Swim', modifier: 8}}});
+		});
+	});
 });

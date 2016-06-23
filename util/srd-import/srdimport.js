@@ -140,6 +140,7 @@ function addProperty(monster, log, convertResult) {
 function createMonster(rawMonster) {
 	var log = [];
 	var monster = {};
+	var temp = {};
 
 	// those properties can be used as is
 	monster.name = rawMonster.name;
@@ -166,6 +167,9 @@ function createMonster(rawMonster) {
 	addProperty(monster, log, convert.extractSpeed(rawMonster.speed));
 	addProperty(monster, log, convert.extractFeats(rawMonster.feats));
 	addProperty(monster, log, convert.extractMelee(rawMonster.melee));
+
+	// those properties need to be extracted first then recalculated
+	addProperty(temp, log, convert.extractSkills(rawMonster.skills));
 
 	return {log: log, monster: monster};
 }

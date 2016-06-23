@@ -11,6 +11,7 @@
 // ***********************************************************************
 
 var feat = require('./feat'),
+	skill = require('./skill'),
 	parse = require('./parse'),
 	message = require('./message');
 var createMessage = message.createMessage;
@@ -573,6 +574,57 @@ function extractMelee(meleeStr){
 	return {name: 'melee', errors: errors, warnings: warnings, data: melee};
 }
 
+/**
+ * checkSkills
+ * returns an array of errors
+ */
+function checkSkills(skillsDict){
+	var errors = [],
+		key;
+
+	for (key in skillsDict) {
+		// check that this is a known skill
+		if (!skill.isSkill(key)) {
+			errors.push(createMessage('unknownSkill', key));
+		}
+	}
+
+	return errors;
+}
+
+/**
+ * extractSkills
+ */
+function extractSkills(skillStr){
+	var errors = [],
+		warnings = [],
+		skills = {},
+		result,
+		checkErrors;
+
+	if (skillStr !== undefined) {
+
+		result = parse.parseSkillString(skillStr);
+
+		errors = result.errors;
+		warnings = result.warnings;
+		skills = result.data;
+	}
+
+	if (skills !== undefined) {
+
+		checkErrors = checkSkills(skills);
+		
+		if (checkErrors.length) {
+	
+			Array.prototype.push.apply(errors, checkErrors);
+			skills = undefined;
+		}
+	}
+
+	return {name: 'skills', errors: errors, warnings: warnings, data: skills};
+}
+
 exports.checkRawMonster = checkRawMonster;
 exports.extractType = extractType;
 exports.extractCR = extractCR;
@@ -583,3 +635,5 @@ exports.extractAbility = extractAbility;
 exports.extractSpeed = extractSpeed;
 exports.extractFeats = extractFeats;
 exports.extractMelee = extractMelee;
+exports.extractSkills = extractSkills;
+exports.checkSkills = checkSkills;

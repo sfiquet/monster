@@ -18,6 +18,8 @@ const messages = {
 	invalidReachConverted: 'Value 2.5 is invalid for Reach - replaced by default 5',
 	unknownFeat: 'Unknown feat',
 	unknownAttack: 'Unknown attack',
+	wrongSkillFormat: 'Wrong skill format',
+	unknownSkill: 'Unknown skill',
 
 	// not handled yet
 	highCRNotHandled: 'CR over 30 not handled yet',
@@ -31,14 +33,15 @@ const messages = {
 	alternateFormsNotHandled: 'Alternate forms not handled yet',
 	flyNotHandled: 'Fly speed not handled yet',
 	specialSpeedNotHandled: 'Extra speed in special conditions not handled yet',
-
 	featSubDetailsNotHandled: 'Feat sub-details not handled yet',
 	criticalsNotHandled: 'Criticals not handled yet',
 	alternativeAttackListsNotHandled: 'Alternative lists of attacks not handled yet',
 	multipleAttackTypesNotHandled: 'Multiple attack types not handled yet',
 	extraReachesNotHandled: 'Extra reaches are not implemented yet',
 	movementAbilitiesNotHandled: 'Special abilities that affect movement not handled yet',
-	featNotHandled: 'Feat not handled yet'
+	featNotHandled: 'Feat not handled yet',
+	extraSkillModifiersNotHandled: 'Alternative skill modifiers not handled yet',
+	skillDetailsNotHandled: 'Skill details not handled yet'
 };
 
 function outputValue(value) {

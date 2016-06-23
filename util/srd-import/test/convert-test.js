@@ -442,4 +442,37 @@ describe('Convert', function(){
 				{name: 'melee', errors: [createMessage('alternativeAttackListsNotHandled')], warnings: [], data: undefined});
 		});
 	});
+
+	describe('checkSkills', function(){
+		it ('returns an empty error array when the given skill dictionary is empty', function(){
+			expect(conv.checkSkills({})).to.deep.equal([]);
+		});
+
+		it('returns an empty error array when the given skill dictionary only has valid skills', function(){
+			// note: only the keys are checked, the data is irrelevant
+			expect(conv.checkSkills({Acrobatics: {}, 'Sense Motive': {}})).to.deep.equal([]);
+		});
+
+		it('returns an array of errors when the given skill dictionary has invalid skills', function(){
+			// note: only the keys are checked, the data is irrelevant
+			expect(conv.checkSkills({acrobatics: {}})).to.deep.equal([createMessage('unknownSkill', 'acrobatics')]);
+			expect(conv.checkSkills({Rubbish: {}})).to.deep.equal([createMessage('unknownSkill', 'Rubbish')]);
+
+			expect(conv.checkSkills({Acrobatics: {}, 'Sense motive': {}, Rubbish: {}})).to.deep.equal(
+				[createMessage('unknownSkill', 'Sense motive'), createMessage('unknownSkill', 'Rubbish')]);
+		});
+	});
+
+	describe('extractSkills', function(){
+		
+		it('generates an empty object when there are no skills', function(){
+			expect(conv.extractSkills('')).to.deep.equal(
+				{name: 'skills', errors: [], warnings: [], data: {}});
+		});
+
+		it('generates a dictionary of skill objects', function(){
+			expect(conv.extractSkills('Perception +4, Stealth +4')).to.deep.equal(
+				{name: 'skills', errors: [], warnings: [], data: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}});
+		});
+	});
 });

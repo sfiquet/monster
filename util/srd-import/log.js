@@ -41,7 +41,9 @@ const messages = {
 	movementAbilitiesNotHandled: 'Special abilities that affect movement not handled yet',
 	featNotHandled: 'Feat not handled yet',
 	extraSkillModifiersNotHandled: 'Alternative skill modifiers not handled yet',
-	skillDetailsNotHandled: 'Skill details not handled yet'
+	skillDetailsNotHandled: 'Skill details not handled yet',
+	conditionalModifiersNotHandled: 'Conditional modifiers not handled yet',
+	substitutionRulesNotHandled: 'Substitution rules not handled yet'
 };
 
 function outputValue(value) {

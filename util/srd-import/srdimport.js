@@ -170,6 +170,7 @@ function createMonster(rawMonster) {
 
 	// those properties need to be extracted first then recalculated
 	addProperty(temp, log, convert.extractSkills(rawMonster.skills));
+	addProperty(temp, log, convert.extractRacialModifiers(rawMonster.racialmods));
 
 	return {log: log, monster: monster};
 }

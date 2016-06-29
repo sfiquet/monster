@@ -475,4 +475,49 @@ describe('Convert', function(){
 				{name: 'skills', errors: [], warnings: [], data: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}});
 		});
 	});
+
+	describe('extractRacialModifiers', function(){
+
+		it('generates an empty object when there are no racial modifiers', function(){
+			expect(conv.extractRacialModifiers('')).to.deep.equal(
+				{name: 'racialMods', errors: [], warnings: [], data: {}});
+
+			expect(conv.extractRacialModifiers()).to.deep.equal(
+				{name: 'racialMods', errors: [], warnings: [], data: {}});
+		});
+
+		it('generates a racial modifier object with a list of skills from the given string', function(){
+			expect(conv.extractRacialModifiers('+4 Perception, +4 Stealth')).to.deep.equal(
+				{name: 'racialMods', errors: [], warnings: [], data: 
+					{skills: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}}});
+		});
+
+		it('generates an error when there is a conditional modifier', function(){
+			expect(conv.extractRacialModifiers('+4 Acrobatics (+8 when jumping)')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics (+8 when jumping)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a conditional modifier without a general modifier', function(){
+			expect(conv.extractRacialModifiers('+4 Acrobatics when jumping')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics when jumping')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the given string is a substitution rule', function(){
+			expect(conv.extractRacialModifiers('uses Dex to modify Swim')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('substitutionRulesNotHandled')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the given string contains a substitution rule', function(){
+			expect(conv.extractRacialModifiers('+4 Perception; uses Dexterity to modify Climb checks')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('substitutionRulesNotHandled')], warnings: [], data: undefined});
+		});
+
+		it('generates errors for each unrecognised skill', function(){
+			expect(conv.extractRacialModifiers('+4 acrobatics, +2 wrong')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('unknownSkill', 'acrobatics'), createMessage('unknownSkill', 'wrong')], warnings: [], data: undefined});
+
+			expect(conv.extractRacialModifiers('+4 on Perception')).to.deep.equal(
+				{name: 'racialMods', errors: [createMessage('unknownSkill', 'on Perception')], warnings: [], data: undefined});
+		});
+	});
 });

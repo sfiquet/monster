@@ -554,4 +554,139 @@ describe('Parse', function(){
 				{errors:[], warnings: [], data: {Stealth: {name: 'Stealth', modifier: 4}, Swim: {name: 'Swim', modifier: 8}}});
 		});
 	});
+
+	describe('parseRacialMod', function(){
+		it('returns undefined when the format is wrong', function(){
+			expect(parse.parseRacialMod('')).to.be.undefined;
+			expect(parse.parseRacialMod('Swim')).to.be.undefined;
+			expect(parse.parseRacialMod('+ Swim')).to.be.undefined;
+			expect(parse.parseRacialMod('4 Swim')).to.be.undefined;
+			expect(parse.parseRacialMod('+4 ')).to.be.undefined;
+			expect(parse.parseRacialMod('Swim +4')).to.be.undefined;
+		});
+
+		it('returns an object with properties "name" and "modifier" when the format is correct', function(){
+			expect(parse.parseRacialMod('+4 Swim')).to.deep.equal({name: 'Swim', modifier: 4});
+		});
+
+		it('handles negative modifiers', function(){
+			expect(parse.parseRacialMod('-4 Swim')).to.deep.equal({name: 'Swim', modifier: -4});
+		});
+
+		it('trims the name', function(){
+			expect(parse.parseRacialMod('-4   Swim    ')).to.deep.equal({name: 'Swim', modifier: -4});
+		});
+
+		it('ignores spaces', function(){
+			expect(parse.parseRacialMod('   -4   Swim    ')).to.deep.equal({name: 'Swim', modifier: -4});
+		});
+	});
+
+	describe('parseConditionalRacialMod', function(){
+		it('returns an object with property "name" when the given string is a known skill', function(){
+			expect(parse.parseConditionalRacialMod('Acrobatics')).to.deep.equal({name: 'Acrobatics'});
+			expect(parse.parseConditionalRacialMod('Use Magic Device')).to.deep.equal({name: 'Use Magic Device'});
+			expect(parse.parseConditionalRacialMod('Heal')).to.deep.equal({name: 'Heal'});
+		});
+
+		it('returns undefined if the skill is a specialised skill as it requires different parsing', function(){
+			expect(parse.parseConditionalRacialMod('Craft')).to.be.undefined;
+			expect(parse.parseConditionalRacialMod('Knowledge')).to.be.undefined;
+			expect(parse.parseConditionalRacialMod('Perform')).to.be.undefined;
+			expect(parse.parseConditionalRacialMod('Profession')).to.be.undefined;
+		});
+
+		it('returns an object with properties "name" and "condition" when the given string starts with a known skill and ends with additional text', function(){
+			expect(parse.parseConditionalRacialMod('Acrobatics when jumping')).to.deep.equal({name: 'Acrobatics', condition: 'when jumping'});
+			expect(parse.parseConditionalRacialMod('Stealth in tall grass')).to.deep.equal({name: 'Stealth', condition: 'in tall grass'});
+		});
+
+		it('returns undefined when the given string doesn\'t starts with a known skill', function(){
+			expect(parse.parseConditionalRacialMod('acrobatics')).to.be.undefined;
+			expect(parse.parseConditionalRacialMod('Not a skill')).to.be.undefined;
+			expect(parse.parseConditionalRacialMod('+4 Acrobatics')).to.be.undefined;
+		});
+
+		it('removes leading and trailing spaces', function(){
+			expect(parse.parseConditionalRacialMod('  Acrobatics  ')).to.deep.equal({name: 'Acrobatics'});
+			expect(parse.parseConditionalRacialMod('  Acrobatics when jumping  ')).to.deep.equal({name: 'Acrobatics', condition: 'when jumping'});
+		});
+
+		it('makes sure the skill name identified is followed by a space or at the end of the string', function(){
+			expect(parse.parseConditionalRacialMod('Fly')).to.deep.equal({name: 'Fly'});
+			expect(parse.parseConditionalRacialMod('Flying')).to.be.undefined;
+		});
+	});
+
+	describe('parseRacialModChunk', function(){
+
+		it('generates an error if the format is wrong', function(){
+			expect(parse.parseRacialModChunk('Swim')).to.deep.equal(
+				{errors: [createMessage('invalidFormat', 'Swim')], warnings: [], data: undefined});
+		});
+
+		it('generates a racial modifier object', function(){
+			expect(parse.parseRacialModChunk('+4 Swim')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Swim', modifier: 4}});
+		});
+
+		it('generates a racial modifier object when the skill has several words', function(){
+			expect(parse.parseRacialModChunk('+4 Escape Artist')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Escape Artist', modifier: 4}});
+		});
+
+		it('generates a racial modifier object when the modifier has more than 1 digit', function(){
+			expect(parse.parseRacialModChunk('+10 Escape Artist')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Escape Artist', modifier: 10}});
+		});
+
+		it('generates an error when the skill has details', function(){
+			expect(parse.parseRacialModChunk('+4 Craft (trapmaking)')).to.deep.equal(
+				{errors: [createMessage('skillDetailsNotHandled', '+4 Craft (trapmaking)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a conditional modifier', function(){
+			expect(parse.parseRacialModChunk('+4 Acrobatics (+8 when jumping)')).to.deep.equal(
+				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics (+8 when jumping)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a conditional modifier without a general modifier', function(){
+			expect(parse.parseRacialModChunk('+4 Acrobatics when jumping')).to.deep.equal(
+				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics when jumping')], warnings: [], data: undefined});
+		});
+	});
+
+	describe('parseRacialModString', function(){
+
+		it('generates an error if the value is not a string', function(){
+			expect(parse.parseRacialModString(undefined)).to.deep.equal(
+				{errors:[createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+		});
+
+		it('generates a racial modifier object with a list of skills from the given string', function(){
+			expect(parse.parseRacialModString('+4 Perception, +4 Stealth')).to.deep.equal(
+				{errors: [], warnings: [], data: 
+					{skills: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}}});
+		});
+
+		it('generates an error when the given string is a substitution rule', function(){
+			expect(parse.parseRacialModString('uses Dex to modify Swim')).to.deep.equal(
+				{errors: [createMessage('substitutionRulesNotHandled')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the given string contains a substitution rule', function(){
+			expect(parse.parseRacialModString('+4 Perception, +4 Stealth; uses Dexterity to modify Climb checks')).to.deep.equal(
+				{errors: [createMessage('substitutionRulesNotHandled')], warnings: [], data: undefined});
+		});
+		
+		it('generates an error when there is a conditional modifier', function(){
+			expect(parse.parseRacialModString('+4 Acrobatics (+8 when jumping), +4 Stealth')).to.deep.equal(
+				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics (+8 when jumping)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a conditional modifier without a general modifier', function(){
+			expect(parse.parseRacialModString('+4 Acrobatics when jumping, +4 Stealth')).to.deep.equal(
+				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics when jumping')], warnings: [], data: undefined});
+		});
+	});
 });

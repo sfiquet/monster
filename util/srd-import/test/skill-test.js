@@ -31,4 +31,17 @@ describe('Skill', function(){
 			expect(skill.isSpecialisedSkill('Not a skill')).to.be.false;
 		});
 	});
+
+	describe('getAllSkills', function(){
+		it('returns a copy of the array of skills', function(){
+			var skills = skill.getAllSkills();
+			var skills2 = skill.getAllSkills();
+			expect(skills).to.be.an.array;
+			expect(skills.length).to.equal(26);
+			expect(skills[0]).to.equal('Acrobatics');
+			expect(skills[25]).to.equal('Use Magic Device');
+			expect(skills).to.deep.equal(skills2);
+			expect(skills).to.not.equal(skills2);	// not the same object
+		});
+	});
 });

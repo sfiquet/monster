@@ -47,5 +47,10 @@ function isSpecialisedSkill(name){
 	return (specialisedSkills.indexOf(name) < 0 ? false: true);
 }
 
+function getAllSkills(){
+	return skills.slice();
+}
+
 exports.isSkill = isSkill;
 exports.isSpecialisedSkill = isSpecialisedSkill;
+exports.getAllSkills = getAllSkills;

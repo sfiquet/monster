@@ -1,7 +1,8 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var message = require('./message');
+var message = require('./message'),
+	skillLib = require('./skill');
 var createMessage = message.createMessage;
 
 /**
@@ -807,6 +808,218 @@ function parseSkillString(skillStr){
 	return {errors: errors, warnings: warnings, data: data};
 }
 
+/**
+ * parseRacialMod
+ * expected format:
+ * +4 Acrobatics
+ * returns either undefined or an object with properties 'name' and 'modifier'
+ */
+function parseRacialMod(str) {
+	var chunks,
+		result = {};
+
+	chunks = str.split(/\s*([+-]\d+)\s+/);
+
+	// no modifier
+	if (chunks.length === 1) {
+		return;
+
+	// one modifier: this is expected
+	} else if (chunks.length === 3) {
+
+		if (chunks[0] !== '' || chunks[2] === '') {
+			return;
+		
+		} else {
+			result.modifier = parseInt(chunks[1], 10);
+			result.name = chunks[2].trim();
+			return result;
+		}
+	}
+
+	// anything else is wrong
+}
+
+/**
+ * parseConditionalRacialMode
+ * expected formats for input string:
+ * - skill, e.g. 'Acrobatics'
+ * - skill condition 'Acrobatics when jumping'
+ */
+function parseConditionalRacialMod(str){
+	var skills,
+		i,
+		result = {},
+		condition,
+		trimmed;
+
+	trimmed = str.trim();
+	
+	// look for each skill at the beginning of the string until we find one
+	skills = skillLib.getAllSkills();
+
+	for (i = 0; i < skills.length; i++) {
+	
+		if (trimmed.startsWith(skills[i])) {
+
+			// avoid identifying a skill within a word
+			if (skills[i].length < trimmed.length && trimmed[skills[i].length] != ' ') {
+				continue;
+			}
+	
+			// we found it, now make sure it's not a specialised skill as they require brackets
+			if (skillLib.isSpecialisedSkill(skills[i])) {
+				return;
+			}
+
+			result.name = skills[i];
+
+			if (skills[i].length < trimmed.length) {
+
+				condition = trimmed.slice(skills[i].length).trim();
+				
+				if (condition.length) {
+
+					result.condition = condition;
+				}
+			}
+			return result;
+		}
+	}
+	// not found: return undefined
+}
+
+/**
+ * parseRacialModChunk
+ */
+function parseRacialModChunk(str){
+	var errors = [],
+		warnings = [],
+		result,
+		chunks,
+		skill;
+
+	chunks = str.split(/\s*(\(|\))\s*/);
+
+	// 1 chunk = no bracket, 5 chunks = 2 brackets
+	if (chunks.length === 1 || chunks.length === 5) {
+
+		result = parseRacialMod(chunks[0]);
+
+		if (!result) {
+			errors.push(createMessage('invalidFormat', str));
+
+		} else if (chunks.length === 1) {
+			skill = parseConditionalRacialMod(result.name);
+
+			if (!skill) {
+				errors.push(createMessage('unknownSkill', result.name));
+
+			} else if (skill.condition) {
+				errors.push(createMessage('conditionalModifiersNotHandled', str));			
+			}
+			// otherwise we already have the correct name in result
+
+		} else if (chunks.length === 5) {
+
+			// check whether we have a specialised skill - not handled yet
+			if (skillLib.isSpecialisedSkill(result.name)) {
+				errors.push(createMessage('skillDetailsNotHandled', str));
+
+			// if not, we have a conditional modifier - not handled yet
+			} else {
+				errors.push(createMessage('conditionalModifiersNotHandled', str));
+			}
+		}
+
+	// any other number of chunks = wrong format
+	} else {
+		errors.push(createMessage('invalidFormat', str));
+	}
+
+	if (errors.length) {
+		result = undefined;
+	}
+
+	return {errors: errors, warnings: warnings, data: result};
+
+}
+
+/**
+ * parseRacialModString
+ */
+function parseRacialModString(modStr){
+	var errors = [],
+		warnings = [],
+		data = {},
+		bigChunks,
+		chunks,
+		modList,
+		rule;
+
+	if (typeof modStr !== 'string') {
+		return {errors: [createMessage('invalidValue', modStr)], warnings: [], data: undefined};
+	
+	} else if (modStr.length === 0) {
+		return {errors: [], warnings: [], data: undefined};
+	}
+
+	// look for a semicolon
+	bigChunks = modStr.split(';');
+
+	// no semicolon
+	if (bigChunks.length === 1) {
+
+		// doesn't start with a number: substitution rule
+		if (isNaN(parseInt(modStr, 10))) {
+			errors.push(createMessage('substitutionRulesNotHandled'));
+
+		// starts with a number: modifier list
+		} else {
+
+			chunks = parseCommaSeparatedString(modStr);
+
+			data.skills = {};
+
+			chunks.forEach(function(str){
+
+				var result = parseRacialModChunk(str);
+				var name;
+				
+				Array.prototype.push.apply(errors, result.errors);
+				Array.prototype.push.apply(warnings, result.warnings);
+
+				if (result.data) {
+					
+					name = result.data.name;
+
+					if (name !== undefined) {
+					
+						data.skills[name] = result.data;
+					}
+				}
+			});
+		}
+
+	// one semicolon: we have the modifier list on the left and the substitution rule on the right
+	} else if (bigChunks.length === 2) {
+		modList = bigChunks[0];
+		rule = bigChunks[1];
+
+		errors.push(createMessage('substitutionRulesNotHandled'));
+	
+	// too many semicolons
+	} else {
+		errors.push(createMessage('invalidFormat', modStr));
+	}
+
+	if (errors.length) {
+		data = undefined;
+	}
+
+	return {errors: errors, warnings: warnings, data: data};
+}
+
 // ******************************************************************
 // Exports
 // ******************************************************************
@@ -829,3 +1042,7 @@ exports.parseNonBracketedSkill = parseNonBracketedSkill;
 exports.parseBracketedSkill = parseBracketedSkill;
 exports.parseSkillChunk = parseSkillChunk;
 exports.parseSkillString = parseSkillString;
+exports.parseRacialMod = parseRacialMod;
+exports.parseConditionalRacialMod = parseConditionalRacialMod;
+exports.parseRacialModChunk = parseRacialModChunk;
+exports.parseRacialModString = parseRacialModString;

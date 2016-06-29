@@ -625,6 +625,39 @@ function extractSkills(skillStr){
 	return {name: 'skills', errors: errors, warnings: warnings, data: skills};
 }
 
+/**
+ * extractRacialModifiers
+ */
+function extractRacialModifiers(racialModStr){
+	var errors = [],
+		warnings = [],
+		mods = {},
+		result,
+		checkErrors;
+
+	if (racialModStr !== undefined && racialModStr !== '') {
+
+		result = parse.parseRacialModString(racialModStr);
+
+		errors = result.errors;
+		warnings = result.warnings;
+		mods = result.data;
+	}
+
+	if (mods !== undefined) {
+
+		checkErrors = checkSkills(mods.skills);
+		
+		if (checkErrors.length) {
+	
+			Array.prototype.push.apply(errors, checkErrors);
+			mods = undefined;
+		}
+	}
+
+	return {name: 'racialMods', errors: errors, warnings: warnings, data: mods};
+}
+
 exports.checkRawMonster = checkRawMonster;
 exports.extractType = extractType;
 exports.extractCR = extractCR;
@@ -637,3 +670,4 @@ exports.extractFeats = extractFeats;
 exports.extractMelee = extractMelee;
 exports.extractSkills = extractSkills;
 exports.checkSkills = checkSkills;
+exports.extractRacialModifiers = extractRacialModifiers;

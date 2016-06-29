@@ -658,6 +658,31 @@ function extractRacialModifiers(racialModStr){
 	return {name: 'racialMods', errors: errors, warnings: warnings, data: mods};
 }
 
+/**
+ * extractSQ
+ */
+function extractSQ(sqStr){
+	var errors = [],
+		warnings = [],
+		sqArray,
+		result;
+
+	if (sqStr !== undefined && sqStr !== '') {
+
+		result = parse.parseSQString(sqStr);
+
+		errors = result.errors;
+		warnings = result.warnings;
+		sqArray = result.data;
+	}
+
+	if (errors.length) {
+		sqArray = undefined;
+	}
+
+	return {name: 'SQ', errors: errors, warnings: warnings, data: sqArray};
+}
+
 exports.checkRawMonster = checkRawMonster;
 exports.extractType = extractType;
 exports.extractCR = extractCR;
@@ -671,3 +696,4 @@ exports.extractMelee = extractMelee;
 exports.extractSkills = extractSkills;
 exports.checkSkills = checkSkills;
 exports.extractRacialModifiers = extractRacialModifiers;
+exports.extractSQ = extractSQ;

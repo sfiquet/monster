@@ -167,6 +167,7 @@ function createMonster(rawMonster) {
 	addProperty(monster, log, convert.extractSpeed(rawMonster.speed));
 	addProperty(monster, log, convert.extractFeats(rawMonster.feats));
 	addProperty(monster, log, convert.extractMelee(rawMonster.melee));
+	addProperty(monster, log, convert.extractSQ(rawMonster.sq));
 
 	// those properties need to be extracted first then recalculated
 	addProperty(temp, log, convert.extractSkills(rawMonster.skills));

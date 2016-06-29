@@ -520,4 +520,28 @@ describe('Convert', function(){
 				{name: 'racialMods', errors: [createMessage('unknownSkill', 'on Perception')], warnings: [], data: undefined});
 		});
 	});
+
+	describe('extractSQ', function(){
+		
+		it('generates an error when there are DCs in the given string (temporary)', function(){
+			expect(conv.extractSQ('fiery form (DC 20)')).to.deep.equal(
+				{name: 'SQ', errors: [createMessage('DCInSQNotHandled', 'fiery form (DC 20)')], warnings: [], data: undefined});
+		});
+
+		it('generates an array of items, each an array of text chunks', function(){
+			expect(conv.extractSQ('camouflage, trackless step, water breathing, woodland stride')).to.deep.equal(
+				{name: 'SQ', errors: [], warnings: [], data: 
+					[[{text: 'camouflage'}], [{text: 'trackless step'}], [{text: 'water breathing'}], [{text: 'woodland stride'}]]});
+		});
+
+		it('generates a warning when there are numbers in the string so that they can be checked manually', function(){
+			expect(conv.extractSQ('inspiration, unearthly grace, wild empathy +21')).to.deep.equal(
+				{name: 'SQ', errors: [], warnings: [createMessage('numberInSQ', 'inspiration, unearthly grace, wild empathy +21')], data: 
+					[[{text: 'inspiration'}], [{text: 'unearthly grace'}], [{text: 'wild empathy +21'}]]});
+
+			expect(conv.extractSQ('lay on hands (4d6, 7/day, as a 9th-level paladin)')).to.deep.equal(
+				{name: 'SQ', errors: [], warnings: [createMessage('numberInSQ', 'lay on hands (4d6, 7/day, as a 9th-level paladin)')], data: 
+					[[{text: 'lay on hands (4d6, 7/day, as a 9th-level paladin)'}]]});
+		});
+	});
 });

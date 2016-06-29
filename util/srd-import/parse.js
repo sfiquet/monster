@@ -1020,6 +1020,43 @@ function parseRacialModString(modStr){
 	return {errors: errors, warnings: warnings, data: data};
 }
 
+/**
+ * parseSQString
+ */
+function parseSQString(str){
+	var errors = [],
+		warnings = [],
+		SQArray = [],
+		chunks;
+
+	if (typeof str !== 'string') {
+		return {errors: [createMessage('invalidValue', str)], warnings: [], data: undefined};
+	
+	} else if (str.length === 0) {
+		return {errors: [], warnings: [], data: undefined};
+	}
+
+	// check for DCs in the string
+	chunks = str.split(/\W(DC \d+)\W*/);
+	if (chunks.length > 1) {
+		return {errors: [createMessage('DCInSQNotHandled', str)], warnings: [], data: undefined};
+	}
+
+	// raise a warning if there are numbers in the string
+	chunks = str.split(/(\d+)/);
+	if (chunks.length > 1) {
+		warnings.push(createMessage('numberInSQ', str));
+	}
+
+	// now build the chunks for real
+	chunks = parseCommaSeparatedString(str);
+	chunks.forEach(function(item){
+		SQArray.push([{text: item}]);
+	});
+
+	return {errors: errors, warnings: warnings, data: SQArray};
+}
+
 // ******************************************************************
 // Exports
 // ******************************************************************
@@ -1046,3 +1083,4 @@ exports.parseRacialMod = parseRacialMod;
 exports.parseConditionalRacialMod = parseConditionalRacialMod;
 exports.parseRacialModChunk = parseRacialModChunk;
 exports.parseRacialModString = parseRacialModString;
+exports.parseSQString = parseSQString;

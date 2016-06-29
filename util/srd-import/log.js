@@ -20,6 +20,7 @@ const messages = {
 	unknownAttack: 'Unknown attack',
 	wrongSkillFormat: 'Wrong skill format',
 	unknownSkill: 'Unknown skill',
+	numberInSQ: 'Numbers in SQ - check that they are independent from other stats',
 
 	// not handled yet
 	highCRNotHandled: 'CR over 30 not handled yet',
@@ -43,7 +44,8 @@ const messages = {
 	extraSkillModifiersNotHandled: 'Alternative skill modifiers not handled yet',
 	skillDetailsNotHandled: 'Skill details not handled yet',
 	conditionalModifiersNotHandled: 'Conditional modifiers not handled yet',
-	substitutionRulesNotHandled: 'Substitution rules not handled yet'
+	substitutionRulesNotHandled: 'Substitution rules not handled yet',
+	DCInSQNotHandled: 'DC in SQ not handled yet'
 };
 
 function outputValue(value) {

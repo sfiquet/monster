@@ -689,4 +689,29 @@ describe('Parse', function(){
 				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics when jumping')], warnings: [], data: undefined});
 		});
 	});
+
+	describe('parseSQString', function(){
+
+		it('generates an error if the value is not a string', function(){
+			expect(parse.parseSQString(undefined)).to.deep.equal(
+				{errors:[createMessage('invalidValue', undefined)], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there are DCs in the given string', function(){
+			expect(parse.parseSQString('fiery form (DC 20)')).to.deep.equal(
+				{errors:[createMessage('DCInSQNotHandled', 'fiery form (DC 20)')], warnings: [], data: undefined});
+		});
+
+		it('generates a warning when there are numbers in the given string', function(){
+			expect(parse.parseSQString('lay on hands (4d6, 7/day, as a 9th-level paladin)')).to.deep.equal(
+				{errors:[], warnings: [createMessage('numberInSQ', 'lay on hands (4d6, 7/day, as a 9th-level paladin)')], data: 
+					[[{text: 'lay on hands (4d6, 7/day, as a 9th-level paladin)'}]]});
+		});
+
+		it('generates an array of SQ data where each item is an array of text chunks', function(){
+			expect(parse.parseSQString('camouflage, trackless step, water breathing, woodland stride')).to.deep.equal(
+				{errors:[], warnings: [], data: 
+					[[{text: 'camouflage'}], [{text: 'trackless step'}], [{text: 'water breathing'}], [{text: 'woodland stride'}]]});
+		});
+	});
 });

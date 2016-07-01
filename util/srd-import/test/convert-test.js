@@ -521,6 +521,30 @@ describe('Convert', function(){
 		});
 	});
 
+	describe('mergeSkillsAndRacialMods', function(){
+
+		it('generates a warning when there is a racial modifier without corresponding skill data', function(){
+			var racial = {skills: {Perception: {name: 'Perception', modifier: 4}}};
+
+			expect(conv.mergeSkillsAndRacialMods({}, racial)).to.deep.equal(
+				{name: 'skills', errors: [], warnings: [createMessage('racialModMerge', 'Perception')], data: 
+					[{name: 'Perception', racial: 4}]});
+		});
+		
+		it('creates a new array that is the result of merging the skills and racial mods dictionaries', function(){
+			var skills = {Perception: {name: 'Perception', modifier: 8}, Stealth: {name: 'Stealth', modifier: 8}};
+			var racial = {skills: {Perception: {name: 'Perception', modifier: 4}}};
+			
+			expect(conv.mergeSkillsAndRacialMods(skills, {})).to.deep.equal(
+				{name: 'skills', errors: [], warnings: [], data: 
+					[{name: 'Perception', modifier: 8}, {name: 'Stealth', modifier: 8}]});
+
+			expect(conv.mergeSkillsAndRacialMods(skills, racial)).to.deep.equal(
+				{name: 'skills', errors: [], warnings: [], data: 
+					[{name: 'Perception', modifier: 8, racial: 4}, {name: 'Stealth', modifier: 8}]});
+		});
+	});
+
 	describe('extractSQ', function(){
 		
 		it('generates an error when there are DCs in the given string (temporary)', function(){

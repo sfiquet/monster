@@ -169,9 +169,17 @@ function createMonster(rawMonster) {
 	addProperty(monster, log, convert.extractMelee(rawMonster.melee));
 	addProperty(monster, log, convert.extractSQ(rawMonster.sq));
 
-	// those properties need to be extracted first then recalculated
+	// skills and racialMods properties need to be extracted separately and merged
+	// the skill ranks are deduced at the calculation phase
 	addProperty(temp, log, convert.extractSkills(rawMonster.skills));
 	addProperty(temp, log, convert.extractRacialModifiers(rawMonster.racialmods));
+
+	if (temp.skills && temp.racialMods) {
+		addProperty(monster, log, convert.mergeSkillsAndRacialMods(temp.skills, temp.racialMods));
+	}
+	
+	// calculate remaining properties
+	//monster = calc.calculate(monster);
 
 	return {log: log, monster: monster};
 }

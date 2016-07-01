@@ -659,6 +659,38 @@ function extractRacialModifiers(racialModStr){
 }
 
 /**
+ * mergeSkillsAndRacialMods
+ */
+function mergeSkillsAndRacialMods(rawSkills, racialMods){
+	var warnings = [],
+		skillArray = [],
+		skills,
+		key;
+
+	// copy rawSkills into skills
+	skills = JSON.parse(JSON.stringify(rawSkills));
+
+	// merge with racial Mods
+	for (key in racialMods.skills) {
+
+		if (skills[key] === undefined) {
+
+			skills[key] = {name: key};
+			warnings.push(createMessage('racialModMerge', key));
+		}
+
+		skills[key].racial = racialMods.skills[key].modifier;
+	}
+
+	// build the result array from the skills dictionary
+	for (key in skills) {
+		skillArray.push(skills[key]);
+	}
+
+	return {name: 'skills', errors: [], warnings: warnings, data: skillArray};
+}
+
+/**
  * extractSQ
  */
 function extractSQ(sqStr){
@@ -697,3 +729,4 @@ exports.extractSkills = extractSkills;
 exports.checkSkills = checkSkills;
 exports.extractRacialModifiers = extractRacialModifiers;
 exports.extractSQ = extractSQ;
+exports.mergeSkillsAndRacialMods = mergeSkillsAndRacialMods;

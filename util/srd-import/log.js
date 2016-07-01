@@ -21,6 +21,7 @@ const messages = {
 	wrongSkillFormat: 'Wrong skill format',
 	unknownSkill: 'Unknown skill',
 	numberInSQ: 'Numbers in SQ - check that they are independent from other stats',
+	racialModMerge: 'Skill present in Racial modifiers but not in Skills',
 
 	// not handled yet
 	highCRNotHandled: 'CR over 30 not handled yet',

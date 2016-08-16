@@ -170,9 +170,10 @@ describe('SRD import', function(){
 			expect(monster.organization).to.equal(armadillo.organization);
 			expect(monster.treasure).to.equal(armadillo.treasure);
 			expect(monster.speed).to.deep.equal({land: 30, burrow: 5});
-			expect(monster.feats).to.deep.equal([{name: 'Skill Focus', details: {name: 'Perception'}}]);
+			expect(monster.feats).to.deep.equal([{name: 'Skill Focus', details: [{name: 'Perception'}]}]);
 			expect(monster.melee).to.deep.equal({claw: {name: 'claw', nbAttacks: 1, nbDice: 1, dieType: 2, type: 'natural'}});
 			expect(monster.sq).to.be.undefined;
+
 		});
 	});
 });

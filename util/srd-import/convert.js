@@ -444,10 +444,77 @@ function parseFeatString(featStr) {
 }
 
 /**
+ * checkNeutralFeatDetails
+ * checks the details for neutral feats with details
+ */
+function checkNeutralFeatDetails(featObj, validDetails){
+	var warnings = [],
+		item,
+		itemName;
+
+ 	if (feat.getStatus(featObj.name) !== 'neutral' || !feat.hasDetails(featObj.name)) {
+ 		return;
+ 	}
+
+	if (!featObj.details || !featObj.details.length) {
+		warnings.push(createMessage('missingFeatDetails', featObj.name));
+	} else {
+		for (item = 0; item < featObj.details.length; item++) {
+			itemName = featObj.details[item].name;
+			if (validDetails.indexOf(itemName) < 0) {
+				warnings.push(createMessage('invalidDetails', featObj.name));
+			}
+		}
+	}
+
+	return { errors: [], warnings: warnings };
+}
+
+/**
+ * checkFeatDetails
+ */
+function checkFeatDetails(featObj){
+ 	var errors = [],
+ 		warnings = [],
+ 		item,
+ 		itemName,
+ 		validDetails,
+ 		res;
+
+ 	if (featObj.name === 'Alignment Channel') {
+		res = checkNeutralFeatDetails(featObj, ['chaos', 'law', 'evil', 'good']);
+		warnings = res.warnings;
+
+ 	} else if (featObj.name === 'Elemental Channel') {
+		res = checkNeutralFeatDetails(featObj, ['air', 'earth', 'fire', 'water']);
+		warnings = res.warnings;
+
+ 	} else if (featObj.name === 'Skill Focus') {
+ 		if (!featObj.details || !featObj.details.length) {
+ 			errors.push(createMessage('missingFeatDetails', featObj.name));
+ 		} else {
+ 			for (item = 0; item < featObj.details.length; item++) {
+ 				itemName = featObj.details[item].name;
+ 				if (!skill.isSkill(itemName)) {
+ 					errors.push(createMessage('invalidDetails', featObj.name));
+ 				}
+ 			}
+ 		}
+
+ 	} else {
+ 		errors.push(createMessage('featNotHandled', featObj.name));
+ 	}
+
+ 	return {errors: errors, warnings: warnings};
+}
+
+/**
  * checkFeatList
  */
 function checkFeatList(featList){
-	var errors = [];
+	var errors = [],
+		warnings = [],
+		res;
 
 	featList.forEach(function(item){
 
@@ -458,10 +525,35 @@ function checkFeatList(featList){
 		// check if the feat is currently handled
 		} else if (!feat.isHandled(item.name)) {
 			errors.push(createMessage('featNotHandled', item.name));
+		
+		} else {
+			// we have a valid feat that is handled. Check the details
+			// if it's supposed to have details but doesn't, raise an error
+			if (feat.hasDetails(item.name)) {
+				if (!item.details || item.details.length === 0) {
+					errors.push(createMessage('missingFeatDetails', item.name));
+
+				} else {
+					res = checkFeatDetails(item);
+
+					if (res.errors && res.errors.length) {
+						Array.prototype.push.apply(errors, res.errors);
+					}
+					if (res.warnings && res.warnings.length) {
+						Array.prototype.push.apply(warnings, res.warnings);
+					}
+				}
+
+			// if it's not supposed to have details but has some, raise a warning
+			} else {
+				if (item.details && item.details.length) {
+					warnings.push(createMessage('unexpectedFeatDetails', item.name));
+				}
+			}
 		}
 	});
 
-	return errors;
+ 	return {errors: errors, warnings: warnings};
 }
 
 /**
@@ -492,12 +584,15 @@ function extractFeats(featStr){
 
 	if (list) {
 
-		checkErrors = checkFeatList(list);
+		result = checkFeatList(list);
 		
-		if (checkErrors.length) {
+		if (result.errors && result.errors.length) {
 	
-			Array.prototype.push.apply(errors, checkErrors);
+			Array.prototype.push.apply(errors, result.errors);
 			list = undefined;
+		}
+		if (result.warnings && result.warnings.length) {
+			Array.prototype.push.apply(warnings, result.warnings);
 		}
 	}
 

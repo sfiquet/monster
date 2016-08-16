@@ -99,12 +99,12 @@ describe('Parse', function(){
 
 		it('generates a feat object with a details property when there are parentheses', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception)')).to.deep.equal(
-				{errors: [], warnings: [], data: {name: 'Skill Focus', details: {name: 'Perception'}}});
+				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Perception'}]}});
 		});
 
 		it('generates a feat object with bonus and details properties', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception)B')).to.deep.equal(
-				{errors: [], warnings: [], data: {name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}});
+				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Perception'}], special: ['bonus']}});
 		});
 
 		it('generates an error when there are too many parentheses', function(){
@@ -123,13 +123,13 @@ describe('Parse', function(){
 		it('generates a warning when there is no closing parenthesis', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception')).to.deep.equal(
 				{errors: [], warnings: [createMessage('noClosingParenthesis', 'Skill Focus (Perception')], 
-					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
+					data: {name: 'Skill Focus', details: [{name: 'Perception'}]}});
 		});
 
 		it('generates a warning when there is text after the parentheses', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception) blah blah')).to.deep.equal(
 				{errors: [], warnings: [createMessage('dataAfterClosingParenthesis', 'Skill Focus (Perception) blah blah')], 
-					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
+					data: {name: 'Skill Focus', details: [{name: 'Perception'}]}});
 		});
 
 		it('doesn\'t deal with mythic feats yet (temporary)', function(){
@@ -137,7 +137,23 @@ describe('Parse', function(){
 
 			expect(parse.parseFeatChunk('Skill Focus (Perception)M')).to.deep.equal(
 				{errors: [], warnings: [createMessage('dataAfterClosingParenthesis', 'Skill Focus (Perception)M')], 
-					data: {name: 'Skill Focus', details: {name: 'Perception'}}});
+					data: {name: 'Skill Focus', details: [{name: 'Perception'}]}});
+		});
+
+		it('generates a feat object with multiple details', function(){
+			expect(parse.parseFeatChunk('Skill Focus (Bluff, Perception)')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Bluff'}, {name: 'Perception'}]}});
+		});
+
+		it('generates a single error when there are brackets for multiple details (temporary)', function(){
+			expect(parse.parseFeatChunk('Skill Focus (Knowledge[planes], Knowledge[religion])')).to.deep.equal(
+				{errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
+		});
+
+		it('generates a warning there is no closing parenthesis after multiple details', function(){
+			expect(parse.parseFeatChunk('Skill Focus (Bluff, Perception')).to.deep.equal(
+				{errors: [], warnings: [createMessage('noClosingParenthesis', 'Skill Focus (Bluff, Perception')], 
+					data: {name: 'Skill Focus', details: [{name: 'Bluff'}, {name: 'Perception'}]}});
 		});
 	});
 

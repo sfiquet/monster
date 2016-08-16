@@ -132,6 +132,30 @@ function parseAndSeparatedString(str){
 }
 
 /**
+ * parseFeatDetailsChunk
+ * extracts an array of feat details from a comma-separated string
+ * input: either a single item (can be multiple words) or a comma-separated list, e.g. for Skill Focus:
+ * 	"Perception"
+ * 	"Sleight of Hand"
+ * 	"Perception, Sleight of Hand, Use Magic Device"
+ * output: an array of objects with a name property (an url could also be possible but is not available in the Excel file)
+ * 	for the examples above:
+ * 	[{name: "Perception"}]
+ * 	[{name: "Sleight of Hand"}]
+ * 	[{name: "Perception"}, {name: "Sleight of Hand"}, {name: "Use Magic Device"}]
+ */
+function parseFeatDetailsChunk(detailStr){
+	var chunks,
+		data;
+
+	chunks = parseCommaSeparatedString(detailStr);
+	data = chunks.map(function(str) {
+		return {name: str};
+	});
+	return data;
+}
+
+/**
  * parseFeatChunk
  * parses a string describing a single feat and creates a feat object
  */
@@ -142,7 +166,9 @@ function parseFeatChunk(featStr){
 		warnings = [],
 		close,
 		name,
+		detailStr,
 		details,
+		i,
 		special = [];
 	
 	// split at the opening parenthesis
@@ -168,12 +194,12 @@ function parseFeatChunk(featStr){
 
 		if (close < 0) {
 		
-			details = { name: chunks[1].trim() };
+			detailStr = chunks[1].trim();
 			warnings.push(createMessage('noClosingParenthesis', featStr));
 		
 		} else {
 		
-			details = { name: chunks[1].slice(0, close).trim() };
+			detailStr = chunks[1].slice(0, close).trim();
 
 			// check that there isn't anything after the closing parenthesis
 			var endStr = chunks[1].slice(close + 1).trim();
@@ -186,11 +212,17 @@ function parseFeatChunk(featStr){
 				warnings.push(createMessage('dataAfterClosingParenthesis', featStr));
 			}
 		}
+
+		details = parseFeatDetailsChunk(detailStr);
+
 		// check that there aren't any square brackets within the details
 		// not handled yet
-		var sq = details.name.indexOf('[');
-		if (sq >= 0) {
-			errors.push(createMessage('featSubDetailsNotHandled'));
+		for (i = 0; i < details.length; i++) {
+			var sq = details[i].name.indexOf('[');
+			if (sq >= 0) {
+				errors.push(createMessage('featSubDetailsNotHandled'));
+				break;
+			}
 		}
 	}
 

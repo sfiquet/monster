@@ -342,7 +342,7 @@ describe('Convert', function(){
 
 		it('includes the feat details when a feat has additional details', function(){
 			expect(conv.extractFeats('Skill Focus (Perception)')).to.deep.equal(
-				{name: 'feats', errors: [], warnings: [], data: [{name: 'Skill Focus', details: {name: 'Perception'}}]});
+				{name: 'feats', errors: [], warnings: [], data: [{name: 'Skill Focus', details: [{name: 'Perception'}]}]});
 		});
 
 		it('generates an error for feats whose details have details (temporary)', function(){
@@ -374,7 +374,7 @@ describe('Convert', function(){
 		it('identifies and stores bonus feats properly when they have additional details', function(){
 			expect(conv.extractFeats('Skill Focus (Perception)B, Diehard, Power Attack')).to.deep.equal(
 				{	name: 'feats', errors: [], warnings: [], 
-					data: [	{name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}, 
+					data: [	{name: 'Skill Focus', details: [{name: 'Perception'}], special: ['bonus']}, 
 							{name: 'Diehard'}, 
 							{name: 'Power Attack'}]});
 
@@ -382,8 +382,51 @@ describe('Convert', function(){
 				{	name: 'feats', errors: [], warnings: [], 
 					data: [	{name: 'Diehard'}, 
 							{name: 'Power Attack'},
-							{name: 'Skill Focus', details: {name: 'Perception'}, special: ['bonus']}]});
+							{name: 'Skill Focus', details: [{name: 'Perception'}], special: ['bonus']}]});
 		});
+
+		it('generates a warning when a non-detailed feat has unexpected additional details', function(){
+			expect(conv.extractFeats('Cleave (some detail)')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [createMessage('unexpectedFeatDetails', 'Cleave')], 
+					data: [	{name: 'Cleave', details: [{name: 'some detail'}]} ]});
+		});
+
+		it('generates an error when a detailed feat has no details', function(){
+			expect(conv.extractFeats('Skill Focus')).to.deep.equal(
+				{name: 'feats', errors: [createMessage('missingFeatDetails', 'Skill Focus')], warnings: [], data: undefined});
+
+			expect(conv.extractFeats('Skill Focus ()')).to.deep.equal(
+				{name: 'feats', errors: [createMessage('missingFeatDetails', 'Skill Focus')], warnings: [], data: undefined});
+		});
+
+		it('generates a warning when details for Alignment Channel are not valid alignments', function(){
+			expect(conv.extractFeats('Alignment Channel (chaos, law, evil, good)')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [], 
+					data: [	{name: 'Alignment Channel', details: [{name: 'chaos'}, {name: 'law'}, {name: 'evil'}, {name: 'good'}]} ]});
+
+			expect(conv.extractFeats('Alignment Channel (all alignments)')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [createMessage('invalidDetails', 'Alignment Channel')], 
+					data: [	{name: 'Alignment Channel', details: [{name: 'all alignments'}]} ]});
+		});
+
+		it('generates a warning when details for Elemental Channel are not valid elemental types', function(){
+			expect(conv.extractFeats('Elemental Channel (air, earth, fire, water)')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [], 
+					data: [	{name: 'Elemental Channel', details: [{name: 'air'}, {name: 'earth'}, {name: 'fire'}, {name: 'water'}]} ]});
+
+			expect(conv.extractFeats('Elemental Channel (all elements)')).to.deep.equal(
+				{	name: 'feats', errors: [], warnings: [createMessage('invalidDetails', 'Elemental Channel')], 
+					data: [	{name: 'Elemental Channel', details: [{name: 'all elements'}]} ]});
+		});
+
+		it('generates an error when details for Skill Focus are not valid skills', function(){
+			expect(conv.extractFeats('Skill Focus (not a skill)')).to.deep.equal(
+				{name: 'feats', errors: [createMessage('invalidDetails', 'Skill Focus')], warnings: [], data: undefined});
+
+			expect(conv.extractFeats('Skill Focus (Acrobatics, FakeSkill)')).to.deep.equal(
+				{name: 'feats', errors: [createMessage('invalidDetails', 'Skill Focus')], warnings: [], data: undefined});
+		});
+		// add tests for other detailed feats here when they become handled
 	});
 
 	describe('extractMelee', function(){

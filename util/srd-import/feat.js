@@ -225,6 +225,16 @@ function isHandled(feat) {
 	return true;
 }
 
+function getStatus(feat) {
+
+	if (!feats[feat]) {
+		return;
+	}
+
+	return feats[feat].status;
+}
+
 exports.isFeat = isFeat;
 exports.hasDetails = hasDetails;
 exports.isHandled = isHandled;
+exports.getStatus = getStatus;

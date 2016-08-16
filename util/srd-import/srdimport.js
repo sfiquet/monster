@@ -3,7 +3,9 @@
 
 var xlsx = require('xlsx'), 
 	fs = require('fs'),
-	convert = require('./convert');
+	convert = require('./convert'),
+	calc = require('./calc'),
+	Monster = require('../../lib/monster');
 
 var excelFile = './data/d20pfsrd-Bestiary.xlsx';
 var maxRows = 2812;
@@ -174,12 +176,28 @@ function createMonster(rawMonster) {
 	addProperty(temp, log, convert.extractSkills(rawMonster.skills));
 	addProperty(temp, log, convert.extractRacialModifiers(rawMonster.racialmods));
 
-	if (temp.skills && temp.racialMods) {
-		addProperty(monster, log, convert.mergeSkillsAndRacialMods(temp.skills, temp.racialMods));
+	if (temp.rawSkills && temp.racialMods) {
+		// adds the 'mergedSkills' property
+		addProperty(temp, log, convert.mergeSkillsAndRacialMods(temp.rawSkills, temp.racialMods));
 	}
 	
 	// calculate remaining properties
-	//monster = calc.calculate(monster);
+	var monsterCopy = JSON.parse(JSON.stringify(monster));
+	if (temp.mergedSkills) {
+		// add the merged skills to the monster for ranks calculations
+		// the modifier property will be ignored by the Monster object
+		monsterCopy.skills = temp.mergedSkills;
+	}
+	var monsterObj = new Monster(monsterCopy);
+
+	if (temp.mergedSkills) {
+		addProperty(monster, log, calc.calculateSkills(temp.mergedSkills, monsterObj));
+	}
+
+	addProperty(monster, log, calc.calculateDiscrepancy('naturalArmor', rawMonster.ac, monsterObj.getAC()));
+	addProperty(monster, log, calc.calculateDiscrepancy('baseFort', rawMonster.fort, monsterObj.getFortitude()));
+	addProperty(monster, log, calc.calculateDiscrepancy('baseRef', rawMonster.ref, monsterObj.getReflex()));
+	addProperty(monster, log, calc.calculateDiscrepancy('baseWill', rawMonster.will, monsterObj.getWill()));
 
 	return {log: log, monster: monster};
 }

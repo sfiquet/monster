@@ -173,7 +173,11 @@ describe('SRD import', function(){
 			expect(monster.feats).to.deep.equal([{name: 'Skill Focus', details: [{name: 'Perception'}]}]);
 			expect(monster.melee).to.deep.equal({claw: {name: 'claw', nbAttacks: 1, nbDice: 1, dieType: 2, type: 'natural'}});
 			expect(monster.sq).to.be.undefined;
-
+			expect(monster.skills).to.deep.equal([{name: 'Perception', ranks: 1}, {name: 'Swim', racial: 4}]);
+			expect(monster.naturalArmor).to.equal(2);
+			expect(monster.baseFort).to.equal(2);
+			expect(monster.baseRef).to.equal(2);
+			expect(monster.baseWill).to.equal(0);
 		});
 	});
 });

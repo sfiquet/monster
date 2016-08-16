@@ -717,7 +717,7 @@ function extractSkills(skillStr){
 		}
 	}
 
-	return {name: 'skills', errors: errors, warnings: warnings, data: skills};
+	return {name: 'rawSkills', errors: errors, warnings: warnings, data: skills};
 }
 
 /**
@@ -782,7 +782,7 @@ function mergeSkillsAndRacialMods(rawSkills, racialMods){
 		skillArray.push(skills[key]);
 	}
 
-	return {name: 'skills', errors: [], warnings: warnings, data: skillArray};
+	return {name: 'mergedSkills', errors: [], warnings: warnings, data: skillArray};
 }
 
 /**

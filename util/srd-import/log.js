@@ -25,6 +25,9 @@ const messages = {
 	unknownSkill: 'Unknown skill',
 	numberInSQ: 'Numbers in SQ - check that they are independent from other stats',
 	racialModMerge: 'Skill present in Racial modifiers but not in Skills',
+	negativeDiscrepancy: ['Negative discrepancy for', 'target', 'should be bigger than calculated'],
+	classSkillBonusDiscrepancy: 'Skill discrepancy doesn\'t allow for class skill bonus',
+	noSkillData: 'No data to store for skill',
 
 	// not handled yet
 	highCRNotHandled: 'CR over 30 not handled yet',

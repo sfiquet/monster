@@ -510,12 +510,12 @@ describe('Convert', function(){
 		
 		it('generates an empty object when there are no skills', function(){
 			expect(conv.extractSkills('')).to.deep.equal(
-				{name: 'skills', errors: [], warnings: [], data: {}});
+				{name: 'rawSkills', errors: [], warnings: [], data: {}});
 		});
 
 		it('generates a dictionary of skill objects', function(){
 			expect(conv.extractSkills('Perception +4, Stealth +4')).to.deep.equal(
-				{name: 'skills', errors: [], warnings: [], data: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}});
+				{name: 'rawSkills', errors: [], warnings: [], data: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}});
 		});
 	});
 
@@ -570,7 +570,7 @@ describe('Convert', function(){
 			var racial = {skills: {Perception: {name: 'Perception', modifier: 4}}};
 
 			expect(conv.mergeSkillsAndRacialMods({}, racial)).to.deep.equal(
-				{name: 'skills', errors: [], warnings: [createMessage('racialModMerge', 'Perception')], data: 
+				{name: 'mergedSkills', errors: [], warnings: [createMessage('racialModMerge', 'Perception')], data: 
 					[{name: 'Perception', racial: 4}]});
 		});
 		
@@ -579,11 +579,11 @@ describe('Convert', function(){
 			var racial = {skills: {Perception: {name: 'Perception', modifier: 4}}};
 			
 			expect(conv.mergeSkillsAndRacialMods(skills, {})).to.deep.equal(
-				{name: 'skills', errors: [], warnings: [], data: 
+				{name: 'mergedSkills', errors: [], warnings: [], data: 
 					[{name: 'Perception', modifier: 8}, {name: 'Stealth', modifier: 8}]});
 
 			expect(conv.mergeSkillsAndRacialMods(skills, racial)).to.deep.equal(
-				{name: 'skills', errors: [], warnings: [], data: 
+				{name: 'mergedSkills', errors: [], warnings: [], data: 
 					[{name: 'Perception', modifier: 8, racial: 4}, {name: 'Stealth', modifier: 8}]});
 		});
 	});

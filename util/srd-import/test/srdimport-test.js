@@ -178,6 +178,7 @@ describe('SRD import', function(){
 			expect(monster.baseFort).to.equal(2);
 			expect(monster.baseRef).to.equal(2);
 			expect(monster.baseWill).to.equal(0);
+			expect(monster.shape).to.equal('long');
 		});
 	});
 });

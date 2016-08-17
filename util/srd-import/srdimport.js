@@ -199,6 +199,14 @@ function createMonster(rawMonster) {
 	addProperty(monster, log, calc.calculateDiscrepancy('baseRef', rawMonster.ref, monsterObj.getReflex()));
 	addProperty(monster, log, calc.calculateDiscrepancy('baseWill', rawMonster.will, monsterObj.getWill()));
 
+	// initial value for shape
+	// This is a best guess. All monsters should be checked manually before going live.
+	if (monster.type === 'humanoid' || monster.type === 'monstrous humanoid' || monster.type === 'fey') {
+		monster.shape = 'tall';
+	} else {
+		monster.shape = 'long';
+	}
+
 	return {log: log, monster: monster};
 }
 

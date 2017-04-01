@@ -304,7 +304,7 @@ function importData(inputFile, source, outputFile, logFile) {
 
 	// write to json file
 	if (outputFile) {
-		jsonStr = JSON.stringify(monsterList);
+		jsonStr = JSON.stringify(monsterList, null, '\t');
 		fs.writeFileSync(outputFile, jsonStr);
 	}
 

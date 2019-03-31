@@ -36,7 +36,7 @@ describe('Skill', function(){
 		it('returns a copy of the array of skills', function(){
 			var skills = skill.getAllSkills();
 			var skills2 = skill.getAllSkills();
-			expect(skills).to.be.an.array;
+			expect(skills).to.be.an('array');
 			expect(skills.length).to.equal(26);
 			expect(skills[0]).to.equal('Acrobatics');
 			expect(skills[25]).to.equal('Use Magic Device');

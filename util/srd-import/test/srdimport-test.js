@@ -57,6 +57,7 @@ var armadillo = {
 
 
 describe('SRD import', function(){
+	this.timeout(0);
 	describe('import', function(){
 		
 		it('returns a non-zero value when the input file cannot be read', function(){

@@ -240,6 +240,14 @@ function writeMonsterLog(fdLog, monsterName, log) {
 	});
 }
 
+function isValidMonster(log){
+	// check whether the monster creation log has errors
+	if (log.length > 0 && log.find(item => item.errors && item.errors.length > 0)) {
+		return false;
+	}
+	return true;
+}
+
 /**
  * importData
  * top level function that handles the data import
@@ -287,7 +295,7 @@ function importData(inputFile, source, outputFile, logFile) {
 		if (log.length === 0) {
 
 			result = createMonster(rawMonster);
-			if (result.log.length === 0) {
+			if (isValidMonster(result.log)) {
 				monsterList.push(result.monster);
 			}
 			log = result.log;

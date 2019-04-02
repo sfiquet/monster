@@ -1,3 +1,4 @@
 node_modules/
 prototype/html/
 *.log
+util/srd-import/test/testdata/test-output/

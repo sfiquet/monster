@@ -55,25 +55,51 @@ var armadillo = {
 	source: 'Animal Archive'
 };
 
+let inputFile = path.resolve('test/testdata/test-input/test-Bestiary.xlsx');
+let outputDir = path.resolve('test/testdata/test-output');
 
 describe('Integration: SRD import', function(){
 	this.timeout(0);
+
 	describe('import', function(){
+		before(function(){
+			// create the output folder if not already there
+			if (!fs.existsSync(outputDir)){
+				try{
+					fs.mkdirSync(outputDir);
+				} catch(err){
+					console.err(`Error creating directory ${outputDir}`);
+				}
+			// empty the output folder
+			} else {
+				let files;
+				try {
+					files = fs.readdirSync(outputDir);
+				} catch(err) {
+					console.err(`Error reading content of ${outputDir}`);
+					throw err;
+				}
+
+  			for (const file of files) {
+  				try {
+	    			fs.unlinkSync(path.join(outputDir, file));
+  				} catch(err){
+  					console.err(`Error deleting file ${path.join(outputDir, file)}`);
+  					throw err;
+  				}
+  			}
+			}
+		});
 		
 		it('returns a non-zero value when the input file cannot be read', function(){
 			expect(srdImport.importData('blah')).to.equal(1);
 		});
 
 		it('creates a JSON file', function(){
-			var outputFile = 'output.json',
+			var outputFile = path.resolve('test/testdata/test-output/json-test.json'),
 				fd;
 
-			try {
-				fs.unlinkSync(outputFile);
-			} catch(err) {
-				// the file doesn't already exist: do nothing
-			}
-			expect(srdImport.importData(path.resolve('test/testdata/test-Bestiary.xlsx'), 'PFRPG Bestiary', outputFile)).to.equal(0);
+			expect(srdImport.importData(inputFile, 'PFRPG Bestiary', outputFile)).to.equal(0);
 
 			try {
 				fd = fs.openSync(outputFile, 'r');
@@ -85,16 +111,11 @@ describe('Integration: SRD import', function(){
 		});
 		
 		it('creates a log file', function(){
-			var outputFile = 'output.json',
+			var outputFile = path.resolve('test/testdata/test-output/log-test.json'),
 				logFile = outputFile + '.log',
 				fd;
 
-			try {
-				fs.unlinkSync(logFile);
-			} catch(err) {
-				// the file doesn't already exist: do nothing
-			}
-			expect(srdImport.importData(path.resolve('test/testdata/test-Bestiary.xlsx'), 'PFRPG Bestiary', outputFile, logFile)).to.equal(0);
+			expect(srdImport.importData(inputFile, 'PFRPG Bestiary', outputFile, logFile)).to.equal(0);
 			try {
 				fd = fs.openSync(logFile, 'r');
 			} catch(err) {
@@ -114,14 +135,12 @@ describe('Integration: SRD import', function(){
 	describe('rowGenerator', function(){
 		
 		it('returns the 0-based index of the rows associated with the given source', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
 			var worksheet = srdImport.getWorksheet(inputFile);
 			var rowGen = srdImport.rowGenerator(worksheet, 'PFRPG Bestiary');
 			expect(rowGen.next().value).to.equal(38);
 		});
 		
 		it('returns undefined when there are no more rows', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
 			var worksheet = srdImport.getWorksheet(inputFile);
 			var rowGen = srdImport.rowGenerator(worksheet, 'Animal Archive');
 
@@ -138,7 +157,6 @@ describe('Integration: SRD import', function(){
 	describe('createRawMonster', function(){
 
 		it('returns an object containing all the data from the given row', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
 			var worksheet = srdImport.getWorksheet(inputFile);
 			var raw = srdImport.createRawMonster(worksheet, 1);
 			// note: the value for space is due to bad data 2 1/2 ft being 

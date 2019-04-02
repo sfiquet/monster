@@ -2,9 +2,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-	srdImport = require('../srdimport'),
-	fs = require('fs'),
-	path = require('path');
+	srdImport = require('../srdimport');
 
 var armadillo = {
 	name: 'Armadillo',
@@ -57,96 +55,6 @@ var armadillo = {
 
 
 describe('SRD import', function(){
-	this.timeout(0);
-	describe('import', function(){
-		
-		it('returns a non-zero value when the input file cannot be read', function(){
-			expect(srdImport.importData('blah')).to.equal(1);
-		});
-
-		it('creates a JSON file', function(){
-			var outputFile = 'output.json',
-				fd;
-
-			try {
-				fs.unlinkSync(outputFile);
-			} catch(err) {
-				// the file doesn't already exist: do nothing
-			}
-			expect(srdImport.importData(path.resolve('test/testdata/test-Bestiary.xlsx'), 'PFRPG Bestiary', outputFile)).to.equal(0);
-
-			try {
-				fd = fs.openSync(outputFile, 'r');
-			} catch(err) {
-				expect(err).to.be.undefined;
-				return;
-			}
-			fs.closeSync(fd);
-		});
-		
-		it('creates a log file', function(){
-			var outputFile = 'output.json',
-				logFile = outputFile + '.log',
-				fd;
-
-			try {
-				fs.unlinkSync(logFile);
-			} catch(err) {
-				// the file doesn't already exist: do nothing
-			}
-			expect(srdImport.importData(path.resolve('test/testdata/test-Bestiary.xlsx'), 'PFRPG Bestiary', outputFile, logFile)).to.equal(0);
-			try {
-				fd = fs.openSync(logFile, 'r');
-			} catch(err) {
-				expect(err).to.be.undefined;
-				return;
-			}
-			fs.closeSync(fd);
-		});
-	});
-
-	describe('getWorksheet', function(){
-		it('returns undefined if the file cannot be opened');
-		it('returns undefined if the file is not an excel file');
-		it('returns a worksheet object containing the data from the first sheet');
-	});
-
-	describe('rowGenerator', function(){
-		
-		it('returns the 0-based index of the rows associated with the given source', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
-			var worksheet = srdImport.getWorksheet(inputFile);
-			var rowGen = srdImport.rowGenerator(worksheet, 'PFRPG Bestiary');
-			expect(rowGen.next().value).to.equal(38);
-		});
-		
-		it('returns undefined when there are no more rows', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
-			var worksheet = srdImport.getWorksheet(inputFile);
-			var rowGen = srdImport.rowGenerator(worksheet, 'Animal Archive');
-
-			expect(rowGen.next().value).to.equal(1);
-			expect(rowGen.next().value).to.equal(2);
-			expect(rowGen.next().value).to.equal(3);
-			expect(rowGen.next().value).to.equal(199);
-			expect(rowGen.next().value).to.equal(200);
-			expect(rowGen.next().value).to.equal(201);
-			expect(rowGen.next().value).to.be.undefined;
-		});
-	});
-	
-	describe('createRawMonster', function(){
-
-		it('returns an object containing all the data from the given row', function(){
-			var inputFile = path.resolve('test/testdata/test-Bestiary.xlsx');
-			var worksheet = srdImport.getWorksheet(inputFile);
-			var raw = srdImport.createRawMonster(worksheet, 1);
-			// note: the value for space is due to bad data 2 1/2 ft being 
-			// stored as date 2/1/2002, which translates to numeric value 37288
-			expect(raw).to.deep.equal(armadillo);
-		});
-	});
-
 	describe('createMonster', function(){
 
 		it('creates a monster object in the database format from the given raw monster', function(){

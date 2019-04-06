@@ -4,7 +4,7 @@
 var expect = require('chai').expect,
 	calc = require('../calc'),
 	message = require('../message'),
-	Monster = require('../../../lib/monster');
+	Monster = require('../../app/lib/monster');
 
 var createMessage = message.createMessage;
 

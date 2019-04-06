@@ -2,7 +2,7 @@
 'use strict';
 
 var message = require('./message'),
-	Monster = require('./../../lib/monster');
+	Monster = require('./../app/lib/monster');
 
 var createMessage = message.createMessage;
 

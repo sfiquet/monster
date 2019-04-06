@@ -5,9 +5,9 @@ var xlsx = require('xlsx'),
 	fs = require('fs'),
 	convert = require('./convert'),
 	calc = require('./calc'),
-	Monster = require('../../lib/monster');
+	Monster = require('../app/lib/monster');
 
-var excelFile = './data/d20pfsrd-Bestiary.xlsx';
+var excelFile = '../data/d20pfsrd-Bestiary.xlsx';
 var maxRows = 2812;
 var maxCols = 71;
 var sourceCol = maxCols - 1; // 0-based index

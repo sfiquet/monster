@@ -11,28 +11,28 @@ describe('Giant Template', function(){
 		it('returns false for monsters of Colossal size', function(){
 			var monster;
 			monster = new Monster({size: 'Colossal'});
-			expect(giant.isCompatible(monster)).to.be.false();
+			expect(giant.isCompatible(monster)).to.be.false;
 		});
 
 		it('returns true for monsters of all sizes but Colossal', function(){
 			var monster;
 			monster = new Monster();
 			monster.size = 'Gargantuan';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Huge';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Large';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Medium';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Small';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Tiny';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Diminutive';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 			monster.size = 'Fine';
-			expect(giant.isCompatible(monster)).to.be.true();
+			expect(giant.isCompatible(monster)).to.be.true;
 		});
 	});
 
@@ -67,10 +67,10 @@ describe('Giant Template', function(){
 
 		it('has no effect on an undead\'s Constitution or Charisma', function(){
 			var monster = new Monster({type: 'undead', Cha: 10});
-			expect(monster.Con).to.be.undefined();
+			expect(monster.Con).to.be.undefined;
 			expect(monster.Cha).to.equal(10);
 			giant.apply(monster);
-			expect(monster.Con).to.be.undefined();
+			expect(monster.Con).to.be.undefined;
 			expect(monster.Cha).to.equal(10);
 		});
 

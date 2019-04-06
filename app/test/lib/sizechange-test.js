@@ -9,11 +9,11 @@ describe('Damage dice', function(){
 	describe('getNextDamageDiceUp', function(){
 
 		it('returns undefined if the parameters are incorrect', function(){
-			expect(sizeLib.getNextDamageDiceUp(undefined, {nbDice: 1, dieType: 4})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('not a size', {nbDice: 1, dieType: 4})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 1})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium', {dieType: 4})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium')).to.be.undefined();
+			expect(sizeLib.getNextDamageDiceUp(undefined, {nbDice: 1, dieType: 4})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('not a size', {nbDice: 1, dieType: 4})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 1})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium', {dieType: 4})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium')).to.be.undefined;
 		});
 
 		it('returns the correct damage dice when the initial damage is 1d6 or less', function(){
@@ -144,8 +144,8 @@ describe('Damage dice', function(){
 
 		it('returns undefined when the original damage has several d4 but not a multiple of 2 or 3', function(){
 			// 5d4 has no calculation (but is not likely to be used)
-			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 4})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 4})).to.be.undefined();
+			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 4})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 4})).to.be.undefined;
 		});
 
 		it('returns the correct damage dice when the original damage has several d10', function(){
@@ -160,10 +160,10 @@ describe('Damage dice', function(){
 
 		it('returns undefined when the original damage has several d10 but not a multiple of 2', function(){
 			// the calculation only works on numbers that are multiples of 2
-			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 10})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 10})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 10})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 10})).to.be.undefined();
+			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 3, dieType: 10})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Small', {nbDice: 5, dieType: 10})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 3, dieType: 10})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceUp('Medium', {nbDice: 5, dieType: 10})).to.be.undefined;
 		});
 
 		it('returns the correct damage dice when the original damage is based on d12', function(){
@@ -187,11 +187,11 @@ describe('Damage dice', function(){
 
 	describe('getNextDamageDiceDown', function(){
 		it('returns undefined if the parameters are incorrect', function(){
-			expect(sizeLib.getNextDamageDiceDown(undefined, {nbDice: 1, dieType: 6})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceDown('not a size', {nbDice: 1, dieType: 6})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceDown('Medium', {nbDice: 1})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceDown('Medium', {dieType: 6})).to.be.undefined();
-			expect(sizeLib.getNextDamageDiceDown('Medium')).to.be.undefined();
+			expect(sizeLib.getNextDamageDiceDown(undefined, {nbDice: 1, dieType: 6})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceDown('not a size', {nbDice: 1, dieType: 6})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceDown('Medium', {nbDice: 1})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceDown('Medium', {dieType: 6})).to.be.undefined;
+			expect(sizeLib.getNextDamageDiceDown('Medium')).to.be.undefined;
 		});
 
 		it('returns a dice representing an absence of damage when it is impossible to decrease any further', function(){
@@ -396,12 +396,12 @@ describe('Damage dice', function(){
 		});
 
 		it('returns undefined if the offset doesn\'t correspond to a valid size', function(){
-			expect(sizeLib.calculateSpace('Colossal', 1)).to.be.undefined();
-			expect(sizeLib.calculateSpace('Gargantuan', 2)).to.be.undefined();
-			expect(sizeLib.calculateSpace('Medium', 5)).to.be.undefined();
-			expect(sizeLib.calculateSpace('Medium', -5)).to.be.undefined();
-			expect(sizeLib.calculateSpace('Diminutive', -2)).to.be.undefined();
-			expect(sizeLib.calculateSpace('Fine', -1)).to.be.undefined();
+			expect(sizeLib.calculateSpace('Colossal', 1)).to.be.undefined;
+			expect(sizeLib.calculateSpace('Gargantuan', 2)).to.be.undefined;
+			expect(sizeLib.calculateSpace('Medium', 5)).to.be.undefined;
+			expect(sizeLib.calculateSpace('Medium', -5)).to.be.undefined;
+			expect(sizeLib.calculateSpace('Diminutive', -2)).to.be.undefined;
+			expect(sizeLib.calculateSpace('Fine', -1)).to.be.undefined;
 		});
 	});
 });

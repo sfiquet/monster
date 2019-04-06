@@ -67,7 +67,7 @@ describe('OrderedSet', function(){
 	describe('getItemByKey', function(){
 		it('returns undefined if the ordered set is empty', function(){
 			var set = new OrderedSet();
-			expect(set.getItemByKey('test')).to.be.undefined();
+			expect(set.getItemByKey('test')).to.be.undefined;
 		});
 
 		it('returns undefined if the key is not found', function(){
@@ -77,7 +77,7 @@ describe('OrderedSet', function(){
 				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
 			];
 			var set = new OrderedSet(data);
-			expect(set.getItemByKey('test')).to.be.undefined();
+			expect(set.getItemByKey('test')).to.be.undefined;
 		});
 		
 		it('returns the item identified by the key', function(){
@@ -96,8 +96,8 @@ describe('OrderedSet', function(){
 	describe('getItemByIndex', function(){
 		it('returns undefined if the index is out of bounds', function(){
 			var set = new OrderedSet();
-			expect(set.getItemByIndex(-1)).to.be.undefined();
-			expect(set.getItemByIndex(0)).to.be.undefined();
+			expect(set.getItemByIndex(-1)).to.be.undefined;
+			expect(set.getItemByIndex(0)).to.be.undefined;
 
 			var data = [
 				{'name': 'one', 'number': 4}, 
@@ -105,7 +105,7 @@ describe('OrderedSet', function(){
 				{'name': 'three', 'object': {'name': 'four', 'blah': '123'}}
 			];
 			set = new OrderedSet(data);
-			expect(set.getItemByIndex(3)).to.be.undefined();
+			expect(set.getItemByIndex(3)).to.be.undefined;
 		});
 
 		it('returns the idem identified by the index', function(){

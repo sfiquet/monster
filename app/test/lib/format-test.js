@@ -2,7 +2,6 @@
 "use strict";
 
 var expect = require('chai').expect,
-	sprintf = require('underscore.string/sprintf'),
 	format = require('../../lib/format');
 
 describe('Format', function(){

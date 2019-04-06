@@ -38,7 +38,7 @@ describe('Advanced Template', function(){
 		it('always returns true for Advanced', function(){
 			var monster;
 			monster = new Monster(cubeLiteral);
-			expect(advanced.isCompatible(monster)).to.be.true();
+			expect(advanced.isCompatible(monster)).to.be.true;
 		});
 	});
 	describe('apply', function(){
@@ -63,7 +63,7 @@ describe('Advanced Template', function(){
 			expect(monster.Str).to.equal(14);
 			expect(monster.Dex).to.equal(5);
 			expect(monster.Con).to.equal(30);
-			expect(monster.Int).to.be.undefined();
+			expect(monster.Int).to.be.undefined;
 			expect(monster.Wis).to.equal(5);
 			expect(monster.Cha).to.equal(5);
 			expect(monster.getXP()).to.equal(1200);

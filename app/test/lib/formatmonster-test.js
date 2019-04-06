@@ -123,7 +123,7 @@ describe('Formatting of monster data for display', function(){
 			
 			monster = new Monster();
 			spaceReach = format.getSpaceReach(monster);
-			expect(spaceReach).to.be.undefined();
+			expect(spaceReach).to.be.undefined;
 		});
 		
 		it('builds an object when space and reach are standard but there is extra reach', function(){
@@ -147,7 +147,7 @@ describe('Formatting of monster data for display', function(){
 		
 		it('returns undefined if there are no special attacks', function(){
 			var monster = new Monster();
-			expect(format.getSpecialAttacks(monster)).to.be.undefined();
+			expect(format.getSpecialAttacks(monster)).to.be.undefined;
 		});
 		
 		it('formats the output text correctly when there is no calculation', function(){
@@ -238,12 +238,12 @@ describe('Formatting of monster data for display', function(){
 	describe('getSpecialAbilities', function(){
 		it('returns undefined if there are no special abilities', function(){
 			var monster = new Monster();
-			expect(format.getSpecialAbilities(monster)).to.be.undefined();
+			expect(format.getSpecialAbilities(monster)).to.be.undefined;
 		});
 		
 		it('outputs the text correctly when there is no calculation', function(){
 			var monster, abilities;
-			 
+			
 			monster = new Monster({ specialAbilities: 
 				[{
 					title: 'Corrosion (Ex)',
@@ -263,7 +263,7 @@ describe('Formatting of monster data for display', function(){
 		
 		it('works on multiple special abilities when there is no calculation', function(){
 			var monster, abilities;
-			 
+
 			monster = new Monster({ specialAbilities: 
 				[
 					{
@@ -522,7 +522,7 @@ describe('Formatting of monster data for display', function(){
 	describe('getSkills', function(){
 		it('returns undefined when the creature has no skill bonus', function(){
 			var monster = new Monster();
-			expect(format.getSkills(monster)).to.be.undefined();
+			expect(format.getSkills(monster)).to.be.undefined;
 		});
 		
 		it('returns an array of chunks for the template to display', function(){
@@ -545,7 +545,7 @@ describe('Formatting of monster data for display', function(){
 	describe('getRacialModifiers', function(){
 		it('returns undefined when the creature has no racial modifier', function(){
 			var monster = new Monster();
-			expect(format.getRacialModifiers(monster)).to.be.undefined();
+			expect(format.getRacialModifiers(monster)).to.be.undefined;
 		});
 
 		it('returns an array of chunks for display in the template', function(){
@@ -564,7 +564,7 @@ describe('Formatting of monster data for display', function(){
 		it('returns undefined when the monster has no speed', function(){
 			var monster = new Monster();
 			monster.speed = undefined;
-			expect(format.getSpeed(monster)).to.be.undefined();
+			expect(format.getSpeed(monster)).to.be.undefined;
 		});
 		
 		it('returns an array of text chunks', function(){
@@ -582,7 +582,7 @@ describe('Formatting of monster data for display', function(){
 	describe('getFeats', function(){
 		it('returns undefined when the creature has no feat', function(){
 			var monster = new Monster();
-			expect(format.getFeats(monster)).to.be.undefined();
+			expect(format.getFeats(monster)).to.be.undefined;
 		});
 
 		it('returns the correct array of chunks when a creature has simple feats with no extra detail', function(){
@@ -761,13 +761,13 @@ describe('Formatting of monster data for display', function(){
 			expect(profile.Str).to.equal(10);
 			expect(profile.Dex).to.equal(1);
 			expect(profile.Con).to.equal(26);
-			expect(profile.Int).to.be.undefined();
+			expect(profile.Int).to.be.undefined;
 			expect(profile.Wis).to.equal(1);
 			expect(profile.Cha).to.equal(1);
 			expect(profile.BAB).to.equal('+3');
 			expect(profile.CMB).to.equal('+4');
 			expect(profile.CMD).to.equal('9');
-			expect(profile.skills).to.be.undefined();
+			expect(profile.skills).to.be.undefined;
 			expect(profile.SQ).to.deep.equal([
 						[
 							{text: 'change shape', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#change-shape'},

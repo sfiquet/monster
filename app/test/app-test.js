@@ -23,7 +23,7 @@ describe('App', function(){
 		});
 */		
 		it('creates the app object', function(){
-			expect(app.app).to.exist();
+			expect(app.app).to.exist;
 		});
 		
 		it('sets up handlebars as the template engine', function(){

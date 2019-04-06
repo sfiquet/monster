@@ -13,24 +13,24 @@ describe('Urlutil', function(){
 
 			options = urlutil.extractAdvanceOptions('/advance/no-monster/original');
 			expect(options).to.be.an('object');
-			expect(options).to.be.empty();
+			expect(options).to.be.empty;
 
 			options = urlutil.extractAdvanceOptions('/advance/no-monster/original/browse');
 			expect(options).to.be.an('object');
-			expect(options).to.be.empty();
+			expect(options).to.be.empty;
 		});
 		
 		it('returns undefined if the url doesn\'t follow the correct format', function(){
 			var options;
 			
 			options = urlutil.extractAdvanceOptions('advance/no-monster');
-			expect(options).to.be.undefined();
+			expect(options).to.be.undefined;
 			
 			options = urlutil.extractAdvanceOptions('');
-			expect(options).to.be.undefined();
+			expect(options).to.be.undefined;
 			
 			options = urlutil.extractAdvanceOptions('original');
-			expect(options).to.be.undefined();
+			expect(options).to.be.undefined;
 		});
 		
 		it('returns an object containing the options', function(){
@@ -95,11 +95,11 @@ describe('Urlutil', function(){
 		
 		it('returns undefined if there is no monster segment in the url', function(){
 			var monster = urlutil.extractAdvanceMonster('/advance');
-			expect(monster).to.be.undefined();
+			expect(monster).to.be.undefined;
 			monster = urlutil.extractAdvanceMonster('/');
-			expect(monster).to.be.undefined();
+			expect(monster).to.be.undefined;
 			monster = urlutil.extractAdvanceMonster('');
-			expect(monster).to.be.undefined();
+			expect(monster).to.be.undefined;
 		});
 	});
 	
@@ -128,15 +128,15 @@ describe('Urlutil', function(){
 		it('returns undefined when the input parameters are wrong', function(){
 			var url;
 			url = urlutil.buildAdvanceUrl('black-pudding');
-			expect(url).to.be.undefined();
+			expect(url).to.be.undefined;
 			url = urlutil.buildAdvanceUrl(undefined, 'advanced');
-			expect(url).to.be.undefined();
+			expect(url).to.be.undefined;
 			url = urlutil.buildAdvanceUrl();
-			expect(url).to.be.undefined();
+			expect(url).to.be.undefined;
 			url = urlutil.buildAdvanceUrl('', '');
-			expect(url).to.be.undefined();
+			expect(url).to.be.undefined;
 			url = urlutil.buildAdvanceUrl('', []);
-			expect(url).to.be.undefined();
+			expect(url).to.be.undefined;
 		});
 		
 		it('ignores the extraSegment parameter if empty', function(){

@@ -14,10 +14,10 @@ describe('Look-up tables', function(){
 			expect(ref.getCRId(30)).to.equal(34);
 		});
 		it('returns undefined for any invalid CR', function(){
-			expect(ref.getCRId(0)).to.be.undefined();
-			expect(ref.getCRId(-1)).to.be.undefined();
-			expect(ref.getCRId('1/5')).to.be.undefined();
-			expect(ref.getCRId(2.4)).to.be.undefined();
+			expect(ref.getCRId(0)).to.be.undefined;
+			expect(ref.getCRId(-1)).to.be.undefined;
+			expect(ref.getCRId('1/5')).to.be.undefined;
+			expect(ref.getCRId(2.4)).to.be.undefined;
 		});
 	});
 	
@@ -30,9 +30,9 @@ describe('Look-up tables', function(){
 			expect(ref.getCR(10)).to.equal(6);
 		});
 		it('returns undefined for any invalid id', function(){
-			expect(ref.getCR(-1)).to.be.undefined();
-			expect(ref.getCR(2.5)).to.be.undefined();
-			expect(ref.getCR('1/8')).to.be.undefined();
+			expect(ref.getCR(-1)).to.be.undefined;
+			expect(ref.getCR(2.5)).to.be.undefined;
+			expect(ref.getCR('1/8')).to.be.undefined;
 		});
 	});
 	
@@ -49,11 +49,11 @@ describe('Look-up tables', function(){
 			expect(ref.getXP('1/8')).to.equal(50);
 		});
 		it('returns undefined for any other value', function(){
-			expect(ref.getXP('1/20')).to.be.undefined();			
-			expect(ref.getXP(0)).to.be.undefined();			
-			expect(ref.getXP(31)).to.be.undefined();			
-			expect(ref.getXP(1.5)).to.be.undefined();			
-			expect(ref.getXP(-1)).to.be.undefined();			
+			expect(ref.getXP('1/20')).to.be.undefined;
+			expect(ref.getXP(0)).to.be.undefined;
+			expect(ref.getXP(31)).to.be.undefined;
+			expect(ref.getXP(1.5)).to.be.undefined;
+			expect(ref.getXP(-1)).to.be.undefined;
 		});
 	});
 	
@@ -70,9 +70,9 @@ describe('Look-up tables', function(){
 			expect(ref.getSizeMod('Colossal')).to.equal(-8);
 		});
 		it('returns undefined for any other value', function(){
-			expect(ref.getSizeMod('fine')).to.be.undefined();
-			expect(ref.getSizeMod('')).to.be.undefined();
-			expect(ref.getSizeMod(0)).to.be.undefined();
+			expect(ref.getSizeMod('fine')).to.be.undefined;
+			expect(ref.getSizeMod('')).to.be.undefined;
+			expect(ref.getSizeMod(0)).to.be.undefined;
 		});
 	});
 	
@@ -89,9 +89,9 @@ describe('Look-up tables', function(){
 			expect(ref.getStealthSizeMod('Colossal')).to.equal(-16);
 		});
 		it('returns undefined for any other value', function(){
-			expect(ref.getStealthSizeMod('fine')).to.be.undefined();
-			expect(ref.getStealthSizeMod('')).to.be.undefined();
-			expect(ref.getStealthSizeMod(0)).to.be.undefined();
+			expect(ref.getStealthSizeMod('fine')).to.be.undefined;
+			expect(ref.getStealthSizeMod('')).to.be.undefined;
+			expect(ref.getStealthSizeMod(0)).to.be.undefined;
 		});
 	});
 	
@@ -132,8 +132,8 @@ describe('Look-up tables', function(){
 		});
 
 		it('returns undefined for invalid sizes', function(){
-			expect(ref.getSizeIndex('fine')).to.be.undefined();
-			expect(ref.getSizeIndex(0)).to.be.undefined();
+			expect(ref.getSizeIndex('fine')).to.be.undefined;
+			expect(ref.getSizeIndex(0)).to.be.undefined;
 		});
 	});
 
@@ -151,20 +151,20 @@ describe('Look-up tables', function(){
 		});
 
 		it('returns undefined when the index is out of range', function(){
-			expect(ref.getSizeName(-1)).to.be.undefined();
-			expect(ref.getSizeName(9)).to.be.undefined();
-			expect(ref.getSizeName('Colossal')).to.be.undefined();
+			expect(ref.getSizeName(-1)).to.be.undefined;
+			expect(ref.getSizeName(9)).to.be.undefined;
+			expect(ref.getSizeName('Colossal')).to.be.undefined;
 		});
 
 		it('returns undefined when the index is not a number', function(){
-			expect(ref.getSizeName('Colossal')).to.be.undefined();
-			expect(ref.getSizeName()).to.be.undefined();
+			expect(ref.getSizeName('Colossal')).to.be.undefined;
+			expect(ref.getSizeName()).to.be.undefined;
 		});
 	});
 
 	describe('getNextSizeUp', function(){
 		it('returns undefined if there is no size up', function(){
-			expect(ref.getNextSizeUp('Colossal')).to.be.undefined();
+			expect(ref.getNextSizeUp('Colossal')).to.be.undefined;
 		});
 
 		it('returns the name of the next size up', function(){
@@ -176,7 +176,7 @@ describe('Look-up tables', function(){
 
 	describe('getNextSizeDown', function(){
 		it('returns undefined if there is no size down', function(){
-			expect(ref.getNextSizeDown('Fine')).to.be.undefined();
+			expect(ref.getNextSizeDown('Fine')).to.be.undefined;
 		});
 
 		it('returns the name of the next size down', function(){
@@ -195,8 +195,8 @@ describe('Look-up tables', function(){
 			expect(ref.getHitDie('fey')).to.equal(6);
 		});
 		it('returns undefined if the type is invalid', function(){
-			expect(ref.getHitDie('Aberration')).to.be.undefined();
-			expect(ref.getHitDie('')).to.be.undefined();
+			expect(ref.getHitDie('Aberration')).to.be.undefined;
+			expect(ref.getHitDie('')).to.be.undefined;
 		});
 	});
 	
@@ -209,10 +209,10 @@ describe('Look-up tables', function(){
 			expect(ref.getConstructHPBonus('Medium')).to.equal(20);
 		});
 		it('returns undefined if the size is invalid', function(){
-			expect(ref.getConstructHPBonus('fine')).to.be.undefined();
-			expect(ref.getConstructHPBonus('')).to.be.undefined();
-			expect(ref.getConstructHPBonus()).to.be.undefined();
-			expect(ref.getConstructHPBonus(0)).to.be.undefined();
+			expect(ref.getConstructHPBonus('fine')).to.be.undefined;
+			expect(ref.getConstructHPBonus('')).to.be.undefined;
+			expect(ref.getConstructHPBonus()).to.be.undefined;
+			expect(ref.getConstructHPBonus(0)).to.be.undefined;
 		});
 	});
 	
@@ -225,8 +225,8 @@ describe('Look-up tables', function(){
 			expect(ref.getHitDieBABFactor('6')).to.equal(0.5);
 		});
 		it('returns undefined if the hit die provided is invalid', function(){
-			expect(ref.getHitDieBABFactor(7)).to.be.undefined();
-			expect(ref.getHitDieBABFactor('')).to.be.undefined();
+			expect(ref.getHitDieBABFactor(7)).to.be.undefined;
+			expect(ref.getHitDieBABFactor('')).to.be.undefined;
 		});
 	});
 	
@@ -237,10 +237,10 @@ describe('Look-up tables', function(){
 			expect(ref.getAbilityForSkill('Perception')).to.equal('Wis');
 		});
 		it('returns undefined if the skill provided is invalid', function(){
-			expect(ref.getAbilityForSkill('acrobatics')).to.be.undefined();
-			expect(ref.getAbilityForSkill('')).to.be.undefined();
-			expect(ref.getAbilityForSkill()).to.be.undefined();
-			expect(ref.getAbilityForSkill(2)).to.be.undefined();
+			expect(ref.getAbilityForSkill('acrobatics')).to.be.undefined;
+			expect(ref.getAbilityForSkill('')).to.be.undefined;
+			expect(ref.getAbilityForSkill()).to.be.undefined;
+			expect(ref.getAbilityForSkill(2)).to.be.undefined;
 		});
 	});
 	
@@ -252,10 +252,10 @@ describe('Look-up tables', function(){
 		});
 		
 		it('returns undefined for skills not associated with an url', function(){
-			expect(ref.getSkillUrl('blarg')).to.be.undefined();
-			expect(ref.getSkillUrl('')).to.be.undefined();
-			expect(ref.getSkillUrl()).to.be.undefined();
-			expect(ref.getSkillUrl('Knowledge (arcana)')).to.be.undefined();
+			expect(ref.getSkillUrl('blarg')).to.be.undefined;
+			expect(ref.getSkillUrl('')).to.be.undefined;
+			expect(ref.getSkillUrl()).to.be.undefined;
+			expect(ref.getSkillUrl('Knowledge (arcana)')).to.be.undefined;
 		});
 	});
 
@@ -267,18 +267,18 @@ describe('Look-up tables', function(){
 		});
 		
 		it('returns undefined for types not associated with an url', function(){
-			expect(ref.getTypeUrl('blarg')).to.be.undefined();
-			expect(ref.getTypeUrl('')).to.be.undefined();
-			expect(ref.getTypeUrl()).to.be.undefined();
-			expect(ref.getTypeUrl('outsider (native)')).to.be.undefined();
+			expect(ref.getTypeUrl('blarg')).to.be.undefined;
+			expect(ref.getTypeUrl('')).to.be.undefined;
+			expect(ref.getTypeUrl()).to.be.undefined;
+			expect(ref.getTypeUrl('outsider (native)')).to.be.undefined;
 		});
 	});
 
 	describe('getSpace', function(){
 		it('returns undefined for an invalid size', function(){
-			expect(ref.getSpace('Wrong')).to.be.undefined();
-			expect(ref.getSpace('medium')).to.be.undefined();
-			expect(ref.getSpace(0)).to.be.undefined();
+			expect(ref.getSpace('Wrong')).to.be.undefined;
+			expect(ref.getSpace('medium')).to.be.undefined;
+			expect(ref.getSpace(0)).to.be.undefined;
 		});
 
 		it('returns the correct space for the given size', function(){
@@ -296,17 +296,17 @@ describe('Look-up tables', function(){
 
 	describe('getReach', function(){
 		it('returns undefined for invalid parameters', function(){
-			expect(ref.getReach('WrongSize', 'WrongShape')).to.be.undefined();
-			expect(ref.getReach('WrongSize', 'tall')).to.be.undefined();
-			expect(ref.getReach('Medium', 'WrongShape')).to.be.undefined();
-			expect(ref.getReach()).to.be.undefined();
+			expect(ref.getReach('WrongSize', 'WrongShape')).to.be.undefined;
+			expect(ref.getReach('WrongSize', 'tall')).to.be.undefined;
+			expect(ref.getReach('Medium', 'WrongShape')).to.be.undefined;
+			expect(ref.getReach()).to.be.undefined;
 		});
 
 		it('returns undefined when there is no shape parameter and the size is Large or bigger', function(){
-			expect(ref.getReach('Large')).to.be.undefined();
-			expect(ref.getReach('Huge')).to.be.undefined();
-			expect(ref.getReach('Gargantuan')).to.be.undefined();
-			expect(ref.getReach('Colossal')).to.be.undefined();
+			expect(ref.getReach('Large')).to.be.undefined;
+			expect(ref.getReach('Huge')).to.be.undefined;
+			expect(ref.getReach('Gargantuan')).to.be.undefined;
+			expect(ref.getReach('Colossal')).to.be.undefined;
 		});
 		
 		it('returns the correct reach without a shape parameter when the given size does not exceed Medium', function(){

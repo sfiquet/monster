@@ -97,27 +97,27 @@ describe('Monster', function(){
 			expect(myMonster.type).to.equal('magical beast');
 			expect(myMonster.racialHD).to.equal(1);
 			expect(myMonster.naturalArmor).to.equal(0);
-			expect(myMonster.Str).to.be.undefined();
-			expect(myMonster.Dex).to.be.undefined();
-			expect(myMonster.Con).to.be.undefined();
-			expect(myMonster.Int).to.be.undefined();
-			expect(myMonster.Wis).to.be.undefined();
-			expect(myMonster.Cha).to.be.undefined();
+			expect(myMonster.Str).to.be.undefined;
+			expect(myMonster.Dex).to.be.undefined;
+			expect(myMonster.Con).to.be.undefined;
+			expect(myMonster.Int).to.be.undefined;
+			expect(myMonster.Wis).to.be.undefined;
+			expect(myMonster.Cha).to.be.undefined;
 			expect(myMonster.baseFort).to.equal(0);
 			expect(myMonster.baseRef).to.equal(0);
 			expect(myMonster.baseWill).to.equal(0);
-			expect(myMonster.senses).to.exist();
+			expect(myMonster.senses).to.exist;
 			expect(myMonster.senses).to.be.an.instanceof(Array);
-			expect(myMonster.senses).to.be.empty();
+			expect(myMonster.senses).to.be.empty;
 			expect(myMonster.space).to.equal(5);
 			expect(myMonster.reach).to.equal(5);
-			expect(myMonster.extraReach).to.be.undefined();
-			expect(myMonster.SQ).to.be.undefined();
-			expect(myMonster.optDefense).to.be.undefined();
-			expect(myMonster.specialAtk).to.be.undefined();
-			expect(myMonster.specialAbilities).to.be.undefined();
-			expect(myMonster.specialCMB).to.be.undefined();
-			expect(myMonster.spaceOffset).to.be.undefined();
+			expect(myMonster.extraReach).to.be.undefined;
+			expect(myMonster.SQ).to.be.undefined;
+			expect(myMonster.optDefense).to.be.undefined;
+			expect(myMonster.specialAtk).to.be.undefined;
+			expect(myMonster.specialAbilities).to.be.undefined;
+			expect(myMonster.specialCMB).to.be.undefined;
+			expect(myMonster.spaceOffset).to.be.undefined;
 			expect(myMonster.shape).to.equal('tall');
 		});
 		
@@ -201,10 +201,10 @@ describe('Monster', function(){
 			expect(myMonster.senses).to.have.length(2);
 			expect(myMonster.senses[0]).to.deep.equal({name: 'darkvision', value: 60, unit: 'ft.'});
 			expect(myMonster.senses[1]).to.deep.equal({name: 'scent'});
-			expect(myMonster.optDefense).to.exist();
-			expect(myMonster.optDefense.abilities).to.exist();
+			expect(myMonster.optDefense).to.exist;
+			expect(myMonster.optDefense.abilities).to.exist;
 			expect(myMonster.optDefense.abilities).to.deep.equal(['freedom of movement', 'ferocity']);
-			expect(myMonster.optDefense.immune).to.exist();
+			expect(myMonster.optDefense.immune).to.exist;
 			expect(myMonster.optDefense.immune).to.deep.equal(['cold', 'fire', 'poison']);
 			expect(myMonster.space).to.equal(10);
 			expect(myMonster.reach).to.equal(5);
@@ -275,7 +275,7 @@ describe('Monster', function(){
 			tiger.CR = '1/2';
 			expect(tiger.getXP()).to.equal(200);
 			tiger.CR = 0;
-			expect(tiger.getXP()).to.be.undefined();
+			expect(tiger.getXP()).to.be.undefined;
 			tiger.CR = 30;
 			expect(tiger.getXP()).to.equal(9830400);
 		});
@@ -383,7 +383,7 @@ describe('Monster', function(){
 		
 		it('provides all the AC modifiers', function(){
 			var ACModifiers = tiger.getACModifiers();
-			expect(ACModifiers).to.exist();
+			expect(ACModifiers).to.exist;
 			expect(ACModifiers).to.have.ownProperty('Dex');
 			expect(ACModifiers.Dex).to.equal(2);
 			expect(ACModifiers).to.have.ownProperty('size');
@@ -561,12 +561,12 @@ describe('Monster', function(){
 		
 		it('returns undefined if the stat is invalid for the monster', function(){
 			var monster = new Monster();
-			expect(monster.getDC('Str')).to.be.undefined();	
+			expect(monster.getDC('Str')).to.be.undefined;	
 		});
 		
 		it('returns undefined if the given stat is not a valid stat', function(){
 			var tiger = new Monster(tigerLiteral);
-			expect(tiger.getDC('blah')).to.be.undefined();
+			expect(tiger.getDC('blah')).to.be.undefined;
 		});
 	});
 	
@@ -666,7 +666,6 @@ describe('Monster', function(){
 		});
 		
 		it('returns the default CMB if given an invalid maneuver name', function(){
-			var monster = new Monster();
 			var tiger = new Monster(tigerLiteral);
 			tiger.specialCMB = [
 				{ 
@@ -844,12 +843,12 @@ describe('Monster', function(){
 		it('sets up the skills data in the monster from the JSON representation passed as parameter', function(){
 			var tiger = new Monster(tigerLiteral);
 			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}, {'name': 'Stealth', 'ranks': 4, 'racial': 8}]);
-			expect(tiger.skillOrder).to.exist();
+			expect(tiger.skillOrder).to.exist;
 			expect(tiger.skillOrder).to.be.an.instanceof(Array);
 			expect(tiger.skillOrder).to.have.length(2);
 			expect(tiger.skillOrder[0]).to.equal('Acrobatics');
 			expect(tiger.skillOrder[1]).to.equal('Stealth');
-			expect(tiger.skillSet).to.exist();
+			expect(tiger.skillSet).to.exist;
 			expect(tiger.skillSet).to.be.an.instanceof(Object);
 			expect(tiger.skillSet).to.deep.equal({
 				'Acrobatics': {'name': 'Acrobatics', 'ranks': 4}, 
@@ -860,9 +859,9 @@ describe('Monster', function(){
 		it('initialises the skills data correctly when there is no JSON available', function(){
 			var tiger = new Monster(tigerLiteral);
 			tiger.setSkills();
-			expect(tiger.skillOrder).to.exist();
+			expect(tiger.skillOrder).to.exist;
 			expect(tiger.skillOrder).to.deep.equal([]);
-			expect(tiger.skillSet).to.exist();
+			expect(tiger.skillSet).to.exist;
 			expect(tiger.skillSet).to.deep.equal({});
 		});
 	});
@@ -900,8 +899,7 @@ describe('Monster', function(){
 		});
 
 		it('adds Climb and Swim to the list when the monster has the corresponding speeds', function(){
-			var tiger = new Monster(tigerLiteral),
-				list;
+			var tiger = new Monster(tigerLiteral);
 			
 			tiger.setSkills([
 				{'name': 'Acrobatics', 'ranks': 3}, 
@@ -913,13 +911,11 @@ describe('Monster', function(){
 			tiger.speed = { land: 30, swim: 30 };
 			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival', 'Swim']);
 			tiger.speed = { land: 30, climb: 20, swim: 20 };
-			list = tiger.getSkillsList();
 			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Stealth', 'Survival', 'Climb', 'Swim']);
 		});
 
 		it('only adds Climb or Swim when they are not already present in the list', function(){
-			var tiger = new Monster(tigerLiteral),
-				list;
+			var tiger = new Monster(tigerLiteral);
 			
 			// Climb
 			tiger.setSkills([
@@ -946,7 +942,6 @@ describe('Monster', function(){
 				{'name': 'Swim', 'ranks': 5, 'racial': 2}
 			]);
 			tiger.speed = { land: 30, climb: 20, swim: 20 };
-			list = tiger.getSkillsList();
 			expect(tiger.getSkillsList()).to.deep.equal(['Acrobatics', 'Climb', 'Stealth', 'Swim']);
 			// skill bonus in Climb with Swim speed
 			tiger.setSkills([
@@ -971,13 +966,13 @@ describe('Monster', function(){
 	describe('getRacialModifier', function(){
 		it('returns undefined if monster doesn\'t have the given skill', function(){
 			var monster = new Monster();
-			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined();
+			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined;
 		});
 
 		it('returns undefined if there is no racial modifier for the given skill', function(){
 			var monster = new Monster();
 			monster.setSkills([{name: 'Acrobatics', ranks: 4}]);
-			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined();
+			expect(monster.getRacialModifier('Acrobatics')).to.be.undefined;
 		});
 
 		it('returns the correct racial modifier for the given skill', function(){
@@ -1002,7 +997,7 @@ describe('Monster', function(){
 	describe('getFeat', function(){
 		it('returns undefined if the monster doesn\'t have that feat', function(){
 			var tiger = new Monster(tigerLiteral);
-			expect(tiger.getFeat('Improved Familiar')).to.be.undefined();
+			expect(tiger.getFeat('Improved Familiar')).to.be.undefined;
 		});
 
 		it('returns an object describing the selected feat if the monster has it', function(){

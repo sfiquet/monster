@@ -12,77 +12,77 @@ describe('Young Template', function(){
 		it('returns false for creatures of Fine size', function(){
 			var monster;
 			monster = new Monster({size: 'Fine'});
-			expect(young.isCompatible(monster)).to.be.false();
+			expect(young.isCompatible(monster)).to.be.false;
 		});
 
 		it('returns true for creatures that are bigger than Fine', function() {
 			var monster;
 			monster = new Monster({size: 'Diminutive'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Tiny'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Small'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Medium'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Large'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Huge'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Gargantuan'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({size: 'Colossal'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 		});
 
 		it('returns false for true dragons (increase in power through aging)', function(){
 			var monster;
 			monster = new Monster({name: 'Young Black Dragon', type: 'dragon'});
-			expect(young.isCompatible(monster)).to.be.false();
+			expect(young.isCompatible(monster)).to.be.false;
 		});
 
 		it('returns true for creatures of type dragon that are not true dragons', function(){
 			var monster;
 			monster = new Monster({name: 'Pseudodragon', type: 'dragon'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 
 			monster = new Monster({name: 'Dragon Turtle', type: 'dragon'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 
 			// limits of implementation: depends on how we name dragons in the database
 			monster = new Monster({name: 'Black Dragon, Old', type: 'dragon'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 		});
 
 		it('returns false for barghests (increase in power through feeding)', function(){
 			var monster;
 			monster = new Monster({name: 'Barghest'});
-			expect(young.isCompatible(monster)).to.be.false();
+			expect(young.isCompatible(monster)).to.be.false;
 
 			monster = new Monster({name: 'Greater Barghest'});
-			expect(young.isCompatible(monster)).to.be.false();
+			expect(young.isCompatible(monster)).to.be.false;
 		});
 
 		it('returns false for creatures that have the smallest possible CR', function(){
 			var monster;
 			monster = new Monster({name: 'Bat', CR: '1/8'});
-			expect(young.isCompatible(monster)).to.be.false();
+			expect(young.isCompatible(monster)).to.be.false;
 		});
 
 		it('returns true for creatures that have a bigger CR than 1/8', function(){
 			var monster;
 			monster = new Monster({CR: '1/6'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({CR: '1/4'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({CR: '1/3'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({CR: '1/2'});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({CR: 1});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 			monster = new Monster({CR: 30});
-			expect(young.isCompatible(monster)).to.be.true();
+			expect(young.isCompatible(monster)).to.be.true;
 		});
 	});
 
@@ -296,10 +296,10 @@ describe('Young Template', function(){
 		// orang-utan or chimpanzee)
 		it('has no effect on an undead\'s Constitution or Charisma', function(){
 			var monster = new Monster({type: 'undead', Cha: 10});
-			expect(monster.Con).to.be.undefined();
+			expect(monster.Con).to.be.undefined;
 			expect(monster.Cha).to.equal(10);
 			young.apply(monster);
-			expect(monster.Con).to.be.undefined();
+			expect(monster.Con).to.be.undefined;
 			expect(monster.Cha).to.equal(10);
 		});
 

@@ -11,10 +11,12 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.16.0",
     "mocha": "^6.0.2"
   },
   "scripts": {
     "start": "NODE_PATH=lib node app.js",
-    "test": "mocha --recursive --reporter spec"
+    "test": "mocha --recursive --reporter spec",
+    "lint": "eslint ."
   }
 }

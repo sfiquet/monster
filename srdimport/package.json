@@ -7,7 +7,8 @@
     "test": "npm run test:unit",
     "test:unit": "mocha './test/*-test.js'",
     "test:int": "mocha './test/*-int.js'",
-    "test:all": "npm run test:unit && npm run test:int"
+    "test:all": "npm run test:unit && npm run test:int",
+    "lint": "eslint ."
   },
   "author": "Sylvie Fiquet",
   "dependencies": {
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.16.0",
     "mocha": "^6.0.2"
   }
 }

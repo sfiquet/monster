@@ -8,7 +8,7 @@
 
 /* Grid */
 .grid {
-	max-width: 960px;
+	max-width: 50em;
 	margin: 0 auto;
 }
 .row {
@@ -72,7 +72,14 @@
 
 /* Page styles */
 body {
-  font: 100% "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+  font: 100% "Lucida Grande", "Helvetica Neue", Arial, sans-serif;
+}
+
+footer {
+	border-top: 2px solid darkred;
+	padding: 1.5em 0;
+	text-align: center;
+	font-size: .9em;
 }
 
 #header {
@@ -81,6 +88,14 @@ body {
 
 #header h1 {
 	text-align: center;
+}
+
+.content {
+	padding: 2rem 1rem;
+}
+
+.content-title {
+	margin-top: 0;
 }
 
 /* Links */
@@ -136,9 +151,15 @@ li a {
 	margin-top: 0.5em;
 }
 
+/* Open Game License page */
+.ogl {
+	font: normal 100%/1.4 'Lato', sans-serif;
+}
+
 /* Monster selection */
 #monster-list {
 	list-style-type: none;
+	margin: 0 auto;
 }
 
 /* Customisation options */
@@ -154,9 +175,9 @@ li a {
 
 .search {
 	border: 1px solid lightgrey;
-  	font: 90% "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
-  	padding: 1em;
-  	flex-grow: 1;
+  font-size: 90%;
+  padding: 1em;
+  flex-grow: 1;
 }
 
 #monster-name {
@@ -170,8 +191,12 @@ li a {
 }
 
 /* Stat Blocks */
+.profile {
+	font: normal 100% 'Lato', sans-serif;
+}
+
 .profile-title, .section {
-	font: normal 1.2em 'Lato', sans-serif;
+	font-size: 1.2em;
 	text-transform: uppercase;
 }
 
@@ -195,7 +220,6 @@ li a {
 }
 
 .stat, .indented {
-	font: normal 1em 'Lato', sans-serif;
 	line-height: 1.4;
 	margin: 5px 0;
 }
@@ -205,7 +229,7 @@ li a {
 }
 
 .xp {
-	font: normal 1.1em 'Lato', sans-serif;
+	font-size: 1.1em;
 	font-weight: bold;
 	margin: 0;
 }

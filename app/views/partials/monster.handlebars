@@ -1,210 +1,212 @@
-<div class="row">
-	<div class="col-10">
-		<p class="profile-title">{{stats.name}}
+<div class="profile">
+	<div class="row">
+		<div class="col-10">
+			<p class="profile-title">{{stats.name}}
+		</div>
+		<div class="col-2 cr profile-title">
+			CR {{stats.CR}}
+		</div>
 	</div>
-	<div class="col-2 cr profile-title">
-		CR {{stats.CR}}
-	</div>
-</div>
-<p class="xp">XP {{stats.XP}}</p>
-<p class="stat">
-	{{stats.alignment}}
-	{{stats.size}}
-	{{{format stats.type}}}
-</p>
-<p class="stat">{{{title "Init"}}} {{stats.init}}; {{{title "Senses"}}} 
-	{{#if stats.senses}}
-		{{#each stats.senses}}
-			{{#unless @first}}
-			,
-			{{/unless}}
-			{{this}}
-		{{~/each~}}
-		; 
-	{{/if}}
-	{{#each stats.perception}}
-		{{{format this}}}
-	{{/each}}
-</p>
-	
-<p class="section">DEFENSE</p>
-<p class="stat">
-	{{{title "AC"}}} {{stats.AC}}, touch {{stats.touchAC}}, flat-footed {{stats.flatFootedAC}}
-	{{#if stats.ACModifiers}}
-		(
-		 {{~#each stats.ACModifiers~}}
-			{{~#unless @first~}}
-			, 
-			{{/unless}}
-			{{~this.value}} {{this.name}}
-		{{~/each~}}
-		)
-	{{/if}}
-</p>
-<p class="stat">{{{title "hp"}}} {{stats.hp}} ({{stats.hpFormula}})</p>
-<p class="stat">{{{title "Fort"}}} {{stats.fort}}, {{{title "Ref"}}} {{stats.ref}}, {{{title "Will"}}} {{stats.will}}</p>
-{{#if stats.optDefense}}
+	<p class="xp">XP {{stats.XP}}</p>
 	<p class="stat">
-	{{~#each stats.optDefense~}}
-		{{~#unless @first~}}
-		;
-		{{/unless}}
-		{{{title this.name}}}
-		{{#each this.list}}
-			{{~#unless @first~}}
-			,
-			{{/unless}}
-			{{this}}
-		{{~/each~}}
-	{{~/each~}}
+		{{stats.alignment}}
+		{{stats.size}}
+		{{{format stats.type}}}
 	</p>
-{{/if}}
-{{#if stats.weaknesses}}
-	<p class="stat">{{{title "Weaknesses"}}}
-		{{~#each stats.weaknesses~}}
-			{{~#unless @first~}}
-			, 
-			{{/unless}}
-			{{this}}
-		{{~/each~}}
-	</p>
-{{/if}}
-
-<p class="section">OFFENSE</p>
-<p class="stat">{{{title "Speed"}}}
-	{{~#each stats.speed~}}
-		{{~#unless @first~}}
-			,
-		{{/unless}}
-		{{format this}}
-	{{~/each~}}
-</p>
-<p class="stat">{{{title "Melee"}}} {{#each stats.melee}}
-		{{#if @first}}
-			{{this}}
-		{{else}}
-			, {{this}} 
-		{{/if}}
-	{{/each}}
-</p>
-
-{{#if stats.spaceReach}}
-	<p class="stat">{{{title "Space"}}} {{stats.spaceReach.space}} ft.; {{{title "Reach"}}} {{stats.spaceReach.reach}} ft.
-		{{#if stats.spaceReach.extraReach}}
-			(
-			{{~#each stats.spaceReach.extraReach~}}
+	<p class="stat">{{{title "Init"}}} {{stats.init}}; {{{title "Senses"}}} 
+		{{#if stats.senses}}
+			{{#each stats.senses}}
+				{{#unless @first}}
+				,
+				{{/unless}}
 				{{this}}
+			{{~/each~}}
+			; 
+		{{/if}}
+		{{#each stats.perception}}
+			{{{format this}}}
+		{{/each}}
+	</p>
+		
+	<p class="section">DEFENSE</p>
+	<p class="stat">
+		{{{title "AC"}}} {{stats.AC}}, touch {{stats.touchAC}}, flat-footed {{stats.flatFootedAC}}
+		{{#if stats.ACModifiers}}
+			(
+			 {{~#each stats.ACModifiers~}}
+				{{~#unless @first~}}
+				, 
+				{{/unless}}
+				{{~this.value}} {{this.name}}
 			{{~/each~}}
 			)
 		{{/if}}
 	</p>
-{{/if}}
-
-{{#if stats.specialAttacks}}
-	<p class="stat">{{{title "Special Attacks"}}}
-		{{#each stats.specialAttacks}}
+	<p class="stat">{{{title "hp"}}} {{stats.hp}} ({{stats.hpFormula}})</p>
+	<p class="stat">{{{title "Fort"}}} {{stats.fort}}, {{{title "Ref"}}} {{stats.ref}}, {{{title "Will"}}} {{stats.will}}</p>
+	{{#if stats.optDefense}}
+		<p class="stat">
+		{{~#each stats.optDefense~}}
 			{{~#unless @first~}}
-				,
+			;
 			{{/unless}}
-			{{#each this~}}
-				{{{format this}}}
+			{{{title this.name}}}
+			{{#each this.list}}
+				{{~#unless @first~}}
+				,
+				{{/unless}}
+				{{this}}
 			{{~/each~}}
-		{{/each~}}
-	</p>
-{{/if}}
+		{{~/each~}}
+		</p>
+	{{/if}}
+	{{#if stats.weaknesses}}
+		<p class="stat">{{{title "Weaknesses"}}}
+			{{~#each stats.weaknesses~}}
+				{{~#unless @first~}}
+				, 
+				{{/unless}}
+				{{this}}
+			{{~/each~}}
+		</p>
+	{{/if}}
 
-<p class="section">STATISTICS</p>
-<p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, 
-	{{{title "Con"}}} 
-	{{#if stats.Con}}
-		{{stats.Con~}}
-	{{else}}
-		—
-	{{~/if~}}
-	, {{{title "Int"}}} 
-	{{#if stats.Int}}
-		{{stats.Int~}}
-	{{else}}
-		—
-	{{~/if~}}
-	, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
-<p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
-
-{{#if stats.feats}}
-	<p class="stat">{{{title "Feats"}}}
-		{{#each stats.feats~}}
+	<p class="section">OFFENSE</p>
+	<p class="stat">{{{title "Speed"}}}
+		{{~#each stats.speed~}}
 			{{~#unless @first~}}
 				,
 			{{/unless}}
-			{{{format this.description}}}
-			{{~#if this.details}}
-				(
-				{{~#each this.details~}}
-					{{#unless @first~}}
-						,
-					{{/unless~}}
-					{{{format this}}}
-				{{~/each~}}
-				)
-			{{/if~}}
+			{{format this}}
 		{{~/each~}}
 	</p>
-{{/if}}
+	<p class="stat">{{{title "Melee"}}} {{#each stats.melee}}
+			{{#if @first}}
+				{{this}}
+			{{else}}
+				, {{this}} 
+			{{/if}}
+		{{/each}}
+	</p>
 
-{{#if stats.skills}}
-	<p class="stat">{{{title "Skills"}}}
-		{{#each stats.skills}}
-			{{~#unless @first~}}
-				,
-			{{/unless}}
-			{{#each this}}
-				{{{format this}}}
+	{{#if stats.spaceReach}}
+		<p class="stat">{{{title "Space"}}} {{stats.spaceReach.space}} ft.; {{{title "Reach"}}} {{stats.spaceReach.reach}} ft.
+			{{#if stats.spaceReach.extraReach}}
+				(
+				{{~#each stats.spaceReach.extraReach~}}
+					{{this}}
+				{{~/each~}}
+				)
+			{{/if}}
+		</p>
+	{{/if}}
+
+	{{#if stats.specialAttacks}}
+		<p class="stat">{{{title "Special Attacks"}}}
+			{{#each stats.specialAttacks}}
+				{{~#unless @first~}}
+					,
+				{{/unless}}
+				{{#each this~}}
+					{{{format this}}}
+				{{~/each~}}
+			{{/each~}}
+		</p>
+	{{/if}}
+
+	<p class="section">STATISTICS</p>
+	<p class="stat">{{{title "Str"}}} {{stats.Str}}, {{{title "Dex"}}} {{stats.Dex}}, 
+		{{{title "Con"}}} 
+		{{#if stats.Con}}
+			{{stats.Con~}}
+		{{else}}
+			—
+		{{~/if~}}
+		, {{{title "Int"}}} 
+		{{#if stats.Int}}
+			{{stats.Int~}}
+		{{else}}
+			—
+		{{~/if~}}
+		, {{{title "Wis"}}} {{stats.Wis}}, {{{title "Cha"}}} {{stats.Cha}}</p>
+	<p class="stat">{{{title "Base Atk"}}} {{stats.BAB}}; {{{title "CMB"}}} {{stats.CMB}}; {{{title "CMD"}}} {{stats.CMD}}</p>
+
+	{{#if stats.feats}}
+		<p class="stat">{{{title "Feats"}}}
+			{{#each stats.feats~}}
+				{{~#unless @first~}}
+					,
+				{{/unless}}
+				{{{format this.description}}}
+				{{~#if this.details}}
+					(
+					{{~#each this.details~}}
+						{{#unless @first~}}
+							,
+						{{/unless~}}
+						{{{format this}}}
+					{{~/each~}}
+					)
+				{{/if~}}
 			{{~/each~}}
-		{{/each~}}
-		{{~#if stats.racialMods~}}
-			;
-			{{{title "Racial Modifiers"}}}
-			{{#each stats.racialMods}}
+		</p>
+	{{/if}}
+
+	{{#if stats.skills}}
+		<p class="stat">{{{title "Skills"}}}
+			{{#each stats.skills}}
 				{{~#unless @first~}}
 					,
 				{{/unless}}
 				{{#each this}}
 					{{{format this}}}
 				{{~/each~}}
-			{{/each}}
-		{{/if}}
-	</p>
-{{/if}}
-
-{{#if stats.languages}}
-	<p class="stat">{{{title "Languages"}}} {{stats.languages}}</p>
-{{/if}}
-
-{{#if stats.SQ}}
-	<p class="stat">{{{title "SQ"}}}
-		{{#each stats.SQ}}
-			{{~#unless @first~}}
-				,
-			{{/unless}}
-			{{#each this~}}
-				{{{format this}}}
-			{{~/each~}}
-		{{/each~}}
-	</p>
-{{/if}}
-
-<p class="section">ECOLOGY</p>
-<p class="stat">{{{title "Environment"}}} {{stats.environment}}</p>
-<p class="stat">{{{title "Organization"}}} {{stats.organization}}</p>
-<p class="stat">{{{title "Treasure"}}} {{stats.treasure}}</p>
-
-{{#if stats.specialAbilities}}
-	<p class="section">SPECIAL ABILITIES</p>
-	{{#each stats.specialAbilities}}
-		<p class="stat">
-			{{#each this}}
-				{{{format this}}}
-			{{/each}}
+			{{/each~}}
+			{{~#if stats.racialMods~}}
+				;
+				{{{title "Racial Modifiers"}}}
+				{{#each stats.racialMods}}
+					{{~#unless @first~}}
+						,
+					{{/unless}}
+					{{#each this}}
+						{{{format this}}}
+					{{~/each~}}
+				{{/each}}
+			{{/if}}
 		</p>
-	{{/each}}
-{{/if}}
+	{{/if}}
+
+	{{#if stats.languages}}
+		<p class="stat">{{{title "Languages"}}} {{stats.languages}}</p>
+	{{/if}}
+
+	{{#if stats.SQ}}
+		<p class="stat">{{{title "SQ"}}}
+			{{#each stats.SQ}}
+				{{~#unless @first~}}
+					,
+				{{/unless}}
+				{{#each this~}}
+					{{{format this}}}
+				{{~/each~}}
+			{{/each~}}
+		</p>
+	{{/if}}
+
+	<p class="section">ECOLOGY</p>
+	<p class="stat">{{{title "Environment"}}} {{stats.environment}}</p>
+	<p class="stat">{{{title "Organization"}}} {{stats.organization}}</p>
+	<p class="stat">{{{title "Treasure"}}} {{stats.treasure}}</p>
+
+	{{#if stats.specialAbilities}}
+		<p class="section">SPECIAL ABILITIES</p>
+		{{#each stats.specialAbilities}}
+			<p class="stat">
+				{{#each this}}
+					{{{format this}}}
+				{{/each}}
+			</p>
+		{{/each}}
+	{{/if}}
+</div>

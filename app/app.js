@@ -8,6 +8,9 @@
 var express				= require('express'), // create express app
 	exphbs				= require('express-handlebars'),
 	bodyParser			= require('body-parser'),
+	path          = require('path'),
+	fs            = require('fs'),
+	md            = require('marked'),
 	helpers				= require('./lib/helpers'),
 	advancePresenter	= require('./lib/advancepresenter'),
 	optionsPresenter	= require('./lib/optionspresenter'),
@@ -32,6 +35,10 @@ app.use(bodyParser.urlencoded({ extended: true }));	// for parsing application/x
 // Home page
 app.route('/')
 .get(getHomePage);
+
+// Open Game License page
+app.route('/opengamelicense')
+.get(getOGLPage);
 
 // Advancement page
 app.route('/advance/:monster/:options')
@@ -59,6 +66,21 @@ app.route('/advance/:monster/:options/options')
  */
 function getHomePage(req, res){
 	res.render('home', { pageTitle: 'Monster Workshop' });
+}
+
+/**
+ * getOGLPage
+ * GET handler for the Open Game License page
+ */
+function getOGLPage(req, res){
+  let file = path.join(__dirname, 'views','open-game-license.md');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err){
+      res.write('Could not find or open file for reading\n');
+    }else{
+      res.render('open-game-license', { pageTitle: 'Open Game License', helpers: {content: function(){ return md(data);}}});
+    }
+	});
 }
 
 /**

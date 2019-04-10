@@ -10,7 +10,7 @@ var express				= require('express'), // create express app
 	bodyParser			= require('body-parser'),
 	path          = require('path'),
 	fs            = require('fs'),
-	md            = require('marked'),
+	marked            = require('marked'),
 	helpers				= require('./lib/helpers'),
 	advancePresenter	= require('./lib/advancepresenter'),
 	optionsPresenter	= require('./lib/optionspresenter'),
@@ -28,6 +28,15 @@ app.use(express.static(__dirname + '/public'));
 // set up body parsing for posting forms
 app.use(bodyParser.urlencoded({ extended: true }));	// for parsing application/x-www-form-urlencoded
 
+// modify markedjs's default behaviour
+const renderer = new marked.Renderer();
+const linkRenderer = renderer.link;
+renderer.link = (href, title, text) => {
+	const html = linkRenderer.call(renderer, href, title, text);
+  return html.replace(/^<a /, '<a target="_blank" rel="nofollow noopener noreferrer" ');
+};
+
+
 /**
  * routing
  */
@@ -39,6 +48,10 @@ app.route('/')
 // Open Game License page
 app.route('/opengamelicense')
 .get(getOGLPage);
+
+// About page
+app.route('/about')
+.get(getAboutPage);
 
 // Advancement page
 app.route('/advance/:monster/:options')
@@ -78,11 +91,28 @@ function getOGLPage(req, res){
     if (err){
       res.write('Could not find or open file for reading\n');
     }else{
-      res.render('open-game-license', { pageTitle: 'Open Game License', helpers: {content: function(){ return md(data);}}});
+      res.render('open-game-license', { pageTitle: 'Open Game License', helpers: {content: function(){ return marked(data);}}});
     }
 	});
 }
 
+/**
+ * getAboutPage
+ * GET handler for the About page
+ */
+function getAboutPage(req, res){
+  let file = path.join(__dirname, 'views','about.md');
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err){
+      res.write('Could not find or open file for reading\n');
+    }else{
+      res.render('about', { 
+        pageTitle: 'About Monster Workshop', 
+        helpers: {content: function(){ return marked(data, { renderer });}}
+      });
+    }
+	});
+}
 /**
  * start the server
  */

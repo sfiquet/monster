@@ -77,9 +77,15 @@ body {
 
 footer {
 	border-top: 2px solid darkred;
-	padding: 1.5em 0;
 	text-align: center;
 	font-size: .9em;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+footer a {
+	padding: 1.5em;
 }
 
 #header {
@@ -151,9 +157,45 @@ li a {
 	margin-top: 0.5em;
 }
 
+@media print {
+	body {
+		font-size: 10pt;
+	}
+	li a {
+		line-height: 1.4;
+	}
+}
+
 /* Open Game License page */
 .ogl {
-	font: normal 100%/1.4 'Lato', sans-serif;
+	font: normal 100%/1.6 'Lato', sans-serif;
+}
+
+/* About page */
+.about {
+	font: normal 100%/1.6 'Lato', sans-serif;
+}
+.about li {
+	padding: .2rem;
+}
+.about li > a {
+	line-height: 1.6;
+}
+@media screen and (min-width: 900px){
+	.about {
+		font-size: 112.5%;
+	}
+	.about li {
+		padding: .1rem;
+	}
+}
+@media print {
+	.about, .ogl {
+		font-size: 10pt;
+	}
+	.about li {
+		padding: 0;
+	}
 }
 
 /* Monster selection */

@@ -72,7 +72,7 @@
 
 /* Page styles */
 body {
-  font: 100% "Lucida Grande", "Helvetica Neue", Arial, sans-serif;
+  font: 100% "Helvetica Neue", Arial, sans-serif;
 }
 
 footer {
@@ -94,6 +94,7 @@ footer a {
 
 #header h1 {
 	text-align: center;
+	font-family: 'Metal Mania', cursive;
 }
 
 .content {

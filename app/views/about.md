@@ -59,8 +59,11 @@ The base saves are calculated by subtracting the appropriate modifiers from the 
 
 Skills ranks are calculated in a similar manner, taking into account whether the skill is a class skill.
 
-#### Additional Stat
-- Shape: tall / long - This characteristic is not explicitly listed in the bestiaries but it is implied. Knowing the shape is necessary to calculate reach when a template changes the size (see the rules used by templates below)
+#### Additional Stats for Templating
+
+- Shape: tall / long - This characteristic is not explicitly listed in the bestiaries but it is needed to calculate reach when a template changes the size (see the rules used by templates below)
+
+- Space Offset - represents the number of steps between the actual size of the creature and the typical size for its space: e.g. Quickwood is Huge and should have a space of 15 ft but has an actual space of 5 ft, which is 2 sizes down. Its Space Offset is therefore `-2`. This is used by templates that affect size to change the space in steps that make sense.
 
 ### Calculated Stats
 Everything that isn't listed above is calculated.

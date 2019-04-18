@@ -696,9 +696,11 @@ Monster.prototype.getSkillBonus = function(skill) {
  * isClassSkill
  */
  Monster.prototype.isClassSkill = function(skill) {
-	// treat all skills with ranks as class skills (+3)
-	// unless the monster has class levels (not implemented yet)
- 	return true;
+	// check the class skills for the monster type
+ 	return ref.isClassSkillForType(skill, this.type);
+	// TO DO: 
+	// - add monster-specific class skills (aberrations and outsiders)
+	// - add class skills for class levels
  };
 
 /**

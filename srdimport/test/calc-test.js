@@ -22,6 +22,21 @@ describe('Calc', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({
 				name: 'test',
+				type: 'animal',
+				Cha: 15,
+				skills: [{name: 'Intimidate'}],
+			});
+			skills = [{name: 'Intimidate', modifier: 9}];
+			
+			expect(calc.calculateSkills(skills, monsterObj)).to.deep.equal({name: 'skills', errors: [], warnings: [], data: 
+				[{name: 'Intimidate', ranks: 7}]});
+		});
+
+		it('takes class skills into account', function(){
+			var monsterObj, skills;
+			monsterObj = new Monster({
+				name: 'test',
+				type: 'dragon',
 				Cha: 15,
 				skills: [{name: 'Intimidate'}],
 			});
@@ -35,6 +50,7 @@ describe('Calc', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({
 				name: 'test',
+				type: 'dragon',
 				Cha: 15,
 				skills: [{name: 'Intimidate'}],
 				feats: [{name: 'Skill Focus', details: [{name: 'Intimidate'}]}]
@@ -49,6 +65,7 @@ describe('Calc', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({
 				name: 'test',
+				type: 'dragon',
 				Dex: 12,
 				Wis: 13,
 				Cha: 15,
@@ -65,6 +82,7 @@ describe('Calc', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({
 				name: 'test',
+				type: 'dragon',
 				Cha: 15,
 				skills: [{name: 'Intimidate'}],
 			});
@@ -78,6 +96,7 @@ describe('Calc', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({
 				name: 'test',
+				type: 'dragon',
 				Cha: 15,
 				skills: [{name: 'Intimidate'}],
 			});

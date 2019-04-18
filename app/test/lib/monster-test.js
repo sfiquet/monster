@@ -391,6 +391,14 @@ describe('Monster', function(){
 			expect(ACModifiers).to.have.ownProperty('natural');
 			expect(ACModifiers.natural).to.equal(3);
 		});
+	});
+	
+	describe('getSkillBonus', () => {		
+		let tiger;
+		
+		beforeEach('Create the Monster object', function(){
+			tiger = new Monster(tigerLiteral);
+		});
 		
 		it('calculates untrained skill bonus', function(){
 			expect(tiger.getSkillBonus('Survival')).to.equal(1);
@@ -410,9 +418,14 @@ describe('Monster', function(){
 			expect(tiger.getSkillBonus('Swim')).to.equal(14);
 		});
 
-		it('calculates trained skill bonus', function() {
+		it('calculates trained skill bonus for class skills', function() {
 			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}]);
 			expect(tiger.getSkillBonus('Acrobatics')).to.equal(9); // 4 ranks + 3 class skills + 2 Dex
+		});
+
+		it('calculates trained skill bonus for non-class skills', function() {
+			tiger.setSkills([{'name': 'Intimidate', 'ranks': 4}]);
+			expect(tiger.getSkillBonus('Intimidate')).to.equal(2); // 4 ranks - 2 Cha
 		});
 
 		it('applies racial bonus to trained skill bonus', function(){
@@ -863,6 +876,26 @@ describe('Monster', function(){
 			expect(tiger.skillOrder).to.deep.equal([]);
 			expect(tiger.skillSet).to.exist;
 			expect(tiger.skillSet).to.deep.equal({});
+		});
+	});
+
+	describe('isClassSkill', () => {
+		it('returns true when the given skill is a class skill for the monster type', () => {
+			let monster = new Monster(tigerLiteral);
+			// those skills are class skills for animals
+			expect(monster.isClassSkill('Acrobatics')).to.be.true;
+			expect(monster.isClassSkill('Climb')).to.be.true;
+			expect(monster.isClassSkill('Fly')).to.be.true;
+		});
+		it('returns false when the given skill is not a class skill for the monster type', () => {
+			let monster = new Monster(tigerLiteral);
+			// those skills are not class skills for animals
+			expect(monster.isClassSkill('Appraise')).to.be.false;
+			expect(monster.isClassSkill('Bluff')).to.be.false;
+			expect(monster.isClassSkill('Use Magic Device')).to.be.false;
+			monster.type = 'ooze';
+			// this skill is class skill for animals (tested above) but not for oozes
+			expect(monster.isClassSkill('Acrobatics')).to.be.false;
 		});
 	});
 

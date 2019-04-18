@@ -32,6 +32,11 @@ const messages = {
 	// not handled yet
 	highCRNotHandled: 'CR over 30 not handled yet',
 	classLevelsNotHandled: 'Class levels not handled yet',
+	aberrationTypeNotHandled: 'Aberration type not handled yet',
+	animalTypeNotHandled: 'Animal type not handled yet',
+	humanoidTypeNotHandled: 'Humanoid type not handled yet',
+	outsiderTypeNotHandled: 'Outsider type not handled yet',
+	subtypesNotHandled: 'Subtypes not handled yet',
 	extraHPNotHandled: 'Hit Dice with extra HP not handled yet',
 	extraFortitudeNotHandled: 'Extra Fortitude not handled yet',
 	extraReflexNotHandled: 'Extra Reflex not handled yet',

@@ -257,6 +257,207 @@ exports.getHitDie = function(type){
 };
 
 /**
+ * getClassSkillsForType
+ * Those are the class skills that apply to all monsters of that type.
+ * When all skills in a skill family are class skills, the skill family is listed 
+ * on its own (e.g. Knowledge or Craft). 
+ * When only some skills in a family are class skills, they are listed individually 
+ * (e.g. Knowledge (local)).
+ * Note that, in addition, aberrations and outsiders have extra class skills that 
+ * are specific to the monster. - see Bestiary, Appendix 3, Creature Types
+ */
+ exports.getClassSkillsForType = function(type){
+ 	let classSkillsTable = {
+		'aberration': [
+			'Acrobatics', 
+			'Climb', 
+			'Escape Artist', 
+			'Fly', 
+			'Intimidate', 
+			'Perception', 
+			'Spellcraft', 
+			'Stealth', 
+			'Survival', 
+			'Swim'
+		],
+		'animal': [
+			'Acrobatics', 
+			'Climb', 
+			'Fly', 
+			'Perception', 
+			'Stealth', 
+			'Swim'
+		],
+		'construct': [],
+		'dragon': [
+			'Appraise', 
+			'Bluff', 
+			'Climb', 
+			'Craft', 
+			'Diplomacy', 
+			'Fly', 
+			'Heal', 
+			'Intimidate', 
+			'Knowledge', 
+			'Linguistics', 
+			'Perception', 
+			'Sense Motive', 
+			'Spellcraft', 
+			'Stealth', 
+			'Survival', 
+			'Swim', 
+			'Use Magic Device'
+		],
+		'fey': [
+			'Acrobatics', 
+			'Bluff', 
+			'Climb', 
+			'Craft', 
+			'Diplomacy', 
+			'Disguise', 
+			'Escape Artist', 
+			'Fly', 
+			'Knowledge (geography)', 
+			'Knowledge (local)', 
+			'Knowledge (nature)', 
+			'Perception', 
+			'Perform', 
+			'Sense Motive', 
+			'Sleight of Hand', 
+			'Stealth', 
+			'Swim', 
+			'Use Magic Device'
+		],
+		'humanoid': [
+			'Climb', 
+			'Craft', 
+			'Handle Animal', 
+			'Heal', 
+			'Profession', 
+			'Ride', 
+			'Survival'
+		],
+		'magical beast': [
+			'Acrobatics', 
+			'Climb', 
+			'Fly', 
+			'Perception', 
+			'Stealth', 
+			'Swim'
+		],
+		'monstrous humanoid': [
+			'Climb', 
+			'Craft', 
+			'Fly', 
+			'Intimidate', 
+			'Perception', 
+			'Ride', 
+			'Stealth', 
+			'Survival', 
+			'Swim'
+		],
+		'ooze': [],
+		'outsider': [
+			'Bluff', 
+			'Craft', 
+			'Knowledge (planes)', 
+			'Perception', 
+			'Sense Motive', 
+			'Stealth'
+		],
+		'plant': [
+			'Perception', 
+			'Stealth'
+		],
+		'undead': [
+			'Climb', 
+			'Disguise', 
+			'Fly', 
+			'Intimidate', 
+			'Knowledge (arcana)', 
+			'Knowledge (religion)', 
+			'Perception', 
+			'Sense Motive', 
+			'Spellcraft', 
+			'Stealth'
+		],
+		'vermin': []
+ 	};
+ 	return classSkillsTable[type];
+ }
+
+exports.isSkillFamily = function(skillName){
+	let skillFamilies = [
+		'Craft',
+		'Knowledge',
+		'Perform',
+		'Profession',
+	];
+	return skillFamilies.includes(skillName);
+};
+
+/**
+ * isClassSkillForType
+ */
+exports.isClassSkillForType = function(skill, type){
+	let typeClassSkills = exports.getClassSkillsForType(type);
+	
+	// check that the type is valid
+	if (typeClassSkills === undefined || !exports.isSkill(skill)){
+		return undefined;
+	}
+
+	if (typeClassSkills.includes(skill)) {
+		return true;
+	}
+	return typeClassSkills.findIndex(item => exports.isSkillFamily(item) && skill.startsWith(item)) >= 0;
+};
+
+/**
+ * isSkill
+ */
+exports.isSkill = function(skill){
+	let skills = [
+		'Acrobatics',
+		'Appraise',
+		'Bluff',
+		'Climb',
+		'Craft',
+		'Diplomacy',
+		'Disable Device',
+		'Disguise',
+		'Escape Artist',
+		'Fly',
+		'Handle Animal',
+		'Heal',
+		'Intimidate',
+		'Knowledge',
+		'Linguistics',
+		'Perception',
+		'Perform',
+		'Profession',
+		'Ride',
+		'Sense Motive',
+		'Sleight of Hand',
+		'Spellcraft',
+		'Stealth',
+		'Survival',
+		'Swim',
+		'Use Magic Device'
+	];
+
+	if (typeof skill !== 'string'){
+		return false;
+	}
+
+	if (skills.includes(skill)) {
+		return true;
+	}
+
+	return skills.findIndex(item => exports.isSkillFamily(item) && skill.startsWith(`${item} `)) >= 0;
+};
+
+/**
  * getConstructHPBonus
  * Implements table from Construct description in Bestiary
  */

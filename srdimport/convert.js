@@ -34,6 +34,23 @@ function checkRawMonster(rawMonster) {
 		log.push({name: 'Class1', errors: [createMessage('classLevelsNotHandled')]});
 	}
 
+	if (typeof rawMonster.type === 'string'){
+		let type = rawMonster.type.toLowerCase();
+		if (type === 'aberration') {
+			log.push({name: 'type', errors: [createMessage('aberrationTypeNotHandled')]});
+		} else if (type === 'animal') {
+			log.push({name: 'type', errors: [createMessage('animalTypeNotHandled')]});
+		} else if (type === 'humanoid') {
+			log.push({name: 'type', errors: [createMessage('humanoidTypeNotHandled')]});
+		} else if (type === 'outsider') {
+			log.push({name: 'type', errors: [createMessage('outsiderTypeNotHandled')]});
+		}		
+	}
+
+	if (rawMonster.subtype1) {
+		log.push({name: 'subtype1', errors: [createMessage('subtypesNotHandled')]});
+	}
+
 	if (typeof rawMonster.hd === 'string' && rawMonster.hd.indexOf('plus') >= 0) {
 		log.push({name: 'HD', errors: [createMessage('extraHPNotHandled')]});
 	}

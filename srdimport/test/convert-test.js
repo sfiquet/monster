@@ -19,6 +19,26 @@ describe('Convert', function(){
 			expect(conv.checkRawMonster({class1: 'rogue'})).to.deep.equal([{name: 'Class1', errors: [createMessage('classLevelsNotHandled')]}]);
 		});
 
+		it('generates an error when the monster is of type aberration (temporary)', function(){
+			expect(conv.checkRawMonster({type: 'aberration'})).to.deep.equal([{name: 'type', errors: [createMessage('aberrationTypeNotHandled')]}]);
+		});
+
+		it('generates an error when the monster is of type animal (temporary)', function(){
+			expect(conv.checkRawMonster({type: 'animal'})).to.deep.equal([{name: 'type', errors: [createMessage('animalTypeNotHandled')]}]);
+		});
+
+		it('generates an error when the monster is of type humanoid (temporary)', function(){
+			expect(conv.checkRawMonster({type: 'humanoid'})).to.deep.equal([{name: 'type', errors: [createMessage('humanoidTypeNotHandled')]}]);
+		});
+
+		it('generates an error when the monster is of type outsider (temporary)', function(){
+			expect(conv.checkRawMonster({type: 'outsider'})).to.deep.equal([{name: 'type', errors: [createMessage('outsiderTypeNotHandled')]}]);
+		});
+
+		it('generates an error when the monster has subtypes (temporary)', function(){
+			expect(conv.checkRawMonster({subtype1: 'something'})).to.deep.equal([{name: 'subtype1', errors: [createMessage('subtypesNotHandled')]}]);
+		});
+
 		it('generates an error when the HD has extra HP (temporary)', function(){
 			expect(conv.checkRawMonster({hd: '12d10 plus 12'})).to.deep.equal([{name: 'HD', errors: [createMessage('extraHPNotHandled')]}]);
 			expect(conv.checkRawMonster({hd: '11d6+55 plus 15 false life'})).to.deep.equal([{name: 'HD', errors: [createMessage('extraHPNotHandled')]}]);

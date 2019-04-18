@@ -199,6 +199,104 @@ describe('Look-up tables', function(){
 			expect(ref.getHitDie('')).to.be.undefined;
 		});
 	});
+
+	describe('getClassSkillsForType', function(){
+		it('returns undefined if the type is invalid', function(){
+			expect(ref.getClassSkillsForType('Animal')).to.be.undefined;
+			expect(ref.getClassSkillsForType('')).to.be.undefined;
+		});
+		it('returns an empty array for construct, ooze and vermin', () => {
+			expect(ref.getClassSkillsForType('construct')).to.be.an('array').that.is.empty;
+			expect(ref.getClassSkillsForType('ooze')).to.be.an('array').that.is.empty;
+			expect(ref.getClassSkillsForType('vermin')).to.be.an('array').that.is.empty;
+		});
+		it('returns an array of skills for each type', () => {
+			expect(ref.getClassSkillsForType('aberration')).to.be.an('array').that.has.a.lengthOf(10).and.includes.members(['Acrobatics', 'Swim']);
+			expect(ref.getClassSkillsForType('animal')).to.be.an('array').that.has.a.lengthOf(6).and.includes.members(['Acrobatics', 'Swim']);
+			expect(ref.getClassSkillsForType('dragon')).to.be.an('array').that.has.a.lengthOf(17).and.includes.members(['Appraise', 
+				'Use Magic Device', 'Knowledge']);
+			expect(ref.getClassSkillsForType('fey')).to.be.an('array').that.has.a.lengthOf(18).and.includes.members(['Acrobatics', 
+				'Use Magic Device', 'Knowledge (geography)', 'Knowledge (local)', 'Knowledge (nature)']);
+			expect(ref.getClassSkillsForType('humanoid')).to.be.an('array').that.has.a.lengthOf(7).and.includes.members(['Climb', 'Survival']);
+			expect(ref.getClassSkillsForType('magical beast')).to.be.an('array').that.has.a.lengthOf(6).and.includes.members(['Acrobatics', 'Swim']);
+			expect(ref.getClassSkillsForType('monstrous humanoid')).to.be.an('array').that.has.a.lengthOf(9).and.includes.members(['Climb', 'Swim']);
+			expect(ref.getClassSkillsForType('outsider')).to.be.an('array').that.has.a.lengthOf(6).and.includes.members(['Bluff', 
+				'Stealth', 'Knowledge (planes)']);
+			expect(ref.getClassSkillsForType('plant')).to.be.an('array').that.has.a.lengthOf(2).and.includes.members(['Perception', 'Stealth']);
+			expect(ref.getClassSkillsForType('undead')).to.be.an('array').that.has.a.lengthOf(10).and.includes.members(['Climb', 'Stealth', 
+				'Knowledge (arcana)', 'Knowledge (religion)']);
+		});
+	});
+
+	describe('isSkillFamily', () => {
+		it('returns true if the given name is a skill family name', () => {
+			expect(ref.isSkillFamily('Craft')).to.be.true;
+			expect(ref.isSkillFamily('Knowledge')).to.be.true;
+			expect(ref.isSkillFamily('Perform')).to.be.true;
+			expect(ref.isSkillFamily('Profession')).to.be.true;
+		});
+		it('returns false if the given name is not a skill name', () => {
+			expect(ref.isSkillFamily('ergdaxvzx')).to.be.false;
+			expect(ref.isSkillFamily('')).to.be.false;
+			expect(ref.isSkillFamily(23)).to.be.false;
+			expect(ref.isSkillFamily(undefined)).to.be.false;
+		});
+		it('returns false if the given name is a specialised skill belonging to a skill family', () => {
+			expect(ref.isSkillFamily('Knowledge (local)')).to.be.false;
+			expect(ref.isSkillFamily('Craft (alchemy)')).to.be.false;
+		});
+		it('returns false if the given name is a normal skill name', () => {
+			expect(ref.isSkillFamily('Climb')).to.be.false;
+		});
+	});
+
+	describe('isClassSkillForType', () => {
+		it('returns true if the given skill is a class skill for the given type', () => {
+			expect(ref.isClassSkillForType('Acrobatics', 'animal')).to.be.true;
+			expect(ref.isClassSkillForType('Knowledge (local)', 'fey')).to.be.true;
+		});
+		it('returns true for a whole skill family that is a class skill for the given type', () => {
+			expect(ref.isClassSkillForType('Knowledge', 'dragon')).to.be.true;
+			expect(ref.isClassSkillForType('Craft', 'dragon')).to.be.true;
+		});
+		it('returns false for a whole skill family that is not a class skill for the given type', () => {
+			expect(ref.isClassSkillForType('Knowledge', 'animal')).to.be.false;
+			expect(ref.isClassSkillForType('Knowledge', 'fey')).to.be.false;
+		});
+		it('returns true if the given skill is part of a family that is a class skill for the given type', () => {
+			expect(ref.isClassSkillForType('Knowledge (local)', 'dragon')).to.be.true;
+			expect(ref.isClassSkillForType('Craft (alchemy)', 'dragon')).to.be.true;
+		});
+		it('returns false if the given skill is not a class skill for the given type', () => {
+			expect(ref.isClassSkillForType('Appraise', 'animal')).to.be.false;
+			expect(ref.isClassSkillForType('Fly', 'construct')).to.be.false;
+		});
+		it('returns undefined if either parameter is invalid', () => {
+			expect(ref.isClassSkillForType('stuff', 'animal')).to.be.undefined;
+			expect(ref.isClassSkillForType('Fly', 'clown')).to.be.undefined;
+			expect(ref.isClassSkillForType('stuff', 'clown')).to.be.undefined;
+		});
+	});
+
+	describe('isSkill', () => {
+		it('returns true if the given skill is a simple skill', () => {
+			expect(ref.isSkill('Appraise')).to.be.true;
+		});
+		it('returns true if the given skill is the name of a skill family', () => {
+			expect(ref.isSkill('Craft')).to.be.true;
+			expect(ref.isSkill('Knowledge')).to.be.true;
+		});
+		it('returns true is the given skill is a specialty of a skill family', () => {
+			expect(ref.isSkill('Craft (alchemy)')).to.be.true;
+			expect(ref.isSkill('Knowledge (nature)')).to.be.true;
+		});
+		it('returns false if the given name doesn\'t match either a normal skill or a skill family', () => {
+			expect(ref.isSkill('Skateboard')).to.be.false;
+			expect(ref.isSkill('')).to.be.false;
+			expect(ref.isSkill(undefined)).to.be.false;
+			expect(ref.isSkill(42)).to.be.false;
+		});
+	});
 	
 	describe('getConstructHPBonus', function(){
 		it('returns the HP bonus for a construct for the given size', function(){

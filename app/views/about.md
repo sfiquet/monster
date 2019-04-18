@@ -102,16 +102,27 @@ Everything that isn't listed above is calculated.
         - [Swim](http://legacy.aonprd.com/coreRulebook/skills/swim.html#swim)
         - [Stealth](http://legacy.aonprd.com/coreRulebook/skills/stealth.html#stealth)
     - class skills from [Bestiary Creature Types](http://legacy.aonprd.com/bestiary/creatureTypes.html)
-    - [Skill focus feat](http://legacy.aonprd.com/coreRulebook/feats.html#skill-focus)
+    - [Skill Focus feat](http://legacy.aonprd.com/coreRulebook/feats.html#skill-focus)
 - Special Abilities DC
 
 
-### Not implemented yet
+### Not Supported Yet
 - Race, class and level
+- Subtypes
 - Aura
 - Ranged attacks
 - Spell-like abilities
 - Spells
+
+### Partially Supported
+- Types
+  - Supported: Most types, provided the monster has no subtypes
+  - Not supported: Aberrations, Animals, Humanoids, Outsiders
+- Feats
+  - Supported:
+    - Feats that have no effect on calculations (e.g. Cleave)
+    - Skill Focus
+  - Not supported: Other feats affecting calculations
 
 ## Templates
 Reference: [Monster Advancement](http://legacy.aonprd.com/bestiary/monsterAdvancement.html)

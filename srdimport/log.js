@@ -33,7 +33,6 @@ const messages = {
 	highCRNotHandled: 'CR over 30 not handled yet',
 	classLevelsNotHandled: 'Class levels not handled yet',
 	aberrationTypeNotHandled: 'Aberration type not handled yet',
-	animalTypeNotHandled: 'Animal type not handled yet',
 	humanoidTypeNotHandled: 'Humanoid type not handled yet',
 	outsiderTypeNotHandled: 'Outsider type not handled yet',
 	subtypesNotHandled: 'Subtypes not handled yet',

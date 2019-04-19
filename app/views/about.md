@@ -117,12 +117,17 @@ Everything that isn't listed above is calculated.
 ### Partially Supported
 - Types
   - Supported: Most types, provided the monster has no subtypes
-  - Not supported: Aberrations, Animals, Humanoids, Outsiders
+  - Not supported: Aberrations, Humanoids, Outsiders
 - Feats
   - Supported:
     - Feats that have no effect on calculations (e.g. Cleave)
     - Skill Focus
   - Not supported: Other feats affecting calculations
+- Melee
+  - Supported: single natural weapon
+  - Not supported:
+    - multiple natural weapons
+    - normal weapons
 
 ## Templates
 Reference: [Monster Advancement](http://legacy.aonprd.com/bestiary/monsterAdvancement.html)

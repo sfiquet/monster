@@ -23,10 +23,6 @@ describe('Convert', function(){
 			expect(conv.checkRawMonster({type: 'aberration'})).to.deep.equal([{name: 'type', errors: [createMessage('aberrationTypeNotHandled')]}]);
 		});
 
-		it('generates an error when the monster is of type animal (temporary)', function(){
-			expect(conv.checkRawMonster({type: 'animal'})).to.deep.equal([{name: 'type', errors: [createMessage('animalTypeNotHandled')]}]);
-		});
-
 		it('generates an error when the monster is of type humanoid (temporary)', function(){
 			expect(conv.checkRawMonster({type: 'humanoid'})).to.deep.equal([{name: 'type', errors: [createMessage('humanoidTypeNotHandled')]}]);
 		});

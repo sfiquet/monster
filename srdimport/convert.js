@@ -38,8 +38,6 @@ function checkRawMonster(rawMonster) {
 		let type = rawMonster.type.toLowerCase();
 		if (type === 'aberration') {
 			log.push({name: 'type', errors: [createMessage('aberrationTypeNotHandled')]});
-		} else if (type === 'animal') {
-			log.push({name: 'type', errors: [createMessage('animalTypeNotHandled')]});
 		} else if (type === 'humanoid') {
 			log.push({name: 'type', errors: [createMessage('humanoidTypeNotHandled')]});
 		} else if (type === 'outsider') {

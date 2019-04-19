@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Srdimport: disable importing of monsters with unsupported features
   - subtypes
-  - types: aberration, animal, humanoid and outsider
+  - types: aberration, humanoid and outsider
 
 ### Fixed
 - Calculations: implement proper support for monster type class skills

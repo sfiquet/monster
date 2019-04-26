@@ -399,18 +399,19 @@ exports.isSkillFamily = function(skillName){
 /**
  * isClassSkillForType
  */
-exports.isClassSkillForType = function(skill, type){
+exports.isClassSkillForType = function(type, skill, specialty){
 	let typeClassSkills = exports.getClassSkillsForType(type);
 	
-	// check that the type is valid
+	// check that the type and skill are valid
 	if (typeClassSkills === undefined || !exports.isSkill(skill)){
 		return undefined;
 	}
 
-	if (typeClassSkills.includes(skill)) {
+	if (typeClassSkills.includes(skill) || typeClassSkills.includes(`${skill} (${specialty})`)) {
 		return true;
 	}
-	return typeClassSkills.findIndex(item => exports.isSkillFamily(item) && skill.startsWith(item)) >= 0;
+
+	return false;
 };
 
 /**
@@ -454,7 +455,7 @@ exports.isSkill = function(skill){
 		return true;
 	}
 
-	return skills.findIndex(item => exports.isSkillFamily(item) && skill.startsWith(`${item} `)) >= 0;
+	return false;
 };
 
 /**
@@ -516,16 +517,7 @@ exports.getAbilityForSkill = function(skill) {
 		'Handle Animal':				'Cha',
 		'Heal':							'Wis',
 		'Intimidate':					'Cha',
-		'Knowledge (arcana)':			'Int',
-		'Knowledge (dungeoneering)':	'Int',
-		'Knowledge (engineering)':		'Int',
-		'Knowledge (geography)':		'Int',
-		'Knowledge (history)':			'Int',
-		'Knowledge (local)':			'Int',
-		'Knowledge (nature)':			'Int',
-		'Knowledge (nobility)':			'Int',
-		'Knowledge (planes)':			'Int',
-		'Knowledge (religion)':			'Int',
+		'Knowledge':			'Int',
 		'Linguistics':					'Int',
 		'Perception':					'Wis',
 		'Perform':						'Cha',

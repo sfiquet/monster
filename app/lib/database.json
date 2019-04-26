@@ -588,7 +588,8 @@
 			"ranks": 4
 		},
 		{
-			"name": "Knowledge (religion)",
+			"name": "Knowledge",
+			"specialty": "religion",
 			"ranks": 4
 		},
 		{

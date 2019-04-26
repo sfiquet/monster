@@ -56,6 +56,8 @@ function Monster() {
 	this.SQ = properties.SQ;
 	this.specialAtk = properties.specialAtk;
 	this.feats = new OrderedSet(properties.feats);
+	this.skills = [];
+	this.skillSet = {};
 	this.setSkills(properties.skills);
 	this.specialAbilities = properties.specialAbilities;
 	this.specialCMB = properties.specialCMB;
@@ -85,13 +87,11 @@ function Monster() {
  * set up the skills-related data from the JSON representation
  */
 Monster.prototype.setSkills = function(skillArray){
-	var skillOrder = [];
-	var skillSet = {};
-	var i, key;
+	// reset the skill attributes
+	this.skillSet = {};
+	this.skills = [];
 
 	if (skillArray === undefined) {
-		this.skillOrder = [];
-		this.skillSet = {};
 		return;
 	}
 
@@ -100,19 +100,31 @@ Monster.prototype.setSkills = function(skillArray){
 		console.log(skillArray);
 		return;
 	}
-	for (i = 0; i < skillArray.length; i++) {
-		if (!skillArray[i].hasOwnProperty('name')) {
+
+	if (skillArray.find(item => !item.hasOwnProperty('name'))) {
 			console.log('Wrong format array passed to setSkills: ');
 			console.log(skillArray);
 			return;	// wrong format
-		}
-		key = skillArray[i].name;
-		skillOrder[i] = key;
-		skillSet[key] = skillArray[i];
 	}
 
-	this.skillOrder = skillOrder;
-	this.skillSet = skillSet;
+	this.skills = skillArray;
+	this.skillSet = skillArray.reduce((dict, item) => {
+		let key = item.name;
+		let specialty = item.specialty;
+		
+		// simple skill
+		if (!specialty){
+			dict[key] = item;
+		
+		// specialised skill
+		} else {
+			if (!dict[key]){
+				dict[key] = {};
+			}
+			dict[key][specialty] = item;
+		}
+		return dict;
+	}, {});
 };
 
 /**
@@ -611,11 +623,17 @@ Monster.prototype.getCombatManeuver = function(baseFunc, arrayName, maneuverID) 
 
 /**
  * getSkillBonus
+ * skill: skill name
+ * specialty: optional parameter - should be absent for simple skills
  */
-Monster.prototype.getSkillBonus = function(skill) {
+Monster.prototype.getSkillBonus = function(skill, specialty) {
 	var ability, 
 		mod,
 		skillDetails;
+
+	if (ref.isSkillFamily(skill) && specialty === undefined){
+		return;
+	}
 
 	// start with ability modifier
 	ability = ref.getAbilityForSkill(skill);
@@ -624,13 +642,17 @@ Monster.prototype.getSkillBonus = function(skill) {
 	// add trained skill bonuses
 	if (this.skillSet && this.skillSet[skill]) {
 
-		skillDetails = this.skillSet[skill];
+		if (specialty){
+			skillDetails = this.skillSet[skill][specialty];
+		} else {
+			skillDetails = this.skillSet[skill];
+		}
 
 		if (skillDetails.ranks) {
 
 			mod += skillDetails.ranks;
 
-			if (this.isClassSkill(skill)) {
+			if (this.isClassSkill(skill, specialty)) {
 				mod += CLASS_SKILL_BONUS;
 			}
 		}
@@ -658,7 +680,7 @@ Monster.prototype.getSkillBonus = function(skill) {
 	}
 
 	// add bonuses from feats
-	mod += this.getSkillBonusFromFeats(skill);
+	mod += this.getSkillBonusFromFeats(skill, specialty);
 	
 	return mod;
 };
@@ -667,7 +689,7 @@ Monster.prototype.getSkillBonus = function(skill) {
  * getSkillBonusFromFeats
  * calculate additional bonuses to a specific skill originating from feats
  */
- Monster.prototype.getSkillBonusFromFeats = function(skill){
+ Monster.prototype.getSkillBonusFromFeats = function(skill, specialty){
  	var mod = 0;
  	var i;
 
@@ -675,13 +697,15 @@ Monster.prototype.getSkillBonus = function(skill) {
 	var skillFocus = this.getFeat('Skill Focus');
 	if (skillFocus && skillFocus.details) {
 		for (i = 0; i < skillFocus.details.length; i++) {
-			if (skillFocus.details[i].name === skill) {
+			if (skillFocus.details[i].name === skill && skillFocus.details[i].specialty === specialty) {
 				// there is a skill focus feat for this skill
 				mod += 3;
 
 				// additional bonus for at least 10 ranks in the skill
-				if (this.skillSet && this.skillSet[skill] && this.skillSet[skill].ranks >= 10) {
-					mod += 3;
+				if (this.skillSet && this.skillSet[skill]) {
+					let skillObj = (specialty === undefined ? this.skillSet[skill] : this.skillSet[skill][specialty]);
+					if (skillObj.ranks >= 10)
+						mod += 3;
 				}
 
 				break;
@@ -695,9 +719,9 @@ Monster.prototype.getSkillBonus = function(skill) {
 /**
  * isClassSkill
  */
- Monster.prototype.isClassSkill = function(skill) {
+ Monster.prototype.isClassSkill = function(skill, specialty) {
 	// check the class skills for the monster type
- 	return ref.isClassSkillForType(skill, this.type);
+ 	return ref.isClassSkillForType(this.type, skill, specialty);
 	// TO DO: 
 	// - add monster-specific class skills (aberrations and outsiders)
 	// - add class skills for class levels
@@ -722,17 +746,17 @@ Monster.prototype.getSkillsList = function() {
 	var result = [];
 	var item;
 
-	if (this.skillOrder instanceof Array) {
-		this.skillOrder.forEach(function(item){
+	if (this.skills instanceof Array) {
+		this.skills.forEach(function(item){
 			result.push(item);
 		});
 	}
 	
 	if (this.hasSpeed('climb') && (!this.skillSet || !this.skillSet['Climb'])) {
-		result.push('Climb');
+		result.push({name: 'Climb'});
 	}
 	if (this.hasSpeed('swim') && (!this.skillSet || !this.skillSet['Swim'])) {
-		result.push('Swim');
+		result.push({name: 'Swim'});
 	}
 	
 	return result;
@@ -741,7 +765,7 @@ Monster.prototype.getSkillsList = function() {
 /**
  * getRacialModifier
  */
-Monster.prototype.getRacialModifier = function(skill){
+Monster.prototype.getRacialModifier = function(skill, specialty){
 	if (!this.skillSet) {
 		return;
 	}
@@ -750,7 +774,13 @@ Monster.prototype.getRacialModifier = function(skill){
 		return;
 	}
 
-	return this.skillSet[skill].racial;
+	let skillObj = specialty === undefined ? this.skillSet[skill] : this.skillSet[skill][specialty];
+	
+	if (!skillObj) {
+		return;
+	}
+
+	return skillObj.racial;
 };
 
 /**

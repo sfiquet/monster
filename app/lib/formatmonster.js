@@ -495,8 +495,11 @@ function getSkills(monster) {
 	// format
 	result = skills.map(function(curr) {
 		var chunks = [];
-		chunks.push({ text: curr, url: ref.getSkillUrl(curr) });
-		chunks.push({ text: formatModifier(monster.getSkillBonus(curr)) });
+		chunks.push({ text: curr.name, url: ref.getSkillUrl(curr.name) });
+		if (curr.specialty){
+			chunks.push({ text: `(${curr.specialty})` });
+		}
+		chunks.push({ text: formatModifier(monster.getSkillBonus(curr.name, curr.specialty)) });
 		return chunks;
 	});
 	
@@ -521,11 +524,14 @@ function getRacialModifiers(monster) {
 
 	for (i = 0; i < skills.length; i++) {
 		skill = skills[i];
-		mod = monster.getRacialModifier(skill);
+		mod = monster.getRacialModifier(skill.name, skill.specialty);
 		if (mod) {
 			chunks = [];
 			chunks.push({ text: formatModifier(mod) });
-			chunks.push({ text: skill, url: ref.getSkillUrl(skill) });
+			chunks.push({ text: skill.name, url: ref.getSkillUrl(skill.name) });
+			if (skill.specialty) {
+				chunks.push({ text: `(${skill.specialty})`});
+			}
 			result.push(chunks);
 		}
 	}
@@ -566,7 +572,13 @@ function getFeats(monster) {
 		if (feat.details) {
 			chunks = [];
 			feat.details.forEach(function(detail, index){
-				chunk = { text: detail.name };
+				let name;
+				if (detail.specialty){
+					name = `${detail.name} [${detail.specialty}]`;
+				} else {
+					name = detail.name;
+				}
+				chunk = { text: name };
 				if (detail.url){
 					chunk.url = detail.url;
 				}

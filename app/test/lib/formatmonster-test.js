@@ -540,6 +540,24 @@ describe('Formatting of monster data for display', function(){
 			expect(skills[0][0]).to.deep.equal({ text: 'Climb', url: 'http://paizo.com/pathfinderRPG/prd/skills/climb.html#climb' });
 			expect(skills[0][1]).to.deep.equal( { text: '+12' });
 		});
+
+		it('formats specialised skills appropriately', () => {
+			var monster,
+				skills;
+			
+			monster = new Monster({
+				Int: 14,
+				type: 'dragon',
+				skills: [{name: 'Craft', specialty: 'traps', ranks: 4}]
+			});
+			skills = format.getSkills(monster);
+			expect(skills).to.be.instanceof(Array);
+			expect(skills).to.have.length(1);
+			expect(skills[0]).to.have.length(3);
+			expect(skills[0][0]).to.deep.equal({ text: 'Craft', url: 'http://paizo.com/pathfinderRPG/prd/skills/craft.html#craft' });
+			expect(skills[0][1]).to.deep.equal( { text: '(traps)' });
+			expect(skills[0][2]).to.deep.equal( { text: '+9' });
+		});
 	});
 
 	describe('getRacialModifiers', function(){
@@ -555,6 +573,19 @@ describe('Formatting of monster data for display', function(){
 				[
 					{text: '+6'}, 
 					{text: 'Acrobatics', url: 'http://paizo.com/pathfinderRPG/prd/skills/acrobatics.html#acrobatics'}
+				]
+			]);
+		});
+
+		it('formats specialised skills appropriately', () => {
+			var monster = new Monster();
+			monster.type = 'dragon';
+			monster.setSkills([{'name': 'Craft', specialty: 'traps', 'ranks': 4, 'racial': 6}]);
+			expect(format.getRacialModifiers(monster)).to.deep.equal([
+				[
+					{text: '+6'}, 
+					{text: 'Craft', url: 'http://paizo.com/pathfinderRPG/prd/skills/craft.html#craft'},
+					{text: '(traps)'}
 				]
 			]);
 		});
@@ -627,6 +658,31 @@ describe('Formatting of monster data for display', function(){
 					},
 					{
 						description: { text: 'Weapon Finesse' }
+					}
+				]);
+		});
+
+		it('formats specialised skills correctly for Skill Focus', () => {
+			var monster = new Monster({
+				feats: [
+					{
+						name: 'Skill Focus', 
+						url: 'url/skillfocus', 
+						details: [
+							{name: 'Craft', specialty: 'traps', url: 'url/craft'}, 
+							{name: 'Knowledge', specialty: 'nature', url: 'url/knowledge'}]
+					}
+				]
+			});
+			expect(format.getFeats(monster)).to.deep.equal(
+				[
+					{ 
+						description: { text: 'Skill Focus', url: 'url/skillfocus' },
+						details: 
+							[
+								{ text: 'Craft [traps]', url: 'url/craft' },
+								{ text: 'Knowledge [nature]', url: 'url/knowledge' }
+							]
 					}
 				]);
 		});

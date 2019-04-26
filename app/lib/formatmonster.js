@@ -218,7 +218,7 @@ function getSpaceReach(monster) {
 	
 	function getAllExtraReaches(reaches) {
 		var extra = [], 
-			len, i, weapons, text;
+			len, i;
 			
 		if (!reaches)
 			return;
@@ -416,7 +416,7 @@ function getCMB(monster) {
 		special = special.map(function(curr){
 			return formatModifier(monster.getCMB(curr)) + ' ' + curr;
 		});
-		extra = special.reduce(function(prev, curr, id, array){
+		extra = special.reduce(function(prev, curr){
 			return prev + ', ' + curr;
 		});
 		
@@ -434,10 +434,8 @@ function getCMB(monster) {
  * returns a string describing the CMD and any maneuver-specific variations
  */
 function getCMD(monster) {
- 	var extra = '',
- 		result,
- 		special;
-	 
+	let extra = '', result, special;
+
 	result = '' + monster.getCMD();
 	special = monster.getSpecialCMDList();
 	
@@ -468,7 +466,7 @@ function getCMD(monster) {
 			return cmd + ' vs. ' + curr;
 		});
 		
-		extra = special.reduce(function(prev, curr, id, array){
+		extra = special.reduce(function(prev, curr){
 			return prev + ', ' + curr;
 		});
 		
@@ -477,7 +475,7 @@ function getCMD(monster) {
 			extra = ' (' + extra + ')';
 		}
 	}
-	 return result + extra;
+	return result + extra;
  }
  
 /*
@@ -571,7 +569,7 @@ function getFeats(monster) {
 		// add extra details here
 		if (feat.details) {
 			chunks = [];
-			feat.details.forEach(function(detail, index){
+			feat.details.forEach(function(detail){
 				let name;
 				if (detail.specialty){
 					name = `${detail.name} [${detail.specialty}]`;
@@ -597,8 +595,7 @@ function getFeats(monster) {
  * getSpeed
  */
 function getSpeed(monster) {
-	var result = [],
-		type;
+	var result = [];
 	
 	if (!monster.speed)
 		return;

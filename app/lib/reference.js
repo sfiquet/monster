@@ -266,8 +266,8 @@ exports.getHitDie = function(type){
  * Note that, in addition, aberrations and outsiders have extra class skills that 
  * are specific to the monster. - see Bestiary, Appendix 3, Creature Types
  */
- exports.getClassSkillsForType = function(type){
- 	let classSkillsTable = {
+exports.getClassSkillsForType = function(type){
+	let classSkillsTable = {
 		'aberration': [
 			'Acrobatics', 
 			'Climb', 
@@ -382,9 +382,9 @@ exports.getHitDie = function(type){
 			'Stealth'
 		],
 		'vermin': []
- 	};
- 	return classSkillsTable[type];
- }
+	};
+	return classSkillsTable[type];
+}
 
 exports.isSkillFamily = function(skillName){
 	let skillFamilies = [

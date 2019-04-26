@@ -689,11 +689,11 @@ Monster.prototype.getSkillBonus = function(skill, specialty) {
  * getSkillBonusFromFeats
  * calculate additional bonuses to a specific skill originating from feats
  */
- Monster.prototype.getSkillBonusFromFeats = function(skill, specialty){
- 	var mod = 0;
- 	var i;
+Monster.prototype.getSkillBonusFromFeats = function(skill, specialty){
+	var mod = 0;
+	var i;
 
- 	// Skill Focus
+	// Skill Focus
 	var skillFocus = this.getFeat('Skill Focus');
 	if (skillFocus && skillFocus.details) {
 		for (i = 0; i < skillFocus.details.length; i++) {
@@ -721,7 +721,7 @@ Monster.prototype.getSkillBonus = function(skill, specialty) {
  */
  Monster.prototype.isClassSkill = function(skill, specialty) {
 	// check the class skills for the monster type
- 	return ref.isClassSkillForType(this.type, skill, specialty);
+	return ref.isClassSkillForType(this.type, skill, specialty);
 	// TO DO: 
 	// - add monster-specific class skills (aberrations and outsiders)
 	// - add class skills for class levels
@@ -743,8 +743,7 @@ Monster.prototype.hasSpeed = function(name) {
  * returns an array containing the names of skills that have a bonus
  */
 Monster.prototype.getSkillsList = function() {
-	var result = [];
-	var item;
+	let result = [];
 
 	if (this.skills instanceof Array) {
 		this.skills.forEach(function(item){

@@ -467,9 +467,9 @@ function checkNeutralFeatDetails(featObj, validDetails){
 		item,
 		itemName;
 
- 	if (feat.getStatus(featObj.name) !== 'neutral' || !feat.hasDetails(featObj.name)) {
- 		return;
- 	}
+	if (feat.getStatus(featObj.name) !== 'neutral' || !feat.hasDetails(featObj.name)) {
+		return;
+	}
 
 	if (!featObj.details || !featObj.details.length) {
 		warnings.push(createMessage('missingFeatDetails', featObj.name));
@@ -489,38 +489,37 @@ function checkNeutralFeatDetails(featObj, validDetails){
  * checkFeatDetails
  */
 function checkFeatDetails(featObj){
- 	var errors = [],
- 		warnings = [],
- 		item,
- 		itemName,
- 		validDetails,
- 		res;
+	let errors = [];
+	let warnings = [];
+	let item;
+	let itemName;
+	let res;
 
- 	if (featObj.name === 'Alignment Channel') {
+	if (featObj.name === 'Alignment Channel') {
 		res = checkNeutralFeatDetails(featObj, ['chaos', 'law', 'evil', 'good']);
 		warnings = res.warnings;
 
- 	} else if (featObj.name === 'Elemental Channel') {
+	} else if (featObj.name === 'Elemental Channel') {
 		res = checkNeutralFeatDetails(featObj, ['air', 'earth', 'fire', 'water']);
 		warnings = res.warnings;
 
- 	} else if (featObj.name === 'Skill Focus') {
- 		if (!featObj.details || !featObj.details.length) {
- 			errors.push(createMessage('missingFeatDetails', featObj.name));
- 		} else {
- 			for (item = 0; item < featObj.details.length; item++) {
- 				itemName = featObj.details[item].name;
- 				if (!skill.isSkill(itemName)) {
- 					errors.push(createMessage('invalidDetails', featObj.name));
- 				}
- 			}
- 		}
+	} else if (featObj.name === 'Skill Focus') {
+		if (!featObj.details || !featObj.details.length) {
+			errors.push(createMessage('missingFeatDetails', featObj.name));
+		} else {
+			for (item = 0; item < featObj.details.length; item++) {
+				itemName = featObj.details[item].name;
+				if (!skill.isSkill(itemName)) {
+					errors.push(createMessage('invalidDetails', featObj.name));
+				}
+			}
+		}
 
- 	} else {
- 		errors.push(createMessage('featNotHandled', featObj.name));
- 	}
+	} else {
+		errors.push(createMessage('featNotHandled', featObj.name));
+	}
 
- 	return {errors: errors, warnings: warnings};
+	return {errors: errors, warnings: warnings};
 }
 
 /**
@@ -568,7 +567,7 @@ function checkFeatList(featList){
 		}
 	});
 
- 	return {errors: errors, warnings: warnings};
+	return {errors: errors, warnings: warnings};
 }
 
 /**
@@ -579,7 +578,6 @@ function checkFeatList(featList){
 function extractFeats(featStr){
 	var list,
 		result,
-		checkErrors,
 		errors = [],
 		warnings = [];
 
@@ -772,10 +770,11 @@ function extractRacialModifiers(racialModStr){
  * mergeSkillsAndRacialMods
  */
 function mergeSkillsAndRacialMods(rawSkills, racialMods){
-	var warnings = [],
+	let warnings = [],
 		skillArray = [],
 		skills,
-		key;
+		key,
+		specialty;
 
 	// copy rawSkills into skills
 	skills = JSON.parse(JSON.stringify(rawSkills));
@@ -785,16 +784,47 @@ function mergeSkillsAndRacialMods(rawSkills, racialMods){
 
 		if (skills[key] === undefined) {
 
-			skills[key] = {name: key};
-			warnings.push(createMessage('racialModMerge', key));
-		}
+			if (skill.isSpecialisedSkill(key)) {
+				skills[key] = {};
+				for (specialty in racialMods.skills[key]) {
+					skills[key][specialty] = {name: key, specialty: specialty, racial: racialMods.skills[key][specialty].modifier};
+					warnings.push(createMessage('racialModMerge', `${key} (${specialty})`));
+				}
 
-		skills[key].racial = racialMods.skills[key].modifier;
+			} else {
+				skills[key] = {name: key, racial: racialMods.skills[key].modifier};
+				warnings.push(createMessage('racialModMerge', key));
+			}
+
+
+		} else if (skill.isSpecialisedSkill(key)) {
+			// need to check that all specialties exist in skills
+			for (specialty in racialMods.skills[key]) {
+
+				if (skills[key][specialty] === undefined) {
+
+					skills[key][specialty] = {name: key, specialty: specialty};
+					warnings.push(createMessage('racialModMerge', `${key} (${specialty})`));
+				}
+				skills[key][specialty].racial = racialMods.skills[key][specialty].modifier;
+			}
+		
+		} else {
+			skills[key].racial = racialMods.skills[key].modifier;
+		}
 	}
 
 	// build the result array from the skills dictionary
 	for (key in skills) {
-		skillArray.push(skills[key]);
+
+		if (skill.isSpecialisedSkill(key)) {
+			for (specialty in skills[key]) {
+				skillArray.push(skills[key][specialty]);
+			}
+
+		} else {
+			skillArray.push(skills[key]);
+		}
 	}
 
 	return {name: 'mergedSkills', errors: [], warnings: warnings, data: skillArray};

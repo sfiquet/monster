@@ -45,7 +45,6 @@ const messages = {
 	alternateFormsNotHandled: 'Alternate forms not handled yet',
 	flyNotHandled: 'Fly speed not handled yet',
 	specialSpeedNotHandled: 'Extra speed in special conditions not handled yet',
-	featSubDetailsNotHandled: 'Feat sub-details not handled yet',
 	criticalsNotHandled: 'Criticals not handled yet',
 	alternativeAttackListsNotHandled: 'Alternative lists of attacks not handled yet',
 	multipleAttackTypesNotHandled: 'Multiple attack types not handled yet',

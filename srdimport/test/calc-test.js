@@ -32,6 +32,20 @@ describe('Calc', function(){
 				[{name: 'Intimidate', ranks: 7}]});
 		});
 
+		it('deduces the ranks properly for a specialised skill', function(){
+			var monsterObj, skills;
+			monsterObj = new Monster({
+				name: 'test',
+				type: 'dragon',
+				Cha: 15,
+				skills: [{name: 'Perform', specialty: 'sing'}],
+			});
+			skills = [{name: 'Perform', specialty: 'sing', modifier: 9}];
+			
+			expect(calc.calculateSkills(skills, monsterObj)).to.deep.equal({name: 'skills', errors: [], warnings: [], data: 
+				[{name: 'Perform', specialty: 'sing', ranks: 7}]});
+		});
+
 		it('takes class skills into account', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({

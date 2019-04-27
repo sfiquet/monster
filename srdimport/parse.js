@@ -91,7 +91,7 @@ function parseAndSeparatedString(str){
 	}
 
 	// capture the parentheses
-	chunks1 = str.split(/(\([^\(\)]*\))/);
+	chunks1 = str.split(/(\([^\(\)]*\))/); // eslint-disable-line no-useless-escape
 
 	// on each chunk that is not a bracket unit, split on "and" then replace 
 	// the chunk by its sub-chunks in the resulting array
@@ -133,6 +133,51 @@ function parseAndSeparatedString(str){
 
 /**
  * parseFeatDetailsChunk
+ * extracts a single feat detail object from a string
+ * input: in most cases this is a single item (can be multiple words). 
+ *  For Skill Focus it can be a specialised skill with square brackets:
+ * 	"Sleight of Hand"
+ * 	"Knowledge [nature]"
+ * output: an object with a name property and optionally a specialty property
+ * 	For the examples above:
+ * 	{name: "Sleight of Hand"}
+ * 	{name: "Knowledge", specialty: "nature"}
+ */
+function parseFeatDetailsChunk(detailStr){
+	let reParens = /\s*(\[|\])\s*/;	// capture the square brackets
+	let chunks;
+	let errors = [];
+	let result;
+
+	// split the string into the name and its details in brackets
+	// we should end up with the following structure:
+	// [ name, '[', specialty, ']', '' ]
+	chunks = detailStr.split(reParens);
+
+	// simple case: no square brackets - just return the string
+	if (chunks.length === 1){
+		result = {name : detailStr};
+
+	// pair of square brackets
+	} else if (chunks.length === 5) {
+		
+		if (chunks[0] === '' || chunks[2] === '' || chunks[4] !== '' || chunks[1] === chunks[3] || chunks[1] === ']') {
+			errors.push(createMessage('invalidDetails', detailStr));
+		
+		} else {
+			result = {name: chunks[0], specialty: chunks[2]};
+		}
+
+	// wrong format
+	} else {
+		errors.push(createMessage('invalidDetails', detailStr));
+	}
+
+	return {errors: errors, warnings: [], data: result};
+}
+
+/**
+ * parseFeatDetails
  * extracts an array of feat details from a comma-separated string
  * input: either a single item (can be multiple words) or a comma-separated list, e.g. for Skill Focus:
  * 	"Perception"
@@ -144,15 +189,30 @@ function parseAndSeparatedString(str){
  * 	[{name: "Sleight of Hand"}]
  * 	[{name: "Perception"}, {name: "Sleight of Hand"}, {name: "Use Magic Device"}]
  */
-function parseFeatDetailsChunk(detailStr){
-	var chunks,
-		data;
+function parseFeatDetails(detailStr){
+	let chunks;
+	let data = [];
+	let errors = [];
+	let warnings = [];
 
 	chunks = parseCommaSeparatedString(detailStr);
-	data = chunks.map(function(str) {
-		return {name: str};
+	
+	chunks.forEach(function(str) {
+		let result = parseFeatDetailsChunk(str);
+		
+		errors = errors.concat(result.errors);
+		warnings = warnings.concat(result.warnings);
+		
+		if (result.data !== undefined) {
+			data.push(result.data);
+		}
 	});
-	return data;
+	
+	if (errors.length > 0){
+		data = undefined;
+	}
+
+	return {errors: errors, warnings: [], data: data};
 }
 
 /**
@@ -168,7 +228,6 @@ function parseFeatChunk(featStr){
 		name,
 		detailStr,
 		details,
-		i,
 		special = [];
 	
 	// split at the opening parenthesis
@@ -213,17 +272,9 @@ function parseFeatChunk(featStr){
 			}
 		}
 
-		details = parseFeatDetailsChunk(detailStr);
-
-		// check that there aren't any square brackets within the details
-		// not handled yet
-		for (i = 0; i < details.length; i++) {
-			var sq = details[i].name.indexOf('[');
-			if (sq >= 0) {
-				errors.push(createMessage('featSubDetailsNotHandled'));
-				break;
-			}
-		}
+		details = parseFeatDetails(detailStr);
+		errors = errors.concat(details.errors);
+		warnings = warnings.concat(details.warnings);
 	}
 
 	if (errors.length) {
@@ -234,8 +285,8 @@ function parseFeatChunk(featStr){
 
 		result.name = name;
 		
-		if (details) {
-			result.details = details;
+		if (details && details.data) {
+			result.details = details.data;
 		}
 		
 		if (special.length > 0) {
@@ -340,8 +391,7 @@ function parseDamageRoll(rollStr){
 		warnings = [], 
 		data,
 		nbDice,
-		dieType,
-		bonus;
+		dieType;
 
 	chunks = rollStr.split(/(\d+)/);
 
@@ -366,7 +416,8 @@ function parseDamageRoll(rollStr){
 				errors.push(createMessage('wrongFormatAttackDetails', rollStr));
 			
 			} else {
-				bonus = parseInt(chunks[5], 10);
+				// we're not doing anything with the bonus currently
+				// let bonus = parseInt(chunks[5], 10);
 			}
 		}
 	}
@@ -541,7 +592,7 @@ function parseAttackDetails(detailStr) {
  * parses an attack into an identifier and a details value
  */
 function parseAttack(attackStr) {
- 	var reParens = /\s*(\(|\))\s*/,	// capture the brackets
+	var reParens = /\s*(\(|\))\s*/,	// capture the brackets
 		chunks,
 		identifier,
 		details;
@@ -703,7 +754,7 @@ function parseAlternativeSkillModifiers(str){
  * parseBracketedSkill
  */
 function parseBracketedSkill(str) {
- 	var reParens = /\s*(\(|\))\s*/,	// capture the brackets
+	var reParens = /\s*(\(|\))\s*/,	// capture the brackets
 		chunks,
 		result,
 		name,
@@ -749,7 +800,7 @@ function parseBracketedSkill(str) {
 			name = chunks[0].trim();
 			details = chunks[2].trim();
 			modifier = parseNonBracketedSkill(chunks[4]).modifier;
-			result = {name: name, details: details, modifier: modifier};
+			result = {name: name, specialty: details, modifier: modifier};
 		}
 
 	// 9 chunks: we have everything
@@ -762,7 +813,7 @@ function parseBracketedSkill(str) {
 		details = chunks[2].trim();
 		modifier = parseNonBracketedSkill(chunks[4]).modifier;
 		alternatives = parseAlternativeSkillModifiers(chunks[6]);
-		result = {name: name, details: details, modifier: modifier, alternatives: alternatives};
+		result = {name: name, specialty: details, modifier: modifier, alternatives: alternatives};
 
 	// any other number of chunks = wrong format
 	} else {
@@ -787,9 +838,6 @@ function parseSkillChunk(str){
 		if (data.alternatives) {
 			errors.push(createMessage('extraSkillModifiersNotHandled', str));
 		}
-		if (data.details) {
-			errors.push(createMessage('skillDetailsNotHandled', str));
-		}
 	}
 
 	if (errors.length) {
@@ -801,9 +849,10 @@ function parseSkillChunk(str){
 
 /**
  * parseSkillString
+ * creates a skill dictionary
  */
 function parseSkillString(skillStr){
-	var errors = [],
+	let errors = [],
 		warnings = [],
 		data = {},
 		chunks;
@@ -816,19 +865,26 @@ function parseSkillString(skillStr){
 
 	chunks.forEach(function(str){
 
-		var result = parseSkillChunk(str);
-		var name;
+		let result = parseSkillChunk(str);
 		
 		Array.prototype.push.apply(errors, result.errors);
 		Array.prototype.push.apply(warnings, result.warnings);
 
 		if (result.data) {
-			
-			name = result.data.name;
+			let skill = result.data;
+			let name = skill.name;
 
 			if (name !== undefined) {
 			
-				data[name] = result.data;
+				if (skill.specialty === undefined) {
+					data[name] = skill;
+
+				} else {
+					if (!data[name]) {
+						data[name] = {};
+					}
+					data[name][skill.specialty] = skill;
+				}
 			}
 		}
 	});
@@ -954,9 +1010,17 @@ function parseRacialModChunk(str){
 
 		} else if (chunks.length === 5) {
 
-			// check whether we have a specialised skill - not handled yet
+			// check whether we have a specialised skill
 			if (skillLib.isSpecialisedSkill(result.name)) {
-				errors.push(createMessage('skillDetailsNotHandled', str));
+				
+				// no trailing text after the brackets - we're good
+				if (chunks[4].length === 0) {
+					result.specialty = chunks[2];
+				
+				// there's trailing text, i.e. a conditional modifier
+				} else {
+					errors.push(createMessage('conditionalModifiersNotHandled', str));
+				}
 
 			// if not, we have a conditional modifier - not handled yet
 			} else {
@@ -981,13 +1045,11 @@ function parseRacialModChunk(str){
  * parseRacialModString
  */
 function parseRacialModString(modStr){
-	var errors = [],
+	let errors = [],
 		warnings = [],
 		data = {},
 		bigChunks,
-		chunks,
-		modList,
-		rule;
+		chunks;
 
 	if (typeof modStr !== 'string') {
 		return {errors: [createMessage('invalidValue', modStr)], warnings: [], data: undefined};
@@ -1016,18 +1078,25 @@ function parseRacialModString(modStr){
 			chunks.forEach(function(str){
 
 				var result = parseRacialModChunk(str);
-				var name;
 				
 				Array.prototype.push.apply(errors, result.errors);
 				Array.prototype.push.apply(warnings, result.warnings);
 
 				if (result.data) {
-					
-					name = result.data.name;
+					let skill = result.data;
+					let name = skill.name;
 
 					if (name !== undefined) {
 					
-						data.skills[name] = result.data;
+						if (skill.specialty === undefined) {
+							data.skills[name] = skill;
+
+						} else {
+							if (!data.skills[name]) {
+								data.skills[name] = {};
+							}
+							data.skills[name][skill.specialty] = skill;
+						}
 					}
 				}
 			});
@@ -1035,8 +1104,10 @@ function parseRacialModString(modStr){
 
 	// one semicolon: we have the modifier list on the left and the substitution rule on the right
 	} else if (bigChunks.length === 2) {
-		modList = bigChunks[0];
-		rule = bigChunks[1];
+		/*
+		let modList = bigChunks[0];
+		let rule = bigChunks[1];
+		*/
 
 		errors.push(createMessage('substitutionRulesNotHandled'));
 	
@@ -1096,6 +1167,8 @@ function parseSQString(str){
 exports.parseCommaSeparatedString = parseCommaSeparatedString;
 exports.parseOrSeparatedString = parseOrSeparatedString;
 exports.parseFeatChunk = parseFeatChunk;
+exports.parseFeatDetails = parseFeatDetails;
+exports.parseFeatDetailsChunk = parseFeatDetailsChunk;
 exports.parseAttackHeader = parseAttackHeader;
 exports.parseAttackDetails = parseAttackDetails;
 exports.parseAttackChunk = parseAttackChunk;

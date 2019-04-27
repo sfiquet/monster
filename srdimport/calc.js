@@ -1,8 +1,7 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var message = require('./message'),
-	Monster = require('./../app/lib/monster');
+var message = require('./message');
 
 var createMessage = message.createMessage;
 
@@ -25,7 +24,7 @@ function calculateSkills(mergedSkills, monsterObj){
 			key,
 			ranks;
 
-		calcResult = calculateDiscrepancy(item.name, item.modifier, monsterObj.getSkillBonus(item.name));
+		calcResult = calculateDiscrepancy(item.name, item.modifier, monsterObj.getSkillBonus(item.name, item.specialty));
 
 		if (calcResult.errors.length) {
 			Array.prototype.push.apply(errors, calcResult.errors);
@@ -34,7 +33,7 @@ function calculateSkills(mergedSkills, monsterObj){
 			// if no error has been raised, ranks is either zero or positive
 			ranks = calcResult.data;
 
-			if (ranks > 0 && monsterObj.isClassSkill(item.name)) {
+			if (ranks > 0 && monsterObj.isClassSkill(item.name, item.specialty)) {
 
 				ranks -= CLASS_SKILL_BONUS;
 

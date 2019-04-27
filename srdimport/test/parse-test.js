@@ -2,7 +2,6 @@
 'use strict';
 
 var expect = require('chai').expect,
-	log = require('../log'),
 	msg = require('../message'),
 	parse = require('../parse');
 var createMessage = msg.createMessage;
@@ -102,6 +101,19 @@ describe('Parse', function(){
 				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Perception'}]}});
 		});
 
+		it('generates a specialty property when there are brackets within the parentheses', () => {
+			expect(parse.parseFeatChunk('Skill Focus (Knowledge[planes])')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Knowledge', specialty: 'planes'}]}});			
+		});
+
+		it('generates a feat object correctly when there are brackets for multiple details', function(){
+			expect(parse.parseFeatChunk('Skill Focus (Knowledge [planes], Knowledge [religion])')).to.deep.equal(
+				{errors: [], warnings: [], data: {
+					name: 'Skill Focus', 
+					details: [{name: 'Knowledge', specialty: 'planes'}, {name: 'Knowledge', specialty: 'religion'}]}}
+			);
+		});
+
 		it('generates a feat object with bonus and details properties', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Perception)B')).to.deep.equal(
 				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Perception'}], special: ['bonus']}});
@@ -113,11 +125,6 @@ describe('Parse', function(){
 
 			expect(parse.parseFeatChunk('Skill Focus (Perception) (some comment)')).to.deep.equal(
 				{errors: [createMessage('invalidFormat', 'Skill Focus (Perception) (some comment)')], warnings: [], data: undefined});
-		});
-
-		it('generates an error when there are brackets within the parentheses (temporary)', function(){
-			expect(parse.parseFeatChunk('Skill Focus (Knowledge[planes])')).to.deep.equal(
-				{errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
 		});
 
 		it('generates a warning when there is no closing parenthesis', function(){
@@ -145,15 +152,66 @@ describe('Parse', function(){
 				{errors: [], warnings: [], data: {name: 'Skill Focus', details: [{name: 'Bluff'}, {name: 'Perception'}]}});
 		});
 
-		it('generates a single error when there are brackets for multiple details (temporary)', function(){
-			expect(parse.parseFeatChunk('Skill Focus (Knowledge[planes], Knowledge[religion])')).to.deep.equal(
-				{errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
-		});
-
 		it('generates a warning there is no closing parenthesis after multiple details', function(){
 			expect(parse.parseFeatChunk('Skill Focus (Bluff, Perception')).to.deep.equal(
 				{errors: [], warnings: [createMessage('noClosingParenthesis', 'Skill Focus (Bluff, Perception')], 
 					data: {name: 'Skill Focus', details: [{name: 'Bluff'}, {name: 'Perception'}]}});
+		});
+	});
+
+	describe('parseFeatDetails', () => {
+		
+		it('generates an array of details objects', () => {
+			expect(parse.parseFeatDetails('Perception, Sleight of Hand')).to.deep.equal({
+				errors: [], warnings: [], data: [{name: 'Perception'}, {name: 'Sleight of Hand'}]});
+		});
+
+		it('handles sub-details', () => {
+			expect(parse.parseFeatDetails('Perception, Knowledge [arcana], Knowledge [religion]')).to.deep.equal({
+				errors: [], warnings: [], data: [
+					{name: 'Perception'}, 
+					{name: 'Knowledge', specialty: 'arcana'},
+					{name: 'Knowledge', specialty: 'religion'},
+				]});
+		});
+
+		it('generates errors for each invalid detail', () => {
+			expect(parse.parseFeatDetails('Perception, Knowledge [], [nature]')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge []'), createMessage('invalidDetails', '[nature]')], 
+				warnings: [], data: undefined});
+		});
+	});
+
+	describe('parseFeatDetailsChunk', () => {
+		
+		it('generates a details object with just the name when there are no square brackets', () => {
+			expect(parse.parseFeatDetailsChunk('Sleight of Hand')).to.deep.equal({
+				errors: [], warnings: [], data: {name: 'Sleight of Hand'}});
+		});
+
+		it('generates a details object with name and specialty when there are square brackets', () => {
+			expect(parse.parseFeatDetailsChunk('Knowledge [nature]')).to.deep.equal({
+				errors: [], warnings: [], data: {name: 'Knowledge', specialty: 'nature'}});
+		});
+
+		it('generates an error when the format is invalid', () => {
+			expect(parse.parseFeatDetailsChunk('[nature]')).to.deep.equal({
+				errors: [createMessage('invalidDetails', '[nature]')], warnings: [], data: undefined});
+
+			expect(parse.parseFeatDetailsChunk('Knowledge []')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge []')], warnings: [], data: undefined});
+
+			expect(parse.parseFeatDetailsChunk('Knowledge [nature] trailing stuff')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge [nature] trailing stuff')], warnings: [], data: undefined});
+
+			expect(parse.parseFeatDetailsChunk('Knowledge [] trailing stuff')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge [] trailing stuff')], warnings: [], data: undefined});
+
+			expect(parse.parseFeatDetailsChunk('Knowledge [nature')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge [nature')], warnings: [], data: undefined});
+
+			expect(parse.parseFeatDetailsChunk('Knowledge ]nature[')).to.deep.equal({
+				errors: [createMessage('invalidDetails', 'Knowledge ]nature[')], warnings: [], data: undefined});
 		});
 	});
 
@@ -498,9 +556,9 @@ describe('Parse', function(){
 			// see parseNonBracketedSkill for more in-depth testing
 		});
 
-		it('parses a string containing a skill name, skill details and a modifier', function(){
+		it('parses a string containing a skill name, skill specialty and a modifier', function(){
 			expect(parse.parseBracketedSkill('Craft (alchemy) +4')).to.deep.equal(
-				{name: 'Craft', details: 'alchemy', modifier: 4});
+				{name: 'Craft', specialty: 'alchemy', modifier: 4});
 		});
 
 		it('parses a string containing a skill name, a modifier and a list of alternative modifiers', function(){
@@ -509,10 +567,10 @@ describe('Parse', function(){
 				{name: 'Acrobatics', modifier: 10, alternatives: '+14 balancing, +18 jumping'});
 		});
 
-		it('parses a string containing a skill name, details, a modifier and a list of alternative modifiers', function(){
+		it('parses a string containing a skill name, specialty, a modifier and a list of alternative modifiers', function(){
 			// note: alternatives should eventually be an array of objects with a value and a text for each element
 			expect(parse.parseBracketedSkill('Knowledge (nature) +4 (+8 on a blue moon)')).to.deep.equal(
-				{name: 'Knowledge', details: 'nature', modifier: 4, alternatives: '+8 on a blue moon'});
+				{name: 'Knowledge', specialty: 'nature', modifier: 4, alternatives: '+8 on a blue moon'});
 		});
 
 		it('returns undefined if brackets are wrong', function(){
@@ -547,9 +605,9 @@ describe('Parse', function(){
 				{errors: [createMessage('extraSkillModifiersNotHandled', 'Stealth +4 (+8 in low light)')], warnings: [], data: undefined});
 		});
 
-		it('generates an error if the skill has details (temporary)', function(){
-			expect(parse.parseSkillChunk('Knowledge(planes) +4')).to.deep.equal(
-				{errors: [createMessage('skillDetailsNotHandled', 'Knowledge(planes) +4')], warnings: [], data: undefined});
+		it('parses a skill chunk containing a specialised skill', function(){
+			expect(parse.parseSkillChunk('Knowledge (planes) +4')).to.deep.equal(
+				{errors: [], warnings: [], data: {name: 'Knowledge', specialty: 'planes', modifier: 4}});
 		});
 	});
 
@@ -568,6 +626,20 @@ describe('Parse', function(){
 		it('generates a skill object when there are several skills', function(){
 			expect(parse.parseSkillString('Stealth +4, Swim +8')).to.deep.equal(
 				{errors:[], warnings: [], data: {Stealth: {name: 'Stealth', modifier: 4}, Swim: {name: 'Swim', modifier: 8}}});
+		});
+
+		it('stores specialised skills in a sub-dictionary', () => {
+			expect(parse.parseSkillString('Knowledge (arcana) +4, Knowledge (religion) +5, Swim +8')).to.deep.equal({
+				errors:[], 
+				warnings: [], 
+				data: {
+					Knowledge: {
+						arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 4}, 
+						religion: {name: 'Knowledge', specialty: 'religion', modifier: 5}
+					}, 
+					Swim: {name: 'Swim', modifier: 8}
+				}
+			});
 		});
 	});
 
@@ -656,9 +728,9 @@ describe('Parse', function(){
 				{errors: [], warnings: [], data: {name: 'Escape Artist', modifier: 10}});
 		});
 
-		it('generates an error when the skill has details', function(){
+		it('generates a racial modifier object when the skill has details', function(){
 			expect(parse.parseRacialModChunk('+4 Craft (trapmaking)')).to.deep.equal(
-				{errors: [createMessage('skillDetailsNotHandled', '+4 Craft (trapmaking)')], warnings: [], data: undefined});
+				{errors: [], warnings: [], data: {name: 'Craft', specialty: 'trapmaking', modifier: 4}});
 		});
 
 		it('generates an error when there is a conditional modifier', function(){
@@ -669,6 +741,17 @@ describe('Parse', function(){
 		it('generates an error when there is a conditional modifier without a general modifier', function(){
 			expect(parse.parseRacialModChunk('+4 Acrobatics when jumping')).to.deep.equal(
 				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Acrobatics when jumping')], warnings: [], data: undefined});
+		});
+
+		// should really return conditionalModifiersNotHandled but not sure if it ever happens so invalidFormat is good enough for now
+		it('generates an error when there is a conditional modifier for a specialised skill', function(){
+			expect(parse.parseRacialModChunk('+4 Craft (trapmaking) (+8 when sleepwalking)')).to.deep.equal(
+				{errors: [createMessage('invalidFormat', '+4 Craft (trapmaking) (+8 when sleepwalking)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a conditional modifier without a general modifier for a specialised skill', function(){
+			expect(parse.parseRacialModChunk('+4 Craft (trapmaking) when sleepwalking')).to.deep.equal(
+				{errors: [createMessage('conditionalModifiersNotHandled', '+4 Craft (trapmaking) when sleepwalking')], warnings: [], data: undefined});
 		});
 	});
 
@@ -683,6 +766,16 @@ describe('Parse', function(){
 			expect(parse.parseRacialModString('+4 Perception, +4 Stealth')).to.deep.equal(
 				{errors: [], warnings: [], data: 
 					{skills: {Perception: {name: 'Perception', modifier: 4}, Stealth: {name: 'Stealth', modifier: 4}}}});
+		});
+
+		it('generates a racial modifier object with sub-dictionaries for specialised skills', function(){
+			expect(parse.parseRacialModString('+4 Knowledge (arcana), +8 Knowledge (religion)')).to.deep.equal(
+				{errors: [], warnings: [], data: {skills: {
+					Knowledge: {
+						arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 4},
+						religion: {name: 'Knowledge', specialty: 'religion', modifier: 8}
+					}
+				}}});
 		});
 
 		it('generates an error when the given string is a substitution rule', function(){

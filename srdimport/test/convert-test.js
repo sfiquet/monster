@@ -361,9 +361,10 @@ describe('Convert', function(){
 				{name: 'feats', errors: [], warnings: [], data: [{name: 'Skill Focus', details: [{name: 'Perception'}]}]});
 		});
 
-		it('generates an error for feats whose details have details (temporary)', function(){
-			expect(conv.extractFeats('Skill Focus (Knowledge[religion])')).to.deep.equal(
-				{name: 'feats', errors: [createMessage('featSubDetailsNotHandled')], warnings: [], data: undefined});
+		it('handles Skill Focus with specialised skills', function(){
+			expect(conv.extractFeats('Skill Focus (Knowledge [religion])')).to.deep.equal(
+				{name: 'feats', errors: [], warnings: [], 
+					data: [{name: 'Skill Focus', details: [{name: 'Knowledge', specialty: 'religion'}]}]});
 		});
 
 		it('generates an error when a feat can\'t be recognised', function(){
@@ -590,6 +591,29 @@ describe('Convert', function(){
 					[{name: 'Perception', racial: 4}]});
 		});
 		
+		it('generates a warning when there is a racial modifier without corresponding skill data for a specialised skill', function(){
+			var racial = {skills: {Knowledge: {arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 4}}}};
+
+			expect(conv.mergeSkillsAndRacialMods({}, racial)).to.deep.equal(
+				{name: 'mergedSkills', errors: [], warnings: [createMessage('racialModMerge', 'Knowledge (arcana)')], data: 
+					[{name: 'Knowledge', specialty: 'arcana', racial: 4}]});
+		});
+		
+		it('generates a warning when the list of skills has the correct skill family but not the specialty for the racial modifier', function(){
+			var skills = {
+				Knowledge: {religion: {name: 'Knowledge', specialty: 'religion', modifier: 8}}, 
+				Stealth: {name: 'Stealth', modifier: 8}
+			};
+			var racial = {skills: {Knowledge: {arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 4}}}};
+
+			expect(conv.mergeSkillsAndRacialMods(skills, racial)).to.deep.equal(
+				{name: 'mergedSkills', errors: [], warnings: [createMessage('racialModMerge', 'Knowledge (arcana)')], data: [
+					{name: 'Knowledge', specialty: 'religion', modifier: 8}, 
+					{name: 'Knowledge', specialty: 'arcana', racial: 4},
+					{name: 'Stealth', modifier: 8}
+				]});
+		});
+		
 		it('creates a new array that is the result of merging the skills and racial mods dictionaries', function(){
 			var skills = {Perception: {name: 'Perception', modifier: 8}, Stealth: {name: 'Stealth', modifier: 8}};
 			var racial = {skills: {Perception: {name: 'Perception', modifier: 4}}};
@@ -601,6 +625,27 @@ describe('Convert', function(){
 			expect(conv.mergeSkillsAndRacialMods(skills, racial)).to.deep.equal(
 				{name: 'mergedSkills', errors: [], warnings: [], data: 
 					[{name: 'Perception', modifier: 8, racial: 4}, {name: 'Stealth', modifier: 8}]});
+		});
+
+		it('merges specialised skills correctly', () => {
+			var skills = {
+				Knowledge: {
+					arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 8},
+					religion: {name: 'Knowledge', specialty: 'religion', modifier: 4}
+				}, 
+				Stealth: {name: 'Stealth', modifier: 6}
+			};
+			var racial = {skills: {
+				Knowledge: {
+					arcana: {name: 'Knowledge', specialty: 'arcana', modifier: 4}
+				}}};
+			
+			expect(conv.mergeSkillsAndRacialMods(skills, racial)).to.deep.equal(
+				{name: 'mergedSkills', errors: [], warnings: [], data: [
+					{name: 'Knowledge', specialty: 'arcana', modifier: 8, racial: 4}, 
+					{name: 'Knowledge', specialty: 'religion', modifier: 4}, 
+					{name: 'Stealth', modifier: 6}
+				]});
 		});
 	});
 

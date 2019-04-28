@@ -55,74 +55,125 @@ var armadillo = {
 	source: 'Animal Archive'
 };
 
-let inputFile = path.resolve('test/testdata/test-input/test-Bestiary.xlsx');
-let outputDir = path.resolve('test/testdata/test-output');
+let inputFile = path.resolve('test/testdata/source/srd/d20pfsrd-Bestiary.xlsx');
+
+function emptyFolder(dirPath){
+	let files;
+	try {
+		files = fs.readdirSync(dirPath);
+	} catch(err) {
+		console.err(`Error reading content of ${dirPath}`);
+		throw err;
+	}
+
+	for (const file of files) {
+		let stat = fs.lstatSync(path.join(dirPath, file));
+		
+		if (stat.isDirectory()){
+			deleteFolder(path.join(dirPath, file));
+
+		} else {
+			try {
+				fs.unlinkSync(path.join(dirPath, file));
+			} catch(err){
+				console.err(`Error deleting file ${path.join(dirPath, file)}`);
+				throw err;
+			}
+		}
+	}
+}
+
+function deleteFolder(dirPath){
+	if (!fs.existsSync(dirPath)) return;
+
+	emptyFolder(dirPath);
+
+	try {
+		fs.rmdirSync(dirPath);
+	} catch(err){
+		console.err(`Error removing directory ${dirPath}`);
+		throw(err);
+	}
+}
 
 describe('Integration: SRD import', function(){
 	this.timeout(0);
 
-	describe('import', function(){
-		before(function(){
-			// create the output folder if not already there
-			if (!fs.existsSync(outputDir)){
-				try{
-					fs.mkdirSync(outputDir);
-				} catch(err){
-					console.err(`Error creating directory ${outputDir}`);
-				}
-			// empty the output folder
-			} else {
-				let files;
+	describe('importData', function(){
+		
+		describe('Bad set-up', () => {
+
+			it('expects two non-empty string arguments', () => {
+				expect(srdImport.importData()).to.equal(1);
+				expect(srdImport.importData('b1')).to.equal(1);
+				expect(srdImport.importData('b1', '')).to.equal(1);
+				expect(srdImport.importData('', '')).to.equal(1);
+			});
+
+			it('returns a non-zero value when the source code is invalid', function(){
+				expect(srdImport.importData('aaa', path.resolve('test/testdata'))).to.equal(1);
+			});
+
+			it('returns a non-zero value when the input file cannot be read', function(){
+				expect(srdImport.importData('b1', 'blah')).to.equal(1);
+			});
+		});
+
+		describe('Running with output folders absents', () => {
+			let dataDir = path.resolve('test/testdata');
+			let returnValue;
+
+			// remove any output directories
+			before(() => {
+				deleteFolder(path.resolve('test/testdata/work'));
+			});
+
+			// run the function once only
+			before(() => {
+				returnValue = srdImport.importData('b1', dataDir);
+			});
+
+			it('returns zero when it is sucessful', () => {
+				expect(returnValue).to.equal(0);
+			})
+
+			it('creates the work folder', () => {
+				expect(fs.existsSync(path.resolve('test/testdata/work'))).to.be.true;
+			});
+
+			it('creates a folder named after the source book', () => {
+				expect(fs.existsSync(path.resolve('test/testdata/work/bestiary1'))).to.be.true;
+			});
+
+			it('creates a srd subfolder', () => {
+				expect(fs.existsSync(path.resolve('test/testdata/work/bestiary1/srd'))).to.be.true;
+			});
+
+			it('creates a JSON file', function(){
+				let outputFile = path.join(dataDir, 'work/b1.json');
+				let fd;
+
 				try {
-					files = fs.readdirSync(outputDir);
+					fd = fs.openSync(outputFile, 'r');
 				} catch(err) {
-					console.err(`Error reading content of ${outputDir}`);
-					throw err;
+					expect(err).to.be.undefined;
+					return;
 				}
+				fs.closeSync(fd);
+			});
+			
+			it('creates a log file', function(){
+				let logFile = path.join(dataDir, 'work/b1.log');
+				let fd;
 
-  			for (const file of files) {
-  				try {
-	    			fs.unlinkSync(path.join(outputDir, file));
-  				} catch(err){
-  					console.err(`Error deleting file ${path.join(outputDir, file)}`);
-  					throw err;
-  				}
-  			}
-			}
-		});
-		
-		it('returns a non-zero value when the input file cannot be read', function(){
-			expect(srdImport.importData('blah')).to.equal(1);
-		});
-
-		it('creates a JSON file', function(){
-			var outputFile = path.resolve('test/testdata/test-output/json-test.json'),
-				fd;
-
-			expect(srdImport.importData(inputFile, 'PFRPG Bestiary', outputFile)).to.equal(0);
-
-			try {
-				fd = fs.openSync(outputFile, 'r');
-			} catch(err) {
-				expect(err).to.be.undefined;
-				return;
-			}
-			fs.closeSync(fd);
-		});
-		
-		it('creates a log file', function(){
-			var outputFile = path.resolve('test/testdata/test-output/log-test.json'),
-				logFile = outputFile + '.log',
-				fd;
-
-			expect(srdImport.importData(inputFile, 'PFRPG Bestiary', outputFile, logFile)).to.equal(0);
-			try {
-				fd = fs.openSync(logFile, 'r');
-			} catch(err) {
-				expect(err).to.be.undefined;
-				return;
-			}
-			fs.closeSync(fd);
+				try {
+					fd = fs.openSync(logFile, 'r');
+				} catch(err) {
+					expect(err).to.be.undefined;
+					return;
+				}
+				fs.closeSync(fd);
+			});
 		});
 	});
 
@@ -151,6 +202,20 @@ describe('Integration: SRD import', function(){
 			expect(rowGen.next().value).to.equal(200);
 			expect(rowGen.next().value).to.equal(201);
 			expect(rowGen.next().value).to.be.undefined;
+		});
+
+		it('returns only the rows that are not associated with a bestiary or one of the big tomes of horrors', () => {
+			let worksheet = srdImport.getWorksheet(inputFile);
+			let rowGen = srdImport.rowGenerator(worksheet, 'various');
+			let count = 0;
+			let value;
+
+			value = rowGen.next().value;
+			while (value != undefined){
+				count += 1;
+				value = rowGen.next().value;
+			}
+			expect(count).to.equal(614);
 		});
 	});
 	

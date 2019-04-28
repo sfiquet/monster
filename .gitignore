@@ -1,3 +1,5 @@
 node_modules/
 *.log
-srdimport/test/testdata/test-output/
+srdimport/test/testdata/work/
+data/work/
+

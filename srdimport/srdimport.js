@@ -1,16 +1,26 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var xlsx = require('xlsx'), 
-	fs = require('fs'),
-	convert = require('./convert'),
-	calc = require('./calc'),
-	Monster = require('../app/lib/monster');
+const xlsx = require('xlsx');
+const fs = require('fs');
+const path = require('path');
+const convert = require('./convert');
+const calc = require('./calc');
+const Monster = require('../app/lib/monster');
 
-var excelFile = '../data/d20pfsrd-Bestiary.xlsx';
-var maxRows = 2812;
-var maxCols = 71;
-var sourceCol = maxCols - 1; // 0-based index
+const maxRows = 2812;
+const maxCols = 71;
+const sourceCol = maxCols - 1; // 0-based index
+
+const sources = {
+	b1: {xl: 'PFRPG Bestiary', folder: 'bestiary1'},
+	b2: {xl: 'PFRPG Bestiary 2', folder: 'bestiary2'},
+	b3: {xl: 'PFRPG Bestiary 3', folder: 'bestiary3'},
+	b4: {xl: 'PFRPG Bestiary 4', folder: 'bestiary4'},
+	toh4: {xl: 'Tome of Horrors 4', folder: 'toh4'},
+	tohc: {xl: 'Tome of Horrors Complete', folder: 'tohc'},
+	various: {xl: 'various', folder: 'various'},
+};
 
 /**
  * getWorksheet
@@ -58,14 +68,18 @@ function* rowGenerator(worksheet, source) {
 		cell,
 		cellKey;
 
-	// go line by line
-	for (row = 0; row < maxRows; row++) {
+	// go line by line, skipping the first line which is for titles
+	for (row = 1; row < maxRows; row++) {
 
 		// ignore anything that isn't in the given source
 		cellKey = xlsx.utils.encode_cell({c: sourceCol, r: row});
 		cell = worksheet[cellKey];
 		
-		if (cell.v !== source) {
+		if (source === 'various') {
+			if (cell.v.startsWith('PFRPG Bestiary') || cell.v === 'Tome of Horrors 4' || cell.v === 'Tome of Horrors Complete'){
+				continue;
+			}
+		} else if (cell.v !== source) {
 			continue;
 		}
 
@@ -248,17 +262,31 @@ function isValidMonster(log){
 	return true;
 }
 
+function getSource(sourceCode){
+	return sources[sourceCode];
+}
+
+function createDir(dirPath){
+	if (fs.existsSync(dirPath)) return;
+
+	try {
+		fs.mkdirSync(dirPath);
+	} catch(err){
+		console.log(`Can't create directory ${dirPath}`);
+		throw(err);
+	}
+}
+
 /**
- * importData
- * top level function that handles the data import
+ * importSourceData
+ * handles the data import from a given source
  * input: 
- * - input file name
- * - output file name
- * - log file name
- * - source: specifies which rows to import, value in source column in spreadsheet
+ * - sourceCode: short code that specifies which rows to import, is mapped to 
+ *   value in source column in spreadsheet and to output folder
+ * - dataPath: path of the data directory
  * output: 0 if no error, 1 if error
  */
-function importData(inputFile, source, outputFile, logFile) {
+function importSourceData(sourceCode, dataPath) {
 	var monsterList = [];
 	var rowGen;
 	var worksheet,
@@ -270,18 +298,34 @@ function importData(inputFile, source, outputFile, logFile) {
 		log,
 		count = 0;
 
+	if (!sourceCode || !dataPath){
+		return 1;
+	}
+
+	let source = getSource(sourceCode);
+	if (!source){
+		return 1;
+	}
+
+	let inputFile = path.join(dataPath, 'source/srd/d20pfsrd-Bestiary.xlsx');
+	let outputFile = path.join(dataPath, 'work', `${sourceCode}.json`);
+	let logFile = path.join(dataPath, 'work', `${sourceCode}.log`);
+
 	worksheet = getWorksheet(inputFile);
 	if (!worksheet) {
 		return 1;
 	}
 
-	if (!logFile) {
-		logFile = 'import.log';
-	}
+	// make sure all the folders we need for output are present
+	createDir(path.join(dataPath, 'work'));
+	createDir(path.join(dataPath, 'work', source.folder));
+	createDir(path.join(dataPath, 'work', source.folder, 'srd'));
+	// and the edit folder as well
+	createDir(path.join(dataPath, 'work', source.folder, 'edit'));
 
 	fdLog = fs.openSync(logFile, 'w');
 
-	rowGen = rowGenerator(worksheet, source);
+	rowGen = rowGenerator(worksheet, source.xl);
 	while ((row = rowGen.next().value) !== undefined) {
 	
 		count += 1;
@@ -297,6 +341,9 @@ function importData(inputFile, source, outputFile, logFile) {
 			result = createMonster(rawMonster);
 			if (isValidMonster(result.log)) {
 				monsterList.push(result.monster);
+
+				let monsterFile = path.join(dataPath, 'work', source.folder, 'srd', `${rawMonster.name}.json`);
+				fs.writeFileSync(monsterFile, JSON.stringify(result.monster, null, 2));
 			}
 			log = result.log;
 		}
@@ -319,9 +366,36 @@ function importData(inputFile, source, outputFile, logFile) {
 	return 0;
 }
 
+/**
+ * importData
+ * top level function that handles the data import
+ * input: 
+ * - sourceCode: short code that specifies which rows to import, is mapped to 
+ *   value in source column in spreadsheet and to output folder
+ * - dataPath: path of the data directory
+ * output: 0 if no error, > 0 if error(s)
+ */
+function importData(sourceCode, dataPath) {
+	
+	if (sourceCode === 'all'){
+		
+		Object.keys(sources).reduce((errors, code) => {
+			errors += importSourceData(code, dataPath);
+			return errors;
+		}, 0);
+
+	} else {
+	
+		return importSourceData(sourceCode, dataPath);
+	}
+}
+
 // only run the module if run directly
 if (require.main === module) {
-	return importData(excelFile, 'PFRPG Bestiary', 'output.json', 'output.json.log');	
+	let sourceCode = process.argv.length > 2? process.argv[2] : 'b1';
+	let dataPath = process.argv.length > 3 ? process.argv[3] : '../data';
+	
+	return importData(sourceCode, dataPath);	
 }
 
 exports.getWorksheet = getWorksheet;

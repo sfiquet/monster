@@ -4,6 +4,7 @@
   "description": "Utility to import monsters from the SRD Excel file",
   "main": "srd-import.js",
   "scripts": {
+    "start": "node srdimport.js",
     "test": "npm run test:unit",
     "test:unit": "mocha './test/*-test.js'",
     "test:int": "mocha './test/*-int.js'",

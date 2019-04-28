@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - srdimport
 
 ### Changed
-- data: modified skill format to support specialised skills
+- Data: modified skill format to support specialised skills
+- Srdimport: create a separate JSON file for each monster
 
 ### Fixed
 - Calculations: implement proper support for monster type class skills

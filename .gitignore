@@ -2,4 +2,4 @@ node_modules/
 *.log
 srdimport/test/testdata/work/
 data/work/
-
+data/built/

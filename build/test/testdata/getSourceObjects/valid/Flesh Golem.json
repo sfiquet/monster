@@ -1,0 +1,86 @@
+{
+  "name": "Flesh Golem",
+  "alignment": "N",
+  "size": "Large",
+  "environment": "any",
+  "organization": "solitary or gang (2-4)",
+  "treasure": "none",
+  "type": "construct",
+  "CR": 7,
+  "space": 10,
+  "reach": 10,
+  "racialHD": 9,
+  "Str": 20,
+  "Dex": 9,
+  "Wis": 11,
+  "Cha": 1,
+  "speed": {
+    "land": 30
+  },
+  "feats": [],
+  "melee": {
+    "slam": {
+      "name": "slam",
+      "nbAttacks": 2,
+      "nbDice": 2,
+      "dieType": 8,
+      "type": "natural"
+    }
+  },
+  "skills": [],
+  "naturalArmor": 12,
+  "baseFort": 3,
+  "baseRef": 3,
+  "baseWill": 3,
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "DR": [
+      "5/adamantine"
+    ],
+    "immune": [
+      "construct traits",
+      "magic"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "berserk"
+    }
+  ],
+  "languages": "none",
+  "specialAbilities": [
+    {
+      "title": "Berserk (Ex)",
+      "description": [
+        {
+          "text": "When a flesh golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. The uncontrolled golem goes on a rampage, attacking the nearest living creature or smashing some object smaller than itself if no creature is within reach, then moving on to spread more destruction. The golem's creator, if within 60 feet, can try to regain control by speaking firmly and persuasively to the golem, which requires a DC 19 Charisma check. It takes 1 minute of inactivity by the golem to reset the golem's berserk chance to 0%."
+        }
+      ]
+    },
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A flesh golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted in the "
+        },
+        {
+          "text": "PRD",
+          "url": "http://legacy.aonprd.com/bestiary/golem.html#golem-flesh"
+        },
+        {
+          "text": "."
+        }
+      ]
+    }
+  ]
+}

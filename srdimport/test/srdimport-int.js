@@ -5,6 +5,7 @@ var expect = require('chai').expect,
 	srdImport = require('../srdimport'),
 	fs = require('fs'),
 	path = require('path');
+const folder = require('../../testlib/folder');
 
 var armadillo = {
 	name: 'Armadillo',
@@ -57,45 +58,6 @@ var armadillo = {
 
 let inputFile = path.resolve('test/testdata/source/srd/d20pfsrd-Bestiary.xlsx');
 
-function emptyFolder(dirPath){
-	let files;
-	try {
-		files = fs.readdirSync(dirPath);
-	} catch(err) {
-		console.err(`Error reading content of ${dirPath}`);
-		throw err;
-	}
-
-	for (const file of files) {
-		let stat = fs.lstatSync(path.join(dirPath, file));
-		
-		if (stat.isDirectory()){
-			deleteFolder(path.join(dirPath, file));
-
-		} else {
-			try {
-				fs.unlinkSync(path.join(dirPath, file));
-			} catch(err){
-				console.err(`Error deleting file ${path.join(dirPath, file)}`);
-				throw err;
-			}
-		}
-	}
-}
-
-function deleteFolder(dirPath){
-	if (!fs.existsSync(dirPath)) return;
-
-	emptyFolder(dirPath);
-
-	try {
-		fs.rmdirSync(dirPath);
-	} catch(err){
-		console.err(`Error removing directory ${dirPath}`);
-		throw(err);
-	}
-}
-
 describe('Integration: SRD import', function(){
 	this.timeout(0);
 
@@ -125,7 +87,7 @@ describe('Integration: SRD import', function(){
 
 			// remove any output directories
 			before(() => {
-				deleteFolder(path.resolve('test/testdata/work'));
+				folder.deleteFolder(path.resolve('test/testdata/work'));
 			});
 
 			// run the function once only
@@ -147,6 +109,10 @@ describe('Integration: SRD import', function(){
 
 			it('creates a srd subfolder', () => {
 				expect(fs.existsSync(path.resolve('test/testdata/work/bestiary1/srd'))).to.be.true;
+			});
+
+			it('creates an edit subfolder', () => {
+				expect(fs.existsSync(path.resolve('test/testdata/work/bestiary1/edit'))).to.be.true;
 			});
 
 			it('creates a JSON file', function(){

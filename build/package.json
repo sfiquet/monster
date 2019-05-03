@@ -1,0 +1,22 @@
+{
+  "name": "build",
+  "version": "0.0.1",
+  "description": "database builder",
+  "main": "build.js",
+  "scripts": {
+    "start": "node build.js",
+    "test": "npm run test:unit && npm run test:int",
+    "test:unit": "mocha './test/*-test.js'",
+    "test:int": "mocha './test/*-int.js'",
+    "lint": "eslint ."
+  },
+  "author": "Sylvie Fiquet",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "sprintf-js": "^1.1.2"
+  }
+}

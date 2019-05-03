@@ -1,0 +1,47 @@
+{
+  "name": "Gelatinous Cube",
+  "alignment": "N",
+  "size": "Large",
+  "environment": "any underground",
+  "organization": "solitary",
+  "treasure": "incidental",
+  "type": "ooze",
+  "CR": 3,
+  "space": 10,
+  "reach": 5,
+  "racialHD": 4,
+  "Str": 10,
+  "Dex": 1,
+  "Con": 26,
+  "Wis": 1,
+  "Cha": 1,
+  "speed": {
+    "land": 15
+  },
+  "feats": [],
+  "melee": {
+    "slam": {
+      "name": "slam",
+      "nbAttacks": 1,
+      "nbDice": 1,
+      "dieType": 6,
+      "extraDamage": [
+        "1d6 acid"
+      ],
+      "type": "natural"
+    }
+  },
+  "SQ": [
+    [
+      {
+        "text": "transparent"
+      }
+    ]
+  ],
+  "skills": [],
+  "naturalArmor": 0,
+  "baseFort": 1,
+  "baseRef": 1,
+  "baseWill": 1,
+  "shape": "long"
+}

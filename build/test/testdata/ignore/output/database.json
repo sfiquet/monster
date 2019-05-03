@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Monster 1",
+    "type": "animal"
+  },
+  {
+    "name": "Monster 3",
+    "CR": 3
+  }
+]

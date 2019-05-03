@@ -2,7 +2,7 @@
   "name": "srd-import",
   "version": "1.0.0",
   "description": "Utility to import monsters from the SRD Excel file",
-  "main": "srd-import.js",
+  "main": "srdimport.js",
   "scripts": {
     "start": "node srdimport.js",
     "test": "npm run test:unit",

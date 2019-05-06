@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - app
   - srdimport
 - new Build utility: generate the database from the output of srdimport and manually edited files
-- Srdimport: import monster source
+- Srdimport: import monster source and languages
 
 ### Changed
 - Data: modified skill format to support specialised skills

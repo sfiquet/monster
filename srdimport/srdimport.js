@@ -165,6 +165,7 @@ function createMonster(rawMonster) {
 	monster.size = rawMonster.size;
 	monster.environment = rawMonster.environment;
 	monster.organization = rawMonster.organization;
+	monster.languages = rawMonster.languages;
 	// treasure will need to be extracted at some point to identify objects 
 	// that change other stats, e.g. weapons, armor, ability enhancers...
 	monster.treasure = rawMonster.treasure;

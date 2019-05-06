@@ -79,13 +79,28 @@ describe('Integration: Build', () => {
       expect([data[0].name, data[1].name]).to.have.members(['Flesh Golem', 'Gelatinous Cube']);
     });
 
-    it('skips monster files that are present in the ignore list', () => {
-      let ignoreList = ["Flesh Golem.json"];
-      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), ignoreList);
+    it('skips monster files that are present in the local ignore list', () => {
+      let localIgnoreList = ["Flesh Golem.json"];
+      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), [], localIgnoreList);
       expect(data).to.be.an('array');
       expect(data).to.have.lengthOf(1);
       expect(data[0].name).to.be.a('string');
       expect(data[0].name).to.equal('Gelatinous Cube');
+    });
+
+    it('skips monster files that match the general ignore list', () => {
+      let ignoreList = [{name: "Flesh Golem", source: "PFRPG Bestiary"}];
+      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), ignoreList);
+      expect(data).to.be.an('array').that.has.lengthOf(1);
+      expect(data[0].name).to.equal('Gelatinous Cube');
+    });
+
+    it('doesn\'t skip monster files when the match is partial', () => {
+      let ignoreList = [{name: "Flesh Golem", source: "PFRPG Bestiary 2"}];
+      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), ignoreList);
+      expect(data).to.be.an('array').that.has.lengthOf(2);
+      expect(data[0].name).to.equal('Flesh Golem');
+      expect(data[1].name).to.equal('Gelatinous Cube');
     });
   });
   
@@ -243,13 +258,22 @@ describe('Integration: Build', () => {
       // tests
       it('adds the new monsters to the existing database', () => {
         expect(result).to.equal(0);
-        expect(data).to.be.an('array').that.has.lengthOf(3);
-        expect([ data[0].name, data[1].name, data[2].name ]).to.have.members(['Worg', 'Flesh Golem', 'Gelatinous Cube']);
+        expect(data).to.be.an('array').that.has.lengthOf(4);
+        expect([ data[0].name, data[1].name, data[2].name, data[3].name ]).to.have.members(['Worg', 'Flesh Golem', 'Gelatinous Cube', 'Gelatinous Cube']);
       });
       
       it('ignores srd files for monsters that are already in the database', () => {
-        expect(data[2].name).to.equal('Worg');
-        expect(data[2].size).to.equal('Medium'); // 'Large' in srd file
+        expect(data[3].name).to.equal('Worg');
+        expect(data[3].size).to.equal('Medium'); // 'Large' in srd file
+      });
+
+      it('adds monsters that have the same name as a database monster with a different source', () => {
+        expect(data[1].name).to.equal('Gelatinous Cube');
+        expect(data[1].source).to.equal('PFRPG Bestiary');
+        expect(data[1].size).to.equal('Large');
+        expect(data[2].name).to.equal('Gelatinous Cube');
+        expect(data[2].source).to.equal('PFRPG Bestiary 2');
+        expect(data[2].size).to.equal('Small');
       });
 
     });

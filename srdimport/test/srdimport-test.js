@@ -88,6 +88,7 @@ describe('SRD import', function(){
 			expect(monster.baseRef).to.equal(2);
 			expect(monster.baseWill).to.equal(0);
 			expect(monster.shape).to.equal('long');
+			expect(monster.source).to.equal('Animal Archive');
 		});
 	});
 });

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Specialised skills support, including in racial modifiers and with Skill Focus:
   - app
   - srdimport
+- new Build utility: generate the database from the output of srdimport and manually edited files
+- Srdimport: import monster source
 
 ### Changed
 - Data: modified skill format to support specialised skills

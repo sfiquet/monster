@@ -3,3 +3,5 @@ node_modules/
 srdimport/test/testdata/work/
 data/work/
 data/built/
+build/test/testdata/**/archive/
+build/test/testdata/**/output/database.json

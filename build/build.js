@@ -15,7 +15,7 @@ function createDir(dirPath){
   }
 }
 
-function getSourceObjects(inputDir, ignoreList) {
+function getSourceObjects(inputDir, generalIgnoreList, localIgnoreList) {
   if (!inputDir)
     return;
 
@@ -38,7 +38,7 @@ function getSourceObjects(inputDir, ignoreList) {
     let include = false;
     if (path.extname(file) === '.json'){
       include = true;
-      if (ignoreList && ignoreList.findIndex(item => item === file) >= 0){
+      if (localIgnoreList && localIgnoreList.findIndex(item => item === file) >= 0){
         include = false;
       }
     }
@@ -60,8 +60,17 @@ function getSourceObjects(inputDir, ignoreList) {
         console.error(`Error while parsing JSON file: ${err} - ${path.join(inputDir, file)}`);
         throw err;
       }
+
+      if (generalIgnoreList && generalIgnoreList.findIndex(item => {
+          return item.name === monsterObj.name && item.source === monsterObj.source;
+        }) >= 0){
+        
+        include = false;
+      }
       
-      monsters.push(monsterObj);
+      if (include){
+        monsters.push(monsterObj);
+      }
     }
   }
 
@@ -79,11 +88,17 @@ function merge(srdMonster, editMonster){
   return merged;
 }
 
-function compareNames(a, b) {
+function compareMonsters(a, b) {
   if (a.name < b.name) {
     return -1;
   
   } else if (a.name > b.name){
+    return 1;
+
+  } else if (a.source < b.source) {
+    return -1;
+    
+  } else if (a.source > b.source) {
     return 1;
   }
   
@@ -106,7 +121,7 @@ function mergeLists(srdMonsters, editMonsters) {
     }
   });
   
-  merged.sort(compareNames);
+  merged.sort(compareMonsters);
 
   return merged;
 }
@@ -212,14 +227,16 @@ function buildData(sourceDir, outputDir) {
   }
 
   // build an ignore list from the content of the database - we don't want to import those again
-  let ignoreList = allMonsters.map(item => `${item.name}.json`);
+  let ignoreList = allMonsters.map(item => {
+    return {name: item.name, source: item.source};
+  });
 
   // get the data from the srd and edit subdirectories and merge them
   let configIgnoreList = getIgnoreList(path.resolve(sourceDir));
-  let srdMonsters = getSourceObjects(path.join(sourceDir, 'srd'), ignoreList.concat(configIgnoreList));
+  let srdMonsters = getSourceObjects(path.join(sourceDir, 'srd'), ignoreList, configIgnoreList);
   let editMonsters = getSourceObjects(path.join(sourceDir, 'edit'), ignoreList);
   allMonsters = allMonsters.concat(mergeLists(srdMonsters, editMonsters));
-  allMonsters.sort(compareNames);
+  allMonsters.sort(compareMonsters);
 
   // create output dir if necessary
   createDir(outputDir);

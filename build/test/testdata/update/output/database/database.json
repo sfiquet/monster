@@ -1,6 +1,7 @@
 [
   {
     "name": "Worg",
+    "source": "PFRPG Bestiary",
     "alignment": "NE",
     "size": "Medium",
     "environment": "temperate forests and plains",
@@ -93,5 +94,13 @@
       }
     ],
     "languages": "Common, Goblin"
+  },
+  {
+    "name": "Gelatinous Cube",
+    "source": "PFRPG Bestiary 2",
+    "alignment": "N",
+    "size": "Small",
+    "type": "ooze",
+    "CR": 1
   }
 ]

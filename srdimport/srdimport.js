@@ -160,6 +160,7 @@ function createMonster(rawMonster) {
 
 	// those properties can be used as is
 	monster.name = rawMonster.name;
+	monster.source = rawMonster.source;
 	monster.alignment = rawMonster.alignment;
 	monster.size = rawMonster.size;
 	monster.environment = rawMonster.environment;
@@ -379,7 +380,7 @@ function importData(sourceCode, dataPath) {
 	
 	if (sourceCode === 'all'){
 		
-		Object.keys(sources).reduce((errors, code) => {
+		return Object.keys(sources).reduce((errors, code) => {
 			errors += importSourceData(code, dataPath);
 			return errors;
 		}, 0);

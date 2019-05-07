@@ -61,6 +61,7 @@ describe('Formatting of monster data for display', function(){
 	});
 	
 	describe('getOptionalDefense', function(){
+		
 		it('builds an array of the optional defense characterics', function(){
 			var monster = new Monster(),
 				result;
@@ -73,6 +74,74 @@ describe('Formatting of monster data for display', function(){
 			expect(result).to.have.length(2);
 			expect(result[0]).to.deep.equal({name: 'Defensive Abilities', list: ['split', 'ooze traits']});
 			expect(result[1]).to.deep.equal({name: 'Immune', list: ['cold', 'fire', 'poison']});
+		});
+
+		it('transforms the DR data into strings for inclusion in the handlebars template', () => {
+			var monster = new Monster(),
+				result;
+			monster.optDefense = {
+				'DR': [
+		      {
+		        "value": 10,
+		        "negatedByAny": ["adamantine", "bludgeoning"]
+		      },
+		      {
+		        "value": 5,
+		        "negatedByAny": ["cold iron"]
+		      }
+				]
+			};
+			result = format.getOptionalDefense(monster);
+			expect(result).to.be.an.instanceof(Array);
+			expect(result).to.have.length(1);
+			expect(result[0]).to.deep.equal({name: 'DR', list: ['10/adamantine or bludgeoning', '5/cold iron']});
+		});
+		
+		it('transforms the resist data into strings for inclusion in the handlebars template', () => {
+			var monster = new Monster(),
+				result;
+			monster.optDefense = {
+				'resist': [
+		      {
+		      	"name": "cold",
+		        "value": 10,
+		      },
+		      {
+		      	"name": "fire",
+		        "value": 5,
+		        "comment": "(see below)"
+		      }
+				]
+			};
+			result = format.getOptionalDefense(monster);
+			expect(result).to.be.an.instanceof(Array);
+			expect(result).to.have.length(1);
+			expect(result[0]).to.deep.equal({name: 'Resist', list: ['cold 10', 'fire 5 (see below)']});
+		});
+		
+		it('transforms the SR data into strings for inclusion in the handlebars template', () => {
+			var monster = new Monster(),
+				result;
+			monster.optDefense = {
+				'SR': {
+		        "value": 10,
+		        "comment": "vs lawful spells and creatures"
+		      }
+			};
+			result = format.getOptionalDefense(monster);
+			expect(result).to.be.an.instanceof(Array);
+			expect(result).to.have.length(1);
+			expect(result[0]).to.deep.equal({name: 'SR', list: ['10 vs lawful spells and creatures']});
+
+			monster.optDefense = {
+				'SR': {
+		        "value": 5,
+		      }
+			};
+			result = format.getOptionalDefense(monster);
+			expect(result).to.be.an.instanceof(Array);
+			expect(result).to.have.length(1);
+			expect(result[0]).to.deep.equal({name: 'SR', list: ['5']});
 		});
 	});
 	

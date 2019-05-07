@@ -184,7 +184,15 @@ function getOptionalDefense(monster) {
 	
 	if (monster.optDefense.DR) {
 	
-		result.push({name: 'DR', list: monster.optDefense.DR});
+		result.push({name: 'DR', list: monster.optDefense.DR.map(item => {
+			let text = `${item.value}/`;
+			if (!item.negatedByAny){
+				text += '—';
+			} else {
+				text += item.negatedByAny.reduce((acc, neg) => `${acc} or ${neg}`);
+			}
+			return text;
+		})});
 	}
 	
 	if (monster.optDefense.immune) {
@@ -194,12 +202,21 @@ function getOptionalDefense(monster) {
 	
 	if (monster.optDefense.resist) {
 	
-		result.push({name: 'Resist', list: monster.optDefense.resist});
+		result.push({name: 'Resist', list: monster.optDefense.resist.map(item => {
+			let text = `${item.name} ${item.value}`;
+			if (item.comment){
+				text += ` ${item.comment}`;
+			}
+			return text;
+		})});
 	}
 	
 	if (monster.optDefense.SR) {
-	
-		result.push({name: 'SR', list: monster.optDefense.SR});
+		let text = `${monster.optDefense.SR.value}`;
+		if (monster.optDefense.SR.comment){
+			text += ` ${monster.optDefense.SR.comment}`;
+		}
+		result.push({name: 'SR', list: [text]});
 	}
 	
 	return result;

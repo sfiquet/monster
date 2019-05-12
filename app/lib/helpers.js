@@ -2,16 +2,39 @@
 'use strict';
 
 exports.title = title;
+exports.rankedTitle = rankedTitle;
 exports.link = link;
 exports.magic = magic;
 exports.format = format;
+exports.eq = eq;
+exports.and = and;
+
+// eq
+// compare two values
+function eq(v1, v2) {
+	return v1 === v2;
+}
+
+// and
+// logical and
+function and(v1, v2) {
+	return v1 && v2;
+}
+
+/**
+ * rankedTitle
+ * wrap a text in <span> tags with styling class
+ */
+function rankedTitle(text, rank) {
+	return `<span class="title-${rank}">${text}</span>`;
+}
 
 /**
  * title
- * wrap a text in <strong> tags
+ * make a text into a main title (level 1)
  */
 function title(text) {
-	return '<strong>' + text + '</strong>';
+	return rankedTitle(text, 1);
 }
 
 /**
@@ -24,10 +47,10 @@ function link(text, url) {
 
 /**
  * magic
- * mark text as magic (with <em> tags)
+ * mark text as magic (with <span> tags and CSS class)
  */
 function magic(text) {
-	return '<em>' + text + '</em>';
+	return `<span class="magic">${text}</span>`;
 }
 
 /**
@@ -44,8 +67,8 @@ function format(context) {
 	if (context.isMagic){
 		res = magic(res);
 	}
-	if (context.isTitle){
-		res = title(res);
+	if (context.titleLevel){
+		res = rankedTitle(res, context.titleLevel);
 	}
 	return res;
 }

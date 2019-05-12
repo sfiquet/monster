@@ -393,24 +393,51 @@ function getSpecialAbilities(monster) {
 	if (!monster.specialAbilities) {
 		return;
 	}
+
+	function formatSpecialAbilityChunk(chunk){
+		if (chunk.calc) {
+			
+			if (chunk.calc === 'DC') {
+			
+				return { text: `${monster.getDC(chunk.baseStat)}` };
+			}
+			// deal with other calculations here
+		}
+		return chunk;		
+	}
 	
 	result = monster.specialAbilities.map(function(ability){
-		var chunksArray = [];
-		chunksArray.push({ text: ability.title, isTitle: true });
+		let abilityObj = {};
+		let chunksArray = [];
+		chunksArray.push({ text: ability.title, titleLevel: 1 });
 		
-		Array.prototype.push.apply(chunksArray, ability.description.map(function(chunk){
-			if (chunk.calc) {
+		Array.prototype.push.apply(chunksArray, ability.description.map(formatSpecialAbilityChunk));
+		
+		abilityObj.main = chunksArray;
+		
+		if (ability.extra){
+			
+			abilityObj.extra = ability.extra.map(item => {
+				let content = [];
 				
-				if (chunk.calc === 'DC') {
-				
-					return { text: '' + monster.getDC(chunk.baseStat) };
+				if (item.title){
+					content = content.concat({ text: item.title, titleLevel: 2 });
 				}
-				// deal with other calculations here
-			}
-			return chunk;
-		}));
-		
-		return chunksArray;
+				
+				if (item.type === 'paragraph'){
+					content = content.concat(item.content.map(formatSpecialAbilityChunk));
+				
+				} else if (item.type === 'list'){
+					content = content.concat(item.content.map(chunkArray => chunkArray.map(formatSpecialAbilityChunk)));
+				} else if (item.type === 'table'){
+					content = content.concat(item.content.map(colArray => colArray.map(chunkArray => chunkArray.map(formatSpecialAbilityChunk))));
+					return {type: item.type, hasHeaderRow: item.hasHeaderRow, hasHeaderCol: item.hasHeaderCol, content: content};
+				}
+
+				return {type: item.type, content: content};
+			});
+		}
+		return abilityObj;
 	});
 	
 	return result;

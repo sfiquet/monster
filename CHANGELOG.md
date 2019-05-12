@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - srdimport
 - new Build utility: generate the database from the output of srdimport and manually edited files
 - Srdimport: import monster source and languages
+- App: support complex content in special abilities
+  - multiple paragraphs
+  - titled paragraphs
+  - lists
+  - tables
+  - additional title level for formatting curse, disease and poison
 
 ### Changed
 - Data: modified skill format to support specialised skills

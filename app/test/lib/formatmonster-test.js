@@ -325,9 +325,11 @@ describe('Formatting of monster data for display', function(){
 			abilities = format.getSpecialAbilities(monster);
 			expect(abilities).to.be.instanceof(Array);
 			expect(abilities).to.have.length(1);
-			expect(abilities[0]).to.deep.equal([
-					{text: 'Corrosion (Ex)', isTitle: true}, 
-					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}]);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+				]});
 		});
 		
 		it('works on multiple special abilities when there is no calculation', function(){
@@ -359,15 +361,21 @@ describe('Formatting of monster data for display', function(){
 			abilities = format.getSpecialAbilities(monster);
 			expect(abilities).to.be.instanceof(Array);
 			expect(abilities).to.have.length(3);
-			expect(abilities[0]).to.deep.equal([
-					{text: 'Corrosion (Ex)', isTitle: true}, 
-					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}]);
-			expect(abilities[1]).to.deep.equal([
-					{text: 'Split (Ex)', isTitle: true}, 
-					{text: 'Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original\'s current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points.'}]);
-			expect(abilities[2]).to.deep.equal([
-					{text: 'Suction (Ex)', isTitle: true}, 
-					{text: 'The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding\'s CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location.'}]);
+			expect(abilities[0]).to.deep.equal({ 
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+				]});
+			expect(abilities[1]).to.deep.equal({
+				main: [
+					{text: 'Split (Ex)', titleLevel: 1}, 
+					{text: 'Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original\'s current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points.'}
+				]});
+			expect(abilities[2]).to.deep.equal({
+				main: [
+					{text: 'Suction (Ex)', titleLevel: 1}, 
+					{text: 'The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding\'s CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location.'}
+				]});
 		});
 
 		it('performs a DC calculation and outputs the result as a text chunk', function(){
@@ -393,12 +401,323 @@ describe('Formatting of monster data for display', function(){
 			abilities = format.getSpecialAbilities(monster);
 			expect(abilities).to.be.instanceof(Array);
 			expect(abilities).to.have.length(1);
-			expect(abilities[0]).to.be.instanceof(Array);
-			expect(abilities[0]).to.have.length(4);
-			expect(abilities[0][0]).to.deep.equal({ text: 'Acid (Ex)', isTitle: true });
-			expect(abilities[0][1]).to.deep.equal({ text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC ' });
-			expect(abilities[0][2]).to.deep.equal({ text: '21' });
-			expect(abilities[0][3]).to.deep.equal({ text: 'Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.' });
+			expect(abilities[0]).to.be.an('object');
+			expect(Object.keys(abilities[0])).to.deep.equal(['main']);
+			expect(abilities[0].main).to.be.an('array').that.has.lengthOf(4);
+			expect(abilities[0].main[0]).to.deep.equal({ text: 'Acid (Ex)', titleLevel: 1 });
+			expect(abilities[0].main[1]).to.deep.equal({ text: 'A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding\'s acid, its clothing and armor take the same amount of damage from the acid. A DC ' });
+			expect(abilities[0].main[2]).to.deep.equal({ text: '21' });
+			expect(abilities[0].main[3]).to.deep.equal({ text: 'Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon\'s wielder succeeds on a DC 21 Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based.' });
+		});
+
+		it('supports extra elements for each ability', () => {
+			const monster = new Monster({ specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [{text: 'This is the main paragraph.'}],
+					extra: [
+						{
+							type: 'paragraph',
+							content: [{text: 'This is the second paragraph.'}]
+						},
+						{
+							type: 'paragraph',
+							content: [{text: 'This is the third paragraph.'}]
+						}
+					]
+				}]
+			});
+			
+			const abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.instanceof(Array);
+			expect(abilities).to.have.length(1);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'This is the main paragraph.'}
+				],
+				extra: [
+					{
+						type: 'paragraph',
+						content: [{text: 'This is the second paragraph.'}]
+					},
+					{
+						type: 'paragraph',
+						content: [{text: 'This is the third paragraph.'}]
+					},
+				]
+			});
+		});
+
+		it('supports multiple normal paragraphs', () => {
+			const monster = new Monster({ 
+				Con: 22, 
+				Wis: 6,
+				racialHD: 10,
+				specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [{text: 'This is the main paragraph.'}],
+					extra: [
+						{
+							type: 'paragraph',
+							content: [
+								{text: 'This is the second paragraph with DC '}, 
+								{calc: 'DC', baseStat: 'Con'},
+								{text: ' due to '},
+								{text: 'Some Spell', isMagic: true}
+							]
+						},
+						{
+							type: 'paragraph',
+							content: [
+								{text: 'This is the third paragraph with DC '},
+								{calc: 'DC', baseStat: 'Wis'}
+							]
+						}
+					]
+				}]
+			});
+			
+			const abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.an('array').with.lengthOf(1);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'This is the main paragraph.'}
+				],
+				extra: [
+					{
+						type: 'paragraph',
+						content: [
+							{text: 'This is the second paragraph with DC '}, 
+							{text: '21'},
+							{text: ' due to '},
+							{text: 'Some Spell', isMagic: true}
+						]
+					},
+					{
+						type: 'paragraph',
+						content: [
+							{text: 'This is the third paragraph with DC '},
+							{text: '13'}
+						]
+					},
+				]
+			});
+		});
+
+		it('supports multiple titled paragraphs', () => {
+			const monster = new Monster({ 
+				Con: 22, 
+				Wis: 6,
+				racialHD: 10,
+				specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [{text: 'This is the main paragraph.'}],
+					extra: [
+						{
+							type: 'paragraph',
+							title: 'First Power',
+							content: [
+								{text: 'This is the second paragraph with DC '}, 
+								{calc: 'DC', baseStat: 'Con'},
+								{text: ' due to '},
+								{text: 'Some Spell', isMagic: true}
+							]
+						},
+						{
+							type: 'paragraph',
+							title: 'Second Power',
+							content: [
+								{text: 'This is the third paragraph with DC '},
+								{calc: 'DC', baseStat: 'Wis'}
+							]
+						}
+					]
+				}]
+			});
+			
+			const abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.an('array').with.lengthOf(1);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'This is the main paragraph.'}
+				],
+				extra: [
+					{
+						type: 'paragraph',
+						content: [
+							{text: 'First Power', titleLevel: 2},
+							{text: 'This is the second paragraph with DC '}, 
+							{text: '21'},
+							{text: ' due to '},
+							{text: 'Some Spell', isMagic: true}
+						]
+					},
+					{
+						type: 'paragraph',
+						content: [
+							{text: 'Second Power', titleLevel: 2},
+							{text: 'This is the third paragraph with DC '},
+							{text: '13'}
+						]
+					},
+				]
+			});
+		});
+
+		it('supports lists', () => {
+			const monster = new Monster({ 
+				Con: 22, 
+				Wis: 6,
+				racialHD: 10,
+				specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [{text: 'This is the main paragraph.'}],
+					extra: [
+						{
+							type: 'list',
+							content: [
+								[
+									{text: 'Item 1 with DC '}, 
+									{calc: 'DC', baseStat: 'Con'},
+									{text: ' due to '},
+									{text: 'Some Spell', isMagic: true}
+								],
+								[
+									{text: 'Item 2'}
+								]
+							]
+						},
+						{
+							type: 'paragraph',
+							content: [
+								{text: 'And now we have another list:'},
+							]
+						},
+						{
+							type: 'list',
+							content: [
+								[
+									{text: 'eggs'}
+								],
+								[
+									{text: 'flour'}
+								],
+								[
+									{text: 'sugar', isMagic: true}
+								]
+							]
+						}
+					]
+				}]
+			});
+			
+			const abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.an('array').with.lengthOf(1);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'This is the main paragraph.'}
+				],
+				extra: [
+					{
+						type: 'list',
+						content: [
+							[
+								{text: 'Item 1 with DC '}, 
+								{text: '21'},
+								{text: ' due to '},
+								{text: 'Some Spell', isMagic: true}
+							],
+							[
+								{text: 'Item 2'}
+							]
+						]
+					},
+					{
+						type: 'paragraph',
+						content: [
+							{text: 'And now we have another list:'},
+						]
+					},
+					{
+						type: 'list',
+						content: [
+							[
+								{text: 'eggs'}
+							],
+							[
+								{text: 'flour'}
+							],
+							[
+								{text: 'sugar', isMagic: true}
+							]
+						]
+					}
+				]
+			});
+		});
+
+		it('supports tables', () => {
+			const monster = new Monster({ 
+				Con: 22, 
+				Wis: 6,
+				racialHD: 10,
+				specialAbilities: 
+				[{
+					title: 'Corrosion (Ex)',
+					description: [{text: 'This is the main paragraph.'}],
+					extra: [
+						{
+							type: 'table',
+							hasHeaderRow: true,
+							hasHeaderCol: true,
+							content: [
+								[
+									[{text: 'Col 1'}],
+									[{text: 'Col 2'}],
+								],
+								[
+									[{text: 'Text with DC '}, {calc: 'DC', baseStat: 'Con'}],
+									[{text: 'Text with '}, {text: 'Some Spell', isMagic: true}],
+								]
+							]
+						}
+					]
+				}]
+			});
+			
+			const abilities = format.getSpecialAbilities(monster);
+			expect(abilities).to.be.an('array').with.lengthOf(1);
+			expect(abilities[0]).to.deep.equal({
+				main: [
+					{text: 'Corrosion (Ex)', titleLevel: 1}, 
+					{text: 'This is the main paragraph.'}
+				],
+				extra: [
+					{
+						type: 'table',
+						hasHeaderRow: true,
+						hasHeaderCol: true,
+						content: [
+							[
+								[{text: 'Col 1'}],
+								[{text: 'Col 2'}],
+							],
+							[
+								[{text: 'Text with DC '}, {text: '21'}],
+								[{text: 'Text with '}, {text: 'Some Spell', isMagic: true}],
+							]
+						]
+					}
+				]
+			});
+
 		});
 	});
 	
@@ -919,10 +1238,12 @@ describe('Formatting of monster data for display', function(){
 					{text: 'corrosion'}
 				]
 			]);
-			expect(profile.specialAbilities).to.deep.equal([[
-				{ text: 'Acid (Ex)', isTitle: true },
-				{ text: 'A gelatinous cube\'s acid does not harm metal or stone.' }
-			]]);
+			expect(profile.specialAbilities).to.deep.equal([{
+				main: [
+					{ text: 'Acid (Ex)', titleLevel: 1 },
+					{ text: 'A gelatinous cube\'s acid does not harm metal or stone.' }
+				]
+			}]);
 		});
 	});
 });

@@ -285,3 +285,32 @@ li a {
 	text-align: right;
 	padding: 0 5px 0 0;
 }
+
+.profile span.title-1 {
+	font-weight: bold;
+}
+
+.profile span.title-2 {
+	font-style: italic;
+}
+
+.profile span.title-3 {
+	font-style: italic;
+}
+
+.profile span.magic {
+	font-style: italic;
+}
+
+.profile table {
+	width: 100%;
+}
+
+.profile td, .profile th {
+	text-align: left;
+	vertical-align: top;
+}
+
+.profile th {
+	font-weight: bold;
+}

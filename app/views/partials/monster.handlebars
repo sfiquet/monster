@@ -201,12 +201,75 @@
 
 	{{#if stats.specialAbilities}}
 		<p class="section">SPECIAL ABILITIES</p>
+
 		{{#each stats.specialAbilities}}
 			<p class="stat">
-				{{#each this}}
+				{{#each this.main}}
 					{{{format this}}}
 				{{/each}}
 			</p>
+
+			{{#each this.extra}}
+
+				{{#if (eq this.type "paragraph")}}
+					<p class="indented">
+						{{#each this.content}}
+							{{{format this}}}
+						{{/each}}
+					</p>
+
+				{{else if (eq this.type "list")}}
+					<ul class="stat">
+						{{#each this.content}}
+							<li>
+								{{#each this}}
+									{{{format this}}}
+								{{/each}}
+							</li>
+						{{/each}}
+					</ul>
+
+				{{else if (eq this.type "table")}}
+					<table class="stat">						
+					{{#each this.content as |rowData rowId|}}
+						{{#if (and ../hasHeaderRow (eq rowId 0))}}
+							<thead><tr>
+							{{#each this as |item colId|}}
+								<th>
+									{{#each this}}
+										{{{format this}}}
+									{{/each}}
+								</th>
+							{{/each}}
+							</tr></thead>
+							<tbody>
+						{{else}}
+							{{#if (eq rowId 0)}}
+								<tbody>
+							{{/if}}
+							<tr>
+							{{#each this as |item colId|}}
+								{{#if (and ../../hasHeaderCol (eq colId 0))}}
+									<th>
+										{{#each this}}
+											{{{format this}}}
+										{{/each}}
+									</th>
+								{{else}}
+									<td>
+										{{#each this}}
+											{{{format this}}}
+										{{/each}}
+									</td>
+								{{/if}}
+							{{/each}}
+							</tr>
+						{{/if}}
+					{{/each}}
+					</tbody></table>
+				{{/if}}
+
+			{{/each}}
 		{{/each}}
 	{{/if}}
 </div>

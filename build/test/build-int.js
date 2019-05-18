@@ -112,8 +112,8 @@ describe('Integration: Build', () => {
         expect(build.buildData()).to.equal(1);
         expect(build.buildData('')).to.equal(1);
         expect(build.buildData('', '')).to.equal(1);
-        expect(build.buildData(path.resolve('test/testdata/create/input'), '')).to.equal(1);
-        expect(build.buildData('', path.resolve('test/testdata/create/output'))).to.equal(1);
+        expect(build.buildData(path.resolve('test/testdata/update/input'), '')).to.equal(1);
+        expect(build.buildData('', path.resolve('test/testdata/update/output'))).to.equal(1);
       });
 
       it('throws an error when input files cannot be read', () => {

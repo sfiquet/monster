@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sprintf = require('sprintf-js').sprintf;
 
 const outputFile = 'database.json';
 
@@ -126,48 +125,6 @@ function mergeLists(srdMonsters, editMonsters) {
   return merged;
 }
 
-function archiveJSONFiles(dirPath, ignoreList) {
-  // ignore if the directory doesn't exist
-  if (!fs.existsSync(dirPath)){
-    return;
-  }
-
-  const now = new Date();
-  const archiveName = sprintf('%4d-%02d-%02d_%02d-%02d', 
-    now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes());
-
-  createDir(path.join(dirPath, 'archive'));
-  createDir(path.join(dirPath, 'archive', archiveName));
-
-  let files;
-  try {
-    files = fs.readdirSync(dirPath);
-  } catch(err) {
-    console.error(`Error reading content of ${dirPath}`);
-    throw err;
-  }
-
-  for (const file of files) {
-
-    let include = false;
-    if (path.extname(file) === '.json'){
-      include = true;
-      if (ignoreList && ignoreList.findIndex(item => item === file) >= 0){
-        include = false;
-      }
-    }
-
-    if (include) {
-      try {
-        fs.renameSync(path.join(dirPath, file), path.join(dirPath, 'archive', archiveName, file));
-      } catch(err){
-        console.error(`Error while moving file ${path.join(dirPath, file)} to archive ${path.join(dirPath, 'archive', archiveName, file)}`);
-        throw err;
-      }
-    }
-  }
-}
-
 function getIgnoreList(dirPath) {
   let str;
   let data;
@@ -249,9 +206,6 @@ function buildData(sourceDir, outputDir) {
     throw err;
   }
   
-  // successful - archive the edit folders
-  archiveJSONFiles(path.join(sourceDir, 'edit'), ignoreList);
-
   return 0; // success
 }
 

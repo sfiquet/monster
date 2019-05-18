@@ -1,7 +1,6 @@
 const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
-const sprintf = require('sprintf-js').sprintf;
 const folder = require('../../testlib/folder');
 const build = require('../build');
 
@@ -172,13 +171,7 @@ describe('Integration: Build', () => {
       
       before(() => {
         folder.deleteFolder(path.resolve(testPath, 'output'));
-        folder.deleteFolder(path.resolve(testPath, 'input/edit/archive'));
-        fs.copyFileSync(
-          path.resolve(testPath, 'input/edit/restore/Gelatinous Cube.json'), 
-          path.resolve(testPath, 'input/edit/Gelatinous Cube.json'));
-      });
 
-      before(() => {
         result = build.buildData(path.resolve(testPath, 'input'), path.resolve(testPath, 'output'));
       });
       
@@ -219,26 +212,6 @@ describe('Integration: Build', () => {
         expect(data[1].type).to.equal('ooze');
         expect(data[1].specialCMD).to.deep.equal([{ "name": "trip", "cantFail": true }]);
       });
-
-      it('archives edit files when successful', () => {
-        const date = new Date();
-        const dateStr = sprintf('%4d-%02d-%02d', date.getFullYear(), date.getMonth() + 1, date.getDate());
-
-        expect(fs.existsSync(path.resolve(testPath, 'input/edit/archive'))).to.be.true;
-        
-        let files = fs.readdirSync(path.resolve(testPath, 'input/edit/archive'));
-        files = files.filter(item => {
-          if (!item.startsWith(dateStr)) {
-            return false;
-          }
-          return fs.lstatSync(path.join(testPath, 'input/edit/archive', item)).isDirectory();
-        });
-        expect(files.length).to.equal(1);
-        let folderName = files[0];
-        
-        expect(fs.existsSync(path.resolve(testPath, 'input/edit/archive', folderName, 'Gelatinous Cube.json'))).to.be.true;
-      });
-
     });
 
     describe('Update existing database', () => {
@@ -285,10 +258,6 @@ describe('Integration: Build', () => {
       
       before(() => {
         folder.deleteFolder(path.resolve(testPath, 'output'));
-        folder.deleteFolder(path.resolve(testPath, 'input/edit/archive'));
-        fs.copyFileSync(
-          path.resolve(testPath, 'input/edit/restore/Monster 3.json'), 
-          path.resolve(testPath, 'input/edit/Monster 3.json'));
 
         result = build.buildData(path.resolve(testPath, 'input'), path.resolve(testPath, 'output'));
         data = JSON.parse(fs.readFileSync(path.resolve(testPath, 'output/database.json'), {encoding: 'utf8'}));
@@ -308,3 +277,4 @@ describe('Integration: Build', () => {
     });
   });
 });
+

@@ -1,0 +1,164 @@
+{
+  "name": "",
+  "shape": "",
+  "senses": [
+    {
+      "name": "", 
+      "value": 0,
+      "unit": "ft."
+    },
+    {
+      "name": ""
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      ""
+    ],
+    "DR": [
+      {
+        "value": 0,
+        "negatedByAny": [""]
+      }
+    ],
+    "immune": [
+      ""
+    ],
+    "resist": [
+      {
+        "name": "",
+        "value": 0
+      }
+    ],
+    "SR": {
+      "value": 0
+    }
+  },
+  "weaknesses": [
+    ""
+  ],
+  "specialAtk": [
+    {
+      "name": "",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 8,
+          "strengthFactor": 1.5
+        }
+      ]
+    },
+    {
+      "name": ""
+    }
+  ],
+  "specialCMB": [
+    {
+      "name": "grapple",
+      "components": [
+        {
+          "name": "grab",
+          "type": "melee",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    },
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "",
+      "description": [
+        {
+          "text": ""
+        }
+      ]
+    },
+    {
+      "title": "",
+      "description": [
+        {
+          "text": ""
+        },
+        {
+          "text": "",
+          "url": "",
+          "isMagic": true
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 8,
+          "strengthFactor": 1.5
+        }
+      ]
+    },
+    {
+      "title": "",
+      "description": [
+        {
+          "text": ""
+        }
+      ],
+      "extra": [
+        {
+          "type": "paragraph",
+          "title": "",
+          "content": [
+              {"text": ""}
+          ]
+        },
+        {
+          "type": "list",
+          "content": [
+            [
+              {"text": ""}
+            ],
+            [
+              {"text": ""},
+              {"text": "", "isMagic": true},
+              {"text": ""}
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "hasHeaderRow": true,
+          "hasHeaderCol": true,
+          "content": [
+            [
+              [{"text": ""}], 
+              [{"text": ""}]
+            ],
+            [
+              [{"text": ""}], 
+              [{"text": ""}]
+            ]
+          ]
+        }
+      ]      
+    }
+  ]  
+}

@@ -1,635 +1,2135 @@
 [
-{
-	"name": "Black Pudding",
-	"CR": 7,
-	"alignment": "N",
-	"size": "Huge",
-	"type": "ooze",
-	"senses": [
-		{
-			"name": "blindsight", 
-			"value": 60,
-			"unit": "ft."
-		}
-	],
-	"optDefense": {
-		"abilities": [
-			"split",
-			"ooze traits"
-		]
-	},
-	"racialHD": 10,
-	"naturalArmor": 0,
-	"speed": {
-		"land": 20, 
-		"climb": 20
-	},
-	"space": 15,
-	"reach": 10,
-	"shape": "long",
-	"Str": 16,
-	"Dex": 1,
-	"Con": 22,
-	"Wis": 1,
-	"Cha": 1,
-	"specialCMB": [
-			{
-				"name": "grapple",
-				"components": [
-					{
-						"name": "grab",
-						"type": "melee",
-						"bonus": 4
-					}
-				]
-			}
-		],
-	"specialCMD": [
-		{
-			"name": "bull rush",
-			"components": [
-				{
-					"name": "Suction",
-					"type": "special ability",
-					"bonus": 10
-				}
-			]
-		},
-		{
-			"name": "trip",
-			"cantFail": true
-		}
-	],
-	"SQ": [
-			[{"text": "ooze traits", "url": "http://paizo.com/pathfinderRPG/prd/monsters/creatureTypes.html#ooze"}], 
-			[{"text": "suction"}]
-		],
-	"baseFort": 3,
-	"baseRef": 3,
-	"baseWill": 3,
-	"melee": {
-		"slam": { 
-			"name": "slam", 
-			"type": "natural", 
-			"nbAttacks": 1, 
-			"nbDice": 2, 
-			"dieType": 6,
-			"extraDamage": ["2d6 acid", "grab"]
-		}
-	},
-	"specialAtk": [
-		{
-			"name": "constrict", 
-			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
-			"details": [
-				{
-					"calc": "damage",
-					"type": "weapon",
-					"nbDice": 2,
-					"dieType": 6,
-					"strengthFactor": 1.5
-				},
-				{
-					"text": " plus 2d6 acid"
-				}
-			]
-		}, 
-		{
-			"name": "corrosion"
-		}
-	],
-	"environment": "any underground",
-	"organization": "solitary",
-	"treasure": "none",
-	"specialAbilities": [
-		{
-			"title": "Acid (Ex)",
-			"description": [
-				{
-					"text": "A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding's acid, its clothing and armor take the same amount of damage from the acid. A DC"
-				}, 
-				{
-					"calc": "DC", 
-					"baseStat": "Con"
-				}, 
-				{
-					"text": "Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon's wielder succeeds on a DC"
-				},
-				{
-					"calc": "DC", 
-					"baseStat": "Con"
-				}, 
-				{
-					"text": "Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based."
-				}
-			]
-		},
-		{
-			"title": "Corrosion (Ex)",
-			"description": [
-				{
-					"text": "An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor."
-				}
-			]
-		},
-		{
-			"title": "Split (Ex)",
-			"description": [
-				{
-					"text": "Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original's current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
-				}
-			]
-		},
-		{
-			"title": "Suction (Ex)",
-			"description": [
-				{
-					"text": "The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding's CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location."
-				}
-			]
-		}
-	]
-},
-{
-	"name": "Gelatinous Cube",
-	"CR": 3,
-	"alignment": "N",
-	"size": "Large",
-	"type": "ooze",
-	"senses": [
-		{
-			"name": "blindsight", 
-			"value": 60,
-			"unit": "ft."
-		}
-	],
-	"optDefense": {
-		"immune": [
-			"electricity",
-			"ooze traits"
-		]
-	},
-	"racialHD": 4,
-	"naturalArmor": 0,
-	"speed": {
-		"land": 15
-	},
-	"space": 10,
-	"reach": 5,
-	"shape": "long",
-	"Str": 10,
-	"Dex": 1,
-	"Con": 26,
-	"Wis": 1,
-	"Cha": 1,
-	"specialCMD": [
-		{
-			"name": "trip",
-			"cantFail": true
-		}
-	],
-	"SQ": [
-			[{"text": "transparent"}]
-		],
-	"baseFort": 1,
-	"baseRef": 1,
-	"baseWill": 1,
-	"melee": {
-		"slam": { 
-			"name": "slam", 
-			"type": "natural", 
-			"nbAttacks": 1, 
-			"nbDice": 1, 
-			"dieType": 6,
-			"extraDamage": ["1d6 acid"]
-		}
-	},
-	"specialAtk": [
-		{
-			"name": "engulf"
-		}, 
-		{
-			"name": "paralysis"
-		}
-	],
-	"environment": "any underground",
-	"organization": "solitary",
-	"treasure": "incidental",
-	"specialAbilities": [
-		{
-			"title": "Acid (Ex)",
-			"description": [
-				{
-					"text": "A gelatinous cube's acid does not harm metal or stone."
-				}
-			]
-		},
-		{
-			"title": "Engulf (Ex)",
-			"description": [
-				{
-					"text": "Although it moves slowly, a gelatinous cube can simply engulf Large or smaller creatures in its path as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make attacks of opportunity against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity can attempt a DC"
-				},
-				{
-					"calc": "DC",
-					"baseStat": "Str"
-				},
-				{
-					"text": "Reflex save to avoid being engulfed—on a success, they are pushed back or aside (opponent's choice) as the cube moves forward. Engulfed creatures are subject to the cube's paralysis and acid, gain the pinned condition, are in danger of suffocating, and are trapped within its body until they are no longer pinned. The save DC is Strength-based."
-				}
-			]
-		},
-		{
-			"title": "Paralysis (Ex)",
-			"description": [
-				{
-					"text": "A gelatinous cube secretes an anesthetizing slime. A target hit by a cube's melee or engulf attack must succeed on a DC"
-				},
-				{
-					"calc": "DC",
-					"baseStat": "Con"
-				},
-				{
-					"text": "Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based."
-				}
-			]
-		},
-		{
-			"title": "Transparent (Ex)",
-			"description": [
-				{
-					"text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
-				}
-			]
-		}
-	]
-},
-{
-	"name": "Gray Ooze",
-	"CR": 4,
-	"alignment": "N",
-	"size": "Medium",
-	"type": "ooze",
-	"senses": [
-		{
-			"name": "blindsight", 
-			"value": 60,
-			"unit": "ft."
-		}
-	],
-	"optDefense": {
-		"abilities": [
-			"ooze traits"
-		],
-		"immune": [
-			"cold",
-			"fire"
-		]
-	},
-	"racialHD": 4,
-	"naturalArmor": 0,
-	"speed": {
-		"land": 10
-	},
-	"shape": "long",
-	"Str": 16,
-	"Dex": 1,
-	"Con": 26,
-	"Wis": 1,
-	"Cha": 1,
-	"specialCMB": [
-			{
-				"name": "grapple",
-				"components": [
-					{
-						"name": "grab",
-						"type": "melee",
-						"bonus": 4
-					}
-				]
-			}
-		],
-	"specialCMD": [
-		{
-			"name": "trip",
-			"cantFail": true
-		}
-	],
-	"SQ": [
-			[{"text": "transparent"}]
-		],
-	"baseFort": 1,
-	"baseRef": 1,
-	"baseWill": 1,
-	"melee": {
-		"slam": { 
-			"name": "slam", 
-			"type": "natural", 
-			"nbAttacks": 1, 
-			"nbDice": 1, 
-			"dieType": 6,
-			"extraDamage": ["1d6 acid", "grab"]
-		}
-	},
-	"specialAtk": [
-		{
-			"name": "acid"
-		}, 
-		{
-			"name": "constrict",
-			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
-			"details": [
-				{
-					"calc": "damage",
-					"type": "weapon",
-					"nbDice": 1,
-					"dieType": 6,
-					"strengthFactor": 0.5
-				},
-				{
-					"text": " plus 1d6 acid"
-				}
-			]
-		}
-	],
-	"environment": "cold marshes and underground",
-	"organization": "solitary",
-	"treasure": "none",
-	"specialAbilities": [
-		{
-			"title": "Acid (Ex)",
-			"description": [
-				{
-					"text": "The digestive acid that covers a gray ooze dissolves metals and organic material, but not stone. Each slam and constrict attack deals 1d6 additional acid damage. Armor or clothing worn by a creature grappled by a gray ooze takes the same amount of acid damage unless the wearer succeeds on a DC"
-				},
-				{
-					"calc": "DC",
-					"baseStat": "Con"
-				},
-				{
-					"text": "Reflex saving throw. A wooden or metal weapon that strikes a gray ooze takes 1d6 acid damage unless the weapon's wielder succeeds on a DC"
-				},
-				{
-					"calc": "DC",
-					"baseStat": "Con"
-				},
-				{
-					"text": "Reflex save. The ooze's touch deals 12 points of acid damage per round to wooden or metal objects, but the ooze must remain in contact with the material for 1 full round in order to deal this damage. The save DCs are Constitution-based."
-				}
-			]
-		},
-		{
-			"title": "Transparent (Ex)",
-			"description": [
-				{
-					"text": "Due to its lack of vivid coloration, a gray ooze is difficult to discern from its surroundings in most environments. A DC 15 Perception check is required to notice the gray ooze. Any creature that fails to notice a gray ooze and walks into it automatically suffers damage as if struck by the ooze's slam attack and is immediately subject to a grab attempt by the ooze."
-				}
-			]
-		}
-	]
-},
-{
-	"name": "Ochre Jelly",
-	"CR": 5,
-	"alignment": "N",
-	"size": "Large",
-	"type": "ooze",
-	"senses": [
-		{
-			"name": "blindsight", 
-			"value": 60,
-			"unit": "ft."
-		}
-	],
-	"optDefense": {
-		"abilities": [
-			"split"
-		],
-		"immune": [
-			"electricity",
-			"mind-affecting effects",
-			"ooze traits",
-			"slashing and piercing damage"
-		]
-	},
-	"racialHD": 6,
-	"naturalArmor": 0,
-	"speed": {
-		"land": 10, 
-		"climb": 10
-	},
-	"space": 10,
-	"reach": 5,
-	"shape": "long",
-	"Str": 14,
-	"Dex": 1,
-	"Con": 22,
-	"Wis": 1,
-	"Cha": 1,
-	"specialCMB": [
-			{
-				"name": "grapple",
-				"components": [
-					{
-						"name": "grab",
-						"type": "melee",
-						"bonus": 4
-					}
-				]
-			}
-		],
-	"specialCMD": [
-		{
-			"name": "trip",
-			"cantFail": true
-		}
-	],
-	"baseFort": 2,
-	"baseRef": 2,
-	"baseWill": 2,
-	"melee": {
-		"slam": { 
-			"name": "slam", 
-			"type": "natural", 
-			"nbAttacks": 1, 
-			"nbDice": 2, 
-			"dieType": 4,
-			"extraDamage": ["1d4 acid", "grab"]
-		}
-	},
-	"specialAtk": [
-		{
-			"name": "constrict",
-			"url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
-			"details": [
-				{
-					"calc": "damage",
-					"type": "weapon",
-					"nbDice": 2,
-					"dieType": 4,
-					"strengthFactor": 1.5
-				},
-				{
-					"text": " plus 1d4 acid"
-				}
-			]
-		}
-	],
-	"environment": "temperate underground or marshes",
-	"organization": "solitary",
-	"treasure": "none",
-	"specialAbilities": [
-		{
-			"title": "Acid (Ex)",
-			"description": [
-				{
-					"text": "An ochre jelly secretes a digestive acid that dissolves only flesh (not bone) when it strikes a foe—creatures not made of flesh (including most constructs and oozes, skeletal undead, plants, and incorporeal creatures) are immune to the ochre jelly's acid damage."
-				}
-			]
-		},
-		{
-			"title": "Split (Ex)",
-			"description": [
-				{
-					"text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
-				}
-			]
-		}
-	]
-},
-{
-	"name": "Wight",
-	"CR": 3,
-	"alignment": "LE",
-	"size": "Medium",
-	"type": "undead",
-	"senses": [
-		{
-			"name": "darkvision", 
-			"value": 60,
-			"unit": "ft."
-		}
-	],
-	"optDefense": {
-		"abilities": [
-			"undead traits"
-		]
-	},
-	"weaknesses": [
-		"resurrection vulnerability"
-	],
-	"racialHD": 4,
-	"naturalArmor": 4,
-	"speed": {
-		"land": 30
-	},
-	"space": 5,
-	"reach": 5,
-	"shape": "tall",
-	"Str": 12,
-	"Dex": 12,
-	"Int": 11,
-	"Wis": 13,
-	"Cha": 15,
-	"languages": "Common",
-	"SQ": [
-			[{"text": "create spawn"}]
-		],
-	"baseFort": 1,
-	"baseRef": 1,
-	"baseWill": 4,
-	"melee": {
-		"slam": { 
-			"name": "slam", 
-			"type": "natural", 
-			"nbAttacks": 1, 
-			"nbDice": 1, 
-			"dieType": 4,
-			"extraDamage": ["energy drain"]
-		}
-	},
-	"specialAtk": [
-		{
-			"name": "create spawn"
-		},
-		{
-			"name": "energy drain",
-			"url": "http://paizo.com/pathfinderRPG/prd/bestiary/universalMonsterRules.html#energy-drain",
-			"details": [
-				{
-					"text": "1 level, DC "
-				},
-				{
-					"calc": "DC",
-					"baseStat": "Cha"
-				}
-			]
-		}
-	],
-	"feats": [
-		{
-			"name": "Blind-Fight",
-			"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#blind-fight"
-		},
-		{
-			"name": "Skill Focus",
-			"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#skill-focus",
-			"details": [
-				{
-					"name": "Perception",
-					"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/skills/perception.html#perception"
-				}
-			]
-		}
-	],
-	"skills": [
-		{
-			"name": "Intimidate",
-			"ranks": 4
-		},
-		{
-			"name": "Knowledge",
-			"specialty": "religion",
-			"ranks": 4
-		},
-		{
-			"name": "Perception",
-			"ranks": 4
-		},
-		{
-			"name": "Stealth",
-			"ranks": 4, 
-			"racial": 8
-		}
-	],
-	"environment": "any",
-	"organization": "solitary, pair, gang (3–6), or pack (7–12)",
-	"treasure": "standard",
-	"specialAbilities": [
-		{
-			"title": "Create Spawn (Su)",
-			"description": [
-				{
-					"text": "Any humanoid creature that is slain by a wight becomes a wight itself in only 1d4 rounds. Spawn so created are less powerful than typical wights, and suffer a –2 penalty on all d20 rolls and checks, as well as –2 hp per HD. Spawn are under the command of the wight that created them and remain enslaved until its death, at which point they lose their spawn penalties and become full-fledged and free-willed wights. They do not possess any of the abilities they had in life."
-				}
-			]
-		},
-		{
-			"title": "Resurrection Vulnerability (Su)",
-			"description": [
-				{
-					"text": "A "
-				},
-				{
-					"text": "raise dead",
-					"url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/spells/raiseDead.html#raise-dead",
-					"isMagic": true
-				},
-				{
-					"text": " or similar spell cast on a wight destroys it (Will negates). Using the spell in this way does not require a material component."
-				}
-			]
-		}
-	]
-}
+  {
+    "name": "Assassin Vine",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "temperate forests",
+    "organization": "solitary, pair, or patch (3-6)",
+    "treasure": "incidental",
+    "type": "plant",
+    "CR": 3,
+    "space": 10,
+    "reach": 10,
+    "racialHD": 4,
+    "Str": 20,
+    "Dex": 10,
+    "Con": 16,
+    "Wis": 13,
+    "Cha": 9,
+    "speed": {
+      "land": 5
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 8,
+        "extraDamage": [
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "camouflage"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 6,
+    "baseFort": 4,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 30,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "electricity",
+        "plant traits"
+      ],
+      "resist": [
+        {
+          "name": "cold",
+          "value": 10
+        },
+        {
+          "name": "fire",
+          "value": 10
+        }
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "constrict",
+        "url": "http://legacy.aonprd.com/bestiary/universalMonsterRules.html#constrict",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 1,
+            "dieType": 8,
+            "strengthFactor": 1.5
+          }
+        ]
+      },
+      {
+        "name": "entangle"
+      }
+    ],
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Camouflage (Ex)",
+        "description": [
+          {
+            "text": "Since an assassin vine looks like a normal plant when at rest, a DC 20 Perception check is required to notice it before it attacks for the first time. Anyone with ranks in Survival or Knowledge (nature) can use either of those skills instead of Perception to notice the plant."
+          }
+        ]
+      },
+      {
+        "title": "Entangle (Su)",
+        "description": [
+          {
+            "text": "An assassin vine can, as a free action, cause plants within 30 feet of it to animate and grasp at foes. This ability is otherwise similar to "
+          },
+          {
+            "text": "entangle",
+            "url": "http://legacy.aonprd.com/coreRulebook/spells/entangle.html#entangle",
+            "isMagic": true
+          },
+          {
+            "text": " (CL 4th, DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Wis"
+          },
+          {
+            "text": "). The save DC is Wisdom-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Aurochs",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "temperate plains",
+    "organization": "solitary, pair, or herd (3-30)",
+    "treasure": "none",
+    "type": "animal",
+    "CR": 2,
+    "space": 10,
+    "reach": 5,
+    "racialHD": 3,
+    "Str": 23,
+    "Dex": 10,
+    "Con": 17,
+    "Wis": 11,
+    "Int": 2,
+    "Cha": 4,
+    "speed": {
+      "land": 40
+    },
+    "feats": [
+      {
+        "name": "Endurance"
+      },
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "gore": {
+        "name": "gore",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "naturalArmor": 4,
+    "baseFort": 3,
+    "baseRef": 3,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "low-light vision"
+      },
+      {
+        "name": "scent"
+      }
+    ],
+    "specialAtk": [
+      {
+        "name": "stampede"
+      },
+      {
+        "name": "trample",
+        "url": "http://legacy.aonprd.com/bestiary/universalMonsterRules.html#trample",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 2,
+            "dieType": 6,
+            "strengthFactor": 1.5
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Str"
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Stampede (Ex)",
+        "description": [
+          {
+            "text": "A stampede occurs if three or more creatures with stampede make a trample attack while remaining adjacent to each other. While stampeding, the creatures can trample foes of their size or smaller, and the trample's save DC increases by +2."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Basidirond",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any non-cold underground",
+    "organization": "solitary, pair, or grove (3-8)",
+    "treasure": "incidental",
+    "type": "plant",
+    "CR": 5,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 7,
+    "Str": 20,
+    "Dex": 13,
+    "Con": 16,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 20
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 8,
+        "extraDamage": [
+          "spores"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 7,
+    "baseFort": 5,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "low-light vision"
+      },
+      {
+        "name": "tremorsense"
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "cold",
+        "plant traits"
+      ]
+    },
+    "weaknesses": [
+      "cold lethargy"
+    ],
+    "specialAtk": [
+      {
+        "name": "hallucination cloud"
+      },
+      {
+        "name": "spores"
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Hallucination Cloud (Ex)",
+        "description": [
+          {
+            "text": "As a standard action once per minute, a basidirond can release a cloud of invisible spores in a 20-foot radius. All creatures within the area must succeed on a DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " Fortitude save or be affected by powerful hallucinations as long as they remain in the cloud plus 1d4 rounds after leaving the area. A new save must be made each round a creature remains within the affected area. A hallucination cloud persists for 5 rounds before dispersing—a strong wind causes it to disperse immediately. The save DC is Constitution-based. To determine what hallucination is suffered each round, roll 1d6 and consult the following table."
+          }
+        ],
+        "extra": [
+          {
+            "type": "table",
+            "hasHeaderRow": true,
+            "hasHeaderCol": true,
+            "content": [
+              [
+                [
+                  {
+                    "text": "d6"
+                  }
+                ],
+                [
+                  {
+                    "text": "Hallucination"
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "1"
+                  }
+                ],
+                [
+                  {
+                    "text": "You're sinking in quicksand! Fall prone and spend 1 round flailing your arms and legs as if trying to swim."
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "2"
+                  }
+                ],
+                [
+                  {
+                    "text": "Attacked by a swarm of spiders! Spend a full round action to attack the floor near you with your weapon."
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "3"
+                  }
+                ],
+                [
+                  {
+                    "text": "An item you hold has turned into a viper! Drop it and flee from the item at top speed for 1 round."
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "4"
+                  }
+                ],
+                [
+                  {
+                    "text": "You're suffocating! Stand in place, hold your breath, and clutch at your throat for 1 round."
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "5"
+                  }
+                ],
+                [
+                  {
+                    "text": "You've shrunk to 1/10th your normal size! Take no actions for 1 round and monsters won't see you."
+                  }
+                ]
+              ],
+              [
+                [
+                  {
+                    "text": "6"
+                  }
+                ],
+                [
+                  {
+                    "text": "You're melting! Grasp hold of yourself in an attempt to hold yourself together, and take no actions for 1 round."
+                  }
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Spores (Ex)",
+        "description": [
+          {
+            "text": "Any creature struck by a basidirond's slam attack is coated with spores. The creature struck must make a DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " Fortitude save or these spores take root in his flesh, and particularly in his lungs. The save DC is Constitution-based."
+          }
+        ],
+        "extra": [
+          {
+            "type": "paragraph",
+            "title": "Basidirond Spores:",
+            "content": [
+              {
+                "text": "Disease—inhaled; "
+              },
+              {
+                "text": "save",
+                "titleLevel": 3
+              },
+              {
+                "text": " Fort DC "
+              },
+              {
+                "calc": "DC",
+                "baseStat": "Con"
+              },
+              {
+                "text": "; "
+              },
+              {
+                "text": "frequency",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1/round for 6 rounds; "
+              },
+              {
+                "text": "effect",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1d2 Con damage; "
+              },
+              {
+                "text": "cure",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1 save."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Cold Lethargy (Ex)",
+        "description": [
+          {
+            "text": "Although a basidirond is immune to cold damage, any cold effect it is exposed to slows it for 1d4 rounds. During this time, the basidirond cannot use its hallucination cloud or spores."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Black Pudding",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Huge",
+    "environment": "any underground",
+    "organization": "solitary",
+    "treasure": "none",
+    "type": "ooze",
+    "CR": 7,
+    "space": 15,
+    "reach": 10,
+    "racialHD": 10,
+    "Str": 16,
+    "Dex": 1,
+    "Con": 22,
+    "Wis": 1,
+    "Cha": 1,
+    "speed": {
+      "land": 20,
+      "climb": 20
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 2,
+        "dieType": 6,
+        "extraDamage": [
+          "2d6 acid",
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "ooze traits"
+        }
+      ],
+      [
+        {
+          "text": "suction"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 3,
+    "baseRef": 3,
+    "baseWill": 3,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "split",
+        "ooze traits"
+      ]
+    },
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "bull rush",
+        "components": [
+          {
+            "name": "Suction",
+            "type": "special ability",
+            "bonus": 10
+          }
+        ]
+      },
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAtk": [
+      {
+        "name": "constrict",
+        "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 2,
+            "dieType": 6,
+            "strengthFactor": 1.5
+          },
+          {
+            "text": " plus 2d6 acid"
+          }
+        ]
+      },
+      {
+        "name": "corrosion"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Acid (Ex)",
+        "description": [
+          {
+            "text": "A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding's acid, its clothing and armor take the same amount of damage from the acid. A DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon's wielder succeeds on a DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based."
+          }
+        ]
+      },
+      {
+        "title": "Corrosion (Ex)",
+        "description": [
+          {
+            "text": "An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor."
+          }
+        ]
+      },
+      {
+        "title": "Split (Ex)",
+        "description": [
+          {
+            "text": "Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original's current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+          }
+        ]
+      },
+      {
+        "title": "Suction (Ex)",
+        "description": [
+          {
+            "text": "The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding's CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Clay Golem",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 10,
+    "space": 10,
+    "reach": 10,
+    "racialHD": 13,
+    "Str": 24,
+    "Dex": 9,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 20
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 2,
+        "dieType": 10,
+        "extraDamage": [
+          "cursed wound"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 16,
+    "baseFort": 4,
+    "baseRef": 4,
+    "baseWill": 4,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "DR": [
+        {
+          "value": 10,
+          "negatedByAny": [
+            "adamantine"
+          ]
+        },
+        {
+          "value": 10,
+          "negatedByAny": [
+            "bludgeoning"
+          ]
+        }
+      ],
+      "immune": [
+        "construct traits",
+        "magic"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "berserk"
+      },
+      {
+        "name": "haste"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Berserk (Ex)",
+        "description": [
+          {
+            "text": "When a clay golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. This chance resets to 0% after one minute of inactivity. A berserk golem attacks the nearest living creature or smashes some object smaller than itself if no creature is within reach. Once it goes berserk, no known method can reestablish control."
+          }
+        ]
+      },
+      {
+        "title": "Cursed Wound (Ex)",
+        "description": [
+          {
+            "text": "The damage a clay golem deals doesn't heal naturally and resists magical healing. A character attempting to use magical healing on a creature damaged by a clay golem must succeed on a DC 26 caster level check, or the healing has no effect on the injured creature."
+          }
+        ]
+      },
+      {
+        "title": "Haste (Su)",
+        "description": [
+          {
+            "text": "After it has engaged in at least 1 round of combat, a clay golem can haste itself once per day as a free action. The effect lasts 3 rounds and is otherwise the same as the spell."
+          }
+        ]
+      },
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A clay golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "A "
+                },
+                {
+                  "text": "move earth",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell drives the golem back 120 feet and deals 3d12 points of damage to it (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "A "
+                },
+                {
+                  "text": "disintegrate",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell slows the golem (as the "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell) for 1d6 rounds and deals 1d12 points of damage (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "An "
+                },
+                {
+                  "text": "earthquake",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell cast directly at a clay golem stops it from moving on its next turn and deals 5d10 points of damage (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "Any magical attack against a clay golem that deals acid damage heals 1 point of damage for every 3 points of damage it would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A clay golem gets no saving throw against magical attacks that deal acid damage."
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Flesh Golem",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "languages": "none",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 7,
+    "space": 10,
+    "reach": 10,
+    "racialHD": 9,
+    "Str": 20,
+    "Dex": 9,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 30
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 2,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 12,
+    "baseFort": 3,
+    "baseRef": 3,
+    "baseWill": 3,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "DR": [
+        {
+          "value": 5,
+          "negatedByAny": [
+            "adamantine"
+          ]
+        }
+      ],
+      "immune": [
+        "construct traits",
+        "magic"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "berserk"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Berserk (Ex)",
+        "description": [
+          {
+            "text": "When a flesh golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. The uncontrolled golem goes on a rampage, attacking the nearest living creature or smashing some object smaller than itself if no creature is within reach, then moving on to spread more destruction. The golem's creator, if within 60 feet, can try to regain control by speaking firmly and persuasively to the golem, which requires a DC 19 Charisma check. It takes 1 minute of inactivity by the golem to reset the golem's berserk chance to 0%."
+          }
+        ]
+      },
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A flesh golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "A magical attack that deals cold or fire damage slows a flesh golem (as the "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell) for 2d6 rounds (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "A magical attack that deals electricity damage breaks any "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " effect on the golem and heals 1 point of damage for every 3 points of damage the attack would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A flesh golem gets no saving throw against attacks that deal electricity damage."
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gelatinous Cube",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "any underground",
+    "organization": "solitary",
+    "treasure": "incidental",
+    "type": "ooze",
+    "CR": 3,
+    "space": 10,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 10,
+    "Dex": 1,
+    "Con": 26,
+    "Wis": 1,
+    "Cha": 1,
+    "speed": {
+      "land": 15
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "extraDamage": [
+          "1d6 acid"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "transparent"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 1,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "electricity",
+        "ooze traits"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "engulf"
+      },
+      {
+        "name": "paralysis"
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Acid (Ex)",
+        "description": [
+          {
+            "text": "A gelatinous cube's acid does not harm metal or stone."
+          }
+        ]
+      },
+      {
+        "title": "Engulf (Ex)",
+        "description": [
+          {
+            "text": "Although it moves slowly, a gelatinous cube can simply engulf Large or smaller creatures in its path as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make attacks of opportunity against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity can attempt a DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Str"
+          },
+          {
+            "text": "Reflex save to avoid being engulfed—on a success, they are pushed back or aside (opponent's choice) as the cube moves forward. Engulfed creatures are subject to the cube's paralysis and acid, gain the pinned condition, are in danger of suffocating, and are trapped within its body until they are no longer pinned. The save DC is Strength-based."
+          }
+        ]
+      },
+      {
+        "title": "Paralysis (Ex)",
+        "description": [
+          {
+            "text": "A gelatinous cube secretes an anesthetizing slime. A target hit by a cube's melee or engulf attack must succeed on a DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based."
+          }
+        ]
+      },
+      {
+        "title": "Transparent (Ex)",
+        "description": [
+          {
+            "text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Gray Ooze",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "cold marshes and underground",
+    "organization": "solitary",
+    "treasure": "none",
+    "type": "ooze",
+    "CR": 4,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 16,
+    "Dex": 1,
+    "Con": 26,
+    "Wis": 1,
+    "Cha": 1,
+    "speed": {
+      "land": 10
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "extraDamage": [
+          "1d6 acid",
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "transparent"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 1,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "ooze traits"
+      ],
+      "immune": [
+        "cold",
+        "fire"
+      ]
+    },
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAtk": [
+      {
+        "name": "acid"
+      },
+      {
+        "name": "constrict",
+        "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 1,
+            "dieType": 6,
+            "strengthFactor": 0.5
+          },
+          {
+            "text": " plus 1d6 acid"
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Acid (Ex)",
+        "description": [
+          {
+            "text": "The digestive acid that covers a gray ooze dissolves metals and organic material, but not stone. Each slam and constrict attack deals 1d6 additional acid damage. Armor or clothing worn by a creature grappled by a gray ooze takes the same amount of acid damage unless the wearer succeeds on a DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "Reflex saving throw. A wooden or metal weapon that strikes a gray ooze takes 1d6 acid damage unless the weapon's wielder succeeds on a DC"
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "Reflex save. The ooze's touch deals 12 points of acid damage per round to wooden or metal objects, but the ooze must remain in contact with the material for 1 full round in order to deal this damage. The save DCs are Constitution-based."
+          }
+        ]
+      },
+      {
+        "title": "Transparent (Ex)",
+        "description": [
+          {
+            "text": "Due to its lack of vivid coloration, a gray ooze is difficult to discern from its surroundings in most environments. A DC 15 Perception check is required to notice the gray ooze. Any creature that fails to notice a gray ooze and walks into it automatically suffers damage as if struck by the ooze's slam attack and is immediately subject to a grab attempt by the ooze."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Iron Cobra",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Small",
+    "environment": "any",
+    "organization": "solitary, pair, or nest (3-10)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 2,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 1,
+    "Str": 12,
+    "Dex": 15,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 40
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "extraDamage": [
+          "poison"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "find target"
+        }
+      ]
+    ],
+    "skills": [
+      {
+        "name": "Stealth",
+        "racial": 6
+      }
+    ],
+    "naturalArmor": 7,
+    "baseFort": 0,
+    "baseRef": 0,
+    "baseWill": 0,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "DR": [
+        {
+          "value": 5
+        }
+      ],
+      "immune": [
+        "construct traits"
+      ],
+      "SR": {
+        "value": 13
+      }
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Find Target (Su)",
+        "description": [
+          {
+            "text": "Once per day, an iron cobra's creator can order it to find and kill a specific creature within 1 mile, which it does as if guided by "
+          },
+          {
+            "text": "discern location",
+            "url": "http://legacy.aonprd.com/coreRulebook/spells/discernLocation.html#discern-location",
+            "isMagic": true
+          },
+          {
+            "text": ". The creator must have seen or be holding an item from the specified creature for this order to function."
+          }
+        ]
+      },
+      {
+        "title": "Poison (Ex)",
+        "description": [
+          {
+            "text": "An iron cobra's bite injects poison from a hidden reservoir within its body. Because it is a construct, the cobra does not naturally produce this poison, and its creator must refill this reservoir manually. The reservoir holds enough poison for 3 successful bite attacks, after which the creature merely deals bite damage. Refilling the reservoir takes 5 rounds and provokes attacks of opportunity. The creator can fill the reservoir with any injury poison (typically black adder venom), though acid, alchemical substances, and even stranger liquids have been used."
+          }
+        ],
+        "extra": [
+          {
+            "type": "paragraph",
+            "title": "Black Adder Venom:",
+            "content": [
+              {
+                "text": "Bite—injury; "
+              },
+              {
+                "text": "save",
+                "titleLevel": 3
+              },
+              {
+                "text": " Fort DC "
+              },
+              {
+                "calc": "DC",
+                "baseStat": "Con"
+              },
+              {
+                "text": "; "
+              },
+              {
+                "text": "frequency",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1/round for 6 rounds; "
+              },
+              {
+                "text": "effect",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1d2 Con damage; "
+              },
+              {
+                "text": "cure",
+                "titleLevel": 3
+              },
+              {
+                "text": " 1 save."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ochre Jelly",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "temperate underground or marshes",
+    "organization": "solitary",
+    "treasure": "none",
+    "type": "ooze",
+    "CR": 5,
+    "space": 10,
+    "reach": 5,
+    "racialHD": 6,
+    "Str": 14,
+    "Dex": 1,
+    "Con": 22,
+    "Wis": 1,
+    "Cha": 1,
+    "speed": {
+      "land": 10,
+      "climb": 10
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 2,
+        "dieType": 4,
+        "extraDamage": [
+          "1d4 acid",
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 2,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "split"
+      ],
+      "immune": [
+        "electricity",
+        "mind-affecting effects",
+        "ooze traits",
+        "slashing and piercing damage"
+      ]
+    },
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAtk": [
+      {
+        "name": "constrict",
+        "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 2,
+            "dieType": 4,
+            "strengthFactor": 1.5
+          },
+          {
+            "text": " plus 1d4 acid"
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Acid (Ex)",
+        "description": [
+          {
+            "text": "An ochre jelly secretes a digestive acid that dissolves only flesh (not bone) when it strikes a foe—creatures not made of flesh (including most constructs and oozes, skeletal undead, plants, and incorporeal creatures) are immune to the ochre jelly's acid damage."
+          }
+        ]
+      },
+      {
+        "title": "Split (Ex)",
+        "description": [
+          {
+            "text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Stone Golem",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 11,
+    "space": 10,
+    "reach": 10,
+    "racialHD": 14,
+    "Str": 28,
+    "Dex": 9,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 20
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 2,
+        "dieType": 10,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 18,
+    "baseFort": 4,
+    "baseRef": 4,
+    "baseWill": 4,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "DR": [
+        {
+          "value": 10,
+          "negatedByAny": [
+            "adamantine"
+          ]
+        }
+      ],
+      "immune": [
+        "construct traits",
+        "magic"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "slow"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A stone golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "A "
+                },
+                {
+                  "text": "transmute rock to mud",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell slows a stone golem (as the "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell) for 2d6 rounds, with no saving throw, while "
+                },
+                {
+                  "text": "transmute mud to rock",
+                  "isMagic": true
+                },
+                {
+                  "text": " heals all of its lost hit points."
+                }
+              ],
+              [
+                {
+                  "text": "A "
+                },
+                {
+                  "text": "stone to flesh",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell does not actually change the golem's structure but negates its damage reduction and immunity to magic for 1 full round."
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Slow (Su)",
+        "description": [
+          {
+            "text": "A stone golem can use a slow effect, as the spell, as a free action once every 2 rounds. The effect has a range of 10 feet in a burst centered on the golem and a duration of 7 rounds, requiring a DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " Will save to negate. The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Toad",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Diminutive",
+    "environment": "temperate and warm forests",
+    "organization": "solitary, pair, or knot (3-100)",
+    "treasure": "none",
+    "type": "animal",
+    "CR": "1/8",
+    "space": 1,
+    "reach": 0,
+    "racialHD": 1,
+    "Str": 1,
+    "Dex": 12,
+    "Con": 6,
+    "Wis": 15,
+    "Int": 1,
+    "Cha": 4,
+    "speed": {
+      "land": 5
+    },
+    "feats": [
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          }
+        ]
+      }
+    ],
+    "melee": {},
+    "skills": [
+      {
+        "name": "Stealth",
+        "racial": 4,
+        "ranks": 1
+      }
+    ],
+    "naturalArmor": 0,
+    "baseFort": 2,
+    "baseRef": 2,
+    "baseWill": 0,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "low-light vision"
+      },
+      {
+        "name": "scent"
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Violet Fungus",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any underground",
+    "organization": "solitary, pair, or grove (3-12)",
+    "treasure": "incidental",
+    "type": "plant",
+    "CR": 3,
+    "space": 5,
+    "reach": 10,
+    "racialHD": 4,
+    "Str": 12,
+    "Dex": 8,
+    "Con": 16,
+    "Wis": 11,
+    "Cha": 9,
+    "speed": {
+      "land": 10
+    },
+    "feats": [],
+    "melee": {
+      "tentacle": {
+        "name": "tentacle",
+        "nbAttacks": 4,
+        "nbDice": 1,
+        "dieType": 4,
+        "extraDamage": [
+          "rot"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 6,
+    "baseFort": 4,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "plant traits"
+      ]
+    },
+    "specialAbilities": [
+      {
+        "title": "Rot (Ex)",
+        "description": [
+          {
+            "text": "A creature struck by a violet fungus's tentacle must succeed on a DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " Fortitude save or the flesh around the point of contact swiftly begins to rot away, exposing raw bone with shocking swiftness. This hideous affliction causes 1d4 points of Strength damage and 1d4 points of Constitution damage. This is a poison effect. The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Wight",
+    "source": "PFRPG Bestiary",
+    "alignment": "LE",
+    "size": "Medium",
+    "environment": "any",
+    "organization": "solitary, pair, gang (3-6), or pack (7-12)",
+    "languages": "Common",
+    "treasure": "standard",
+    "type": "undead",
+    "CR": 3,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 12,
+    "Dex": 12,
+    "Wis": 13,
+    "Int": 11,
+    "Cha": 15,
+    "speed": {
+      "land": 30
+    },
+    "feats": [
+      {
+        "name": "Blind-Fight"
+      },
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "extraDamage": [
+          "energy drain"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "create spawn"
+        }
+      ]
+    ],
+    "skills": [
+      {
+        "name": "Intimidate",
+        "ranks": 4
+      },
+      {
+        "name": "Knowledge",
+        "specialty": "religion",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "racial": 8,
+        "ranks": 4
+      }
+    ],
+    "naturalArmor": 4,
+    "baseFort": 1,
+    "baseRef": 1,
+    "baseWill": 4,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "undead traits"
+      ]
+    },
+    "weaknesses": [
+      "resurrection vulnerability"
+    ],
+    "specialAtk": [
+      {
+        "name": "create spawn"
+      },
+      {
+        "name": "energy drain",
+        "url": "http://paizo.com/pathfinderRPG/prd/bestiary/universalMonsterRules.html#energy-drain",
+        "details": [
+          {
+            "text": "1 level, DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Cha"
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Create Spawn (Su)",
+        "description": [
+          {
+            "text": "Any humanoid creature that is slain by a wight becomes a wight itself in only 1d4 rounds. Spawn so created are less powerful than typical wights, and suffer a –2 penalty on all d20 rolls and checks, as well as –2 hp per HD. Spawn are under the command of the wight that created them and remain enslaved until its death, at which point they lose their spawn penalties and become full-fledged and free-willed wights. They do not possess any of the abilities they had in life."
+          }
+        ]
+      },
+      {
+        "title": "Resurrection Vulnerability (Su)",
+        "description": [
+          {
+            "text": "A "
+          },
+          {
+            "text": "raise dead",
+            "url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/spells/raiseDead.html#raise-dead",
+            "isMagic": true
+          },
+          {
+            "text": " or similar spell cast on a wight destroys it (Will negates). Using the spell in this way does not require a material component."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Wood Golem",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 6,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 8,
+    "Str": 18,
+    "Dex": 17,
+    "Wis": 17,
+    "Cha": 1,
+    "speed": {
+      "land": 30
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 2,
+        "dieType": 6,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 6,
+    "baseFort": 2,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "DR": [
+        {
+          "value": 5,
+          "negatedByAny": [
+            "adamantine"
+          ]
+        }
+      ],
+      "immune": [
+        "construct traits",
+        "magic"
+      ]
+    },
+    "weaknesses": [
+      "vulnerable to fire"
+    ],
+    "specialAtk": [
+      {
+        "name": "splintering"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A wood golem is immune to any spell or spell-like ability that allows spell resistance, with the exception of spells and spell-like abilities that have the Fire descriptor, which affect it normally. In addition, certain spells and effects function differently against the creature, as noted below."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "Warp wood",
+                  "isMagic": true
+                },
+                {
+                  "text": " or "
+                },
+                {
+                  "text": "wood shape",
+                  "isMagic": true
+                },
+                {
+                  "text": " slows a wood golem (as the "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell) for 2d6 rounds (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "Repel wood",
+                  "isMagic": true
+                },
+                {
+                  "text": " drives the golem back 60 feet and deals 2d12 points of damage to it (no save)."
+                }
+              ],
+              [
+                {
+                  "text": "A magical attack that deals cold damage breaks any "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " effect on the golem and heals 1 point of damage for every 3 points of damage the attack would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A wood golem gets no saving throw against attacks that deal cold damage."
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Splintering (Su)",
+        "description": [
+          {
+            "text": "As a free action once every 1d4+1 rounds, a wood golem can launch a barrage of razor-sharp wooden splinters from its body in a 20-foot-radius burst. All creatures caught within this area take 6d6 points of slashing damage (Reflex DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " halves). The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Worg",
+    "source": "PFRPG Bestiary",
+    "alignment": "NE",
+    "size": "Medium",
+    "environment": "temperate forests and plains",
+    "organization": "solitary, pair, or pack (3-11)",
+    "languages": "Common, Goblin",
+    "treasure": "incidental",
+    "type": "magical beast",
+    "CR": 2,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 17,
+    "Dex": 15,
+    "Con": 13,
+    "Wis": 14,
+    "Int": 6,
+    "Cha": 10,
+    "speed": {
+      "land": 50
+    },
+    "feats": [
+      {
+        "name": "Run"
+      },
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "extraDamage": [
+          "trip"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "racial": 2,
+        "ranks": 1
+      },
+      {
+        "name": "Stealth",
+        "racial": 2,
+        "ranks": 2
+      },
+      {
+        "name": "Survival",
+        "racial": 2,
+        "ranks": 1
+      }
+    ],
+    "naturalArmor": 2,
+    "baseFort": 4,
+    "baseRef": 4,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      },
+      {
+        "name": "scent"
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 4
+          }
+        ]
+      }
+    ]
+  }
 ]

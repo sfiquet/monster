@@ -1,0 +1,66 @@
+{
+  "name": "Flesh Golem",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "DR": [
+      {
+        "value": 5,
+        "negatedByAny": ["adamantine"]
+      }
+    ],
+    "immune": [
+      "construct traits",
+      "magic"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "berserk"
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Berserk (Ex)",
+      "description": [
+        {
+          "text": "When a flesh golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. The uncontrolled golem goes on a rampage, attacking the nearest living creature or smashing some object smaller than itself if no creature is within reach, then moving on to spread more destruction. The golem's creator, if within 60 feet, can try to regain control by speaking firmly and persuasively to the golem, which requires a DC 19 Charisma check. It takes 1 minute of inactivity by the golem to reset the golem's berserk chance to 0%."
+        }
+      ]
+    },
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A flesh golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+        }
+      ],
+      "extra": [
+        {
+          "type": "list",
+          "content": [
+            [
+              {"text": "A magical attack that deals cold or fire damage slows a flesh golem (as the "},
+              {"text": "slow", "isMagic": true},
+              {"text": " spell) for 2d6 rounds (no save)."}
+            ],
+            [
+              {"text": "A magical attack that deals electricity damage breaks any "},
+              {"text": "slow", "isMagic": true},
+              {"text": " effect on the golem and heals 1 point of damage for every 3 points of damage the attack would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A flesh golem gets no saving throw against attacks that deal electricity damage."}
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

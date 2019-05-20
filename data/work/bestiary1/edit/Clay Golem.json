@@ -1,0 +1,127 @@
+{
+  "name": "Clay Golem",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "DR": [
+      {
+        "value": 10,
+        "negatedByAny": ["adamantine"]
+      },
+      {
+        "value": 10,
+        "negatedByAny": ["bludgeoning"]
+      }
+    ],
+    "immune": [
+      "construct traits",
+      "magic"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "berserk"
+    },
+    {
+      "name": "haste"
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Berserk (Ex)",
+      "description": [
+        {
+          "text": "When a clay golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. This chance resets to 0% after one minute of inactivity. A berserk golem attacks the nearest living creature or smashes some object smaller than itself if no creature is within reach. Once it goes berserk, no known method can reestablish control."
+        }
+      ]
+    },
+    {
+      "title": "Cursed Wound (Ex)",
+      "description": [
+        {
+          "text": "The damage a clay golem deals doesn't heal naturally and resists magical healing. A character attempting to use magical healing on a creature damaged by a clay golem must succeed on a DC 26 caster level check, or the healing has no effect on the injured creature."
+        }
+      ]
+    },
+    {
+      "title": "Haste (Su)",
+      "description": [
+        {
+          "text": "After it has engaged in at least 1 round of combat, a clay golem can haste itself once per day as a free action. The effect lasts 3 rounds and is otherwise the same as the spell."
+        }
+      ]
+    },
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A clay golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+        }
+      ],
+      "extra": [
+        {
+          "type": "list",
+          "content": [
+            [
+              {
+                "text": "A "
+              },
+              {
+                "text": "move earth",
+                "isMagic": true
+              },
+              {
+                "text": " spell drives the golem back 120 feet and deals 3d12 points of damage to it (no save)."
+              }
+            ],
+            [
+              {
+                "text": "A "
+              },
+              {
+                "text": "disintegrate",
+                "isMagic": true
+              },
+              {
+                "text": " spell slows the golem (as the "
+              },
+              {
+                "text": "slow",
+                "isMagic": true
+              },
+              {
+                "text": " spell) for 1d6 rounds and deals 1d12 points of damage (no save)."
+              }
+            ],
+            [
+              {
+                "text": "An "
+              },
+              {
+                "text": "earthquake",
+                "isMagic": true
+              },
+              {
+                "text": " spell cast directly at a clay golem stops it from moving on its next turn and deals 5d10 points of damage (no save)."
+              }
+            ],
+            [
+              {
+                "text": "Any magical attack against a clay golem that deals acid damage heals 1 point of damage for every 3 points of damage it would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A clay golem gets no saving throw against magical attacks that deal acid damage."
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

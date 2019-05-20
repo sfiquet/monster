@@ -1,0 +1,75 @@
+{
+  "name": "Ochre Jelly",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "split"
+    ],
+    "immune": [
+      "electricity",
+      "mind-affecting effects",
+      "ooze traits",
+      "slashing and piercing damage"
+    ]
+  },
+  "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAtk": [
+    {
+      "name": "constrict",
+      "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 2,
+          "dieType": 4,
+          "strengthFactor": 1.5
+        },
+        {
+          "text": " plus 1d4 acid"
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "An ochre jelly secretes a digestive acid that dissolves only flesh (not bone) when it strikes a foe—creatures not made of flesh (including most constructs and oozes, skeletal undead, plants, and incorporeal creatures) are immune to the ochre jelly's acid damage."
+        }
+      ]
+    },
+    {
+      "title": "Split (Ex)",
+      "description": [
+        {
+          "text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+        }
+      ]
+    }
+  ]
+}

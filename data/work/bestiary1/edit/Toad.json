@@ -1,0 +1,23 @@
+{
+  "name": "Toad",
+  "senses": [
+    {
+      "name": "low-light vision"
+    },
+    {
+      "name": "scent"
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 4
+        }
+      ]
+    }
+  ]
+}

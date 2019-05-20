@@ -1,0 +1,28 @@
+{
+  "name": "Worg",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    },
+    {
+      "name": "scent"
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 4
+        }
+      ]
+    }
+  ]
+}

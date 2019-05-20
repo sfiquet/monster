@@ -1,0 +1,31 @@
+{
+  "name": "Violet Fungus",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "plant traits"
+    ]
+  },
+  "specialAbilities": [
+    {
+      "title": "Rot (Ex)",
+      "description": [
+        {
+          "text": "A creature struck by a violet fungus's tentacle must succeed on a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Fortitude save or the flesh around the point of contact swiftly begins to rot away, exposing raw bone with shocking swiftness. This hideous affliction causes 1d4 points of Strength damage and 1d4 points of Constitution damage. This is a poison effect. The save DC is Constitution-based."
+        }
+      ]
+    }
+  ]  
+}

@@ -1,0 +1,77 @@
+{
+  "name": "Stone Golem",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "DR": [
+      {
+        "value": 10,
+        "negatedByAny": ["adamantine"]
+      }
+    ],
+    "immune": [
+      "construct traits",
+      "magic"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "slow"
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A stone golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below."
+        }
+      ],
+      "extra": [
+        {
+          "type": "list",
+          "content": [
+            [
+              {"text": "A "},
+              {"text": "transmute rock to mud", "isMagic": true},
+              {"text": " spell slows a stone golem (as the "},
+              {"text": "slow", "isMagic": true},
+              {"text": " spell) for 2d6 rounds, with no saving throw, while "},
+              {"text": "transmute mud to rock", "isMagic": true},
+              {"text": " heals all of its lost hit points."}
+            ],
+            [
+              {"text": "A "},
+              {"text": "stone to flesh", "isMagic": true},
+              {"text": " spell does not actually change the golem's structure but negates its damage reduction and immunity to magic for 1 full round."}
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Slow (Su)",
+      "description": [
+        {
+          "text": "A stone golem can use a slow effect, as the spell, as a free action once every 2 rounds. The effect has a range of 10 feet in a burst centered on the golem and a duration of 7 rounds, requiring a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Will save to negate. The save DC is Constitution-based."
+        }
+      ]
+    }
+  ]  
+}

@@ -1,0 +1,140 @@
+{
+  "name": "Basidirond",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "low-light vision"
+    },
+    {
+      "name": "tremorsense"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "cold",
+      "plant traits"
+    ]
+  },
+  "weaknesses": [
+    "cold lethargy"
+  ],
+  "specialAtk":[
+    {
+      "name": "hallucination cloud"
+    },
+    {
+      "name": "spores"
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Hallucination Cloud (Ex)",
+      "description": [
+        {
+          "text": "As a standard action once per minute, a basidirond can release a cloud of invisible spores in a 20-foot radius. All creatures within the area must succeed on a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Fortitude save or be affected by powerful hallucinations as long as they remain in the cloud plus 1d4 rounds after leaving the area. A new save must be made each round a creature remains within the affected area. A hallucination cloud persists for 5 rounds before dispersing—a strong wind causes it to disperse immediately. The save DC is Constitution-based. To determine what hallucination is suffered each round, roll 1d6 and consult the following table."
+        }
+      ],
+      "extra": [
+        {
+          "type": "table",
+          "hasHeaderRow": true,
+          "hasHeaderCol": true,
+          "content": [
+            [
+              [{"text": "d6"}], 
+              [{"text": "Hallucination"}]
+            ],
+            [
+              [{"text": "1"}], 
+              [{"text": "You're sinking in quicksand! Fall prone and spend 1 round flailing your arms and legs as if trying to swim."}]
+            ],
+            [
+              [{"text": "2"}], 
+              [{"text": "Attacked by a swarm of spiders! Spend a full round action to attack the floor near you with your weapon."}]
+            ],
+            [
+              [{"text": "3"}], 
+              [{"text": "An item you hold has turned into a viper! Drop it and flee from the item at top speed for 1 round."}]
+            ],
+            [
+              [{"text": "4"}], 
+              [{"text": "You're suffocating! Stand in place, hold your breath, and clutch at your throat for 1 round."}]
+            ],
+            [
+              [{"text": "5"}], 
+              [{"text": "You've shrunk to 1/10th your normal size! Take no actions for 1 round and monsters won't see you."}]
+            ],
+            [
+              [{"text": "6"}], 
+              [{"text": "You're melting! Grasp hold of yourself in an attempt to hold yourself together, and take no actions for 1 round."}]
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Spores (Ex)",
+      "description": [
+        {
+          "text": "Any creature struck by a basidirond's slam attack is coated with spores. The creature struck must make a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Fortitude save or these spores take root in his flesh, and particularly in his lungs. The save DC is Constitution-based."
+        }
+      ],
+      "extra": [
+        {
+          "type": "paragraph",
+          "title": "Basidirond Spores:",
+          "content": [
+            {"text": "Disease—inhaled; "},
+            {"text": "save", "titleLevel": 3},
+            {"text": " Fort DC "},
+            {
+              "calc": "DC",
+              "baseStat": "Con"
+            },
+            {"text": "; "},
+            {"text": "frequency", "titleLevel": 3},
+            {"text": " 1/round for 6 rounds; "},
+            {"text": "effect", "titleLevel": 3},
+            {"text": " 1d2 Con damage; "},
+            {"text": "cure", "titleLevel": 3},
+            {"text": " 1 save."}
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cold Lethargy (Ex)",
+      "description": [
+        {
+          "text": "Although a basidirond is immune to cold damage, any cold effect it is exposed to slows it for 1d4 rounds. During this time, the basidirond cannot use its hallucination cloud or spores."
+        }
+      ]
+    }
+  ]
+}

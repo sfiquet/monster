@@ -1,0 +1,80 @@
+{
+  "name": "Iron Cobra",
+  "senses": [
+    {
+      "name": "darkvision",
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "DR": [
+      {
+        "value": 5
+      }
+    ],
+    "immune": [
+      "construct traits"
+    ],
+    "SR": {
+      "value": 13
+    }
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Find Target (Su)",
+      "description": [
+        {
+          "text": "Once per day, an iron cobra's creator can order it to find and kill a specific creature within 1 mile, which it does as if guided by "
+        },
+        {
+          "text": "discern location",
+          "url": "http://legacy.aonprd.com/coreRulebook/spells/discernLocation.html#discern-location",
+          "isMagic": true
+        },
+        {
+          "text": ". The creator must have seen or be holding an item from the specified creature for this order to function."
+        }
+      ]
+    },
+    {
+      "title": "Poison (Ex)",
+      "description": [
+        {
+          "text": "An iron cobra's bite injects poison from a hidden reservoir within its body. Because it is a construct, the cobra does not naturally produce this poison, and its creator must refill this reservoir manually. The reservoir holds enough poison for 3 successful bite attacks, after which the creature merely deals bite damage. Refilling the reservoir takes 5 rounds and provokes attacks of opportunity. The creator can fill the reservoir with any injury poison (typically black adder venom), though acid, alchemical substances, and even stranger liquids have been used."
+        }
+      ],
+      "extra": [
+        {
+          "type": "paragraph",
+          "title": "Black Adder Venom:",
+          "content": [
+            {"text": "Bite—injury; "},
+            {"text": "save", "titleLevel": 3},
+            {"text": " Fort DC "},
+            {
+              "calc": "DC",
+              "baseStat": "Con"
+            },
+            {"text": "; "},
+            {"text": "frequency", "titleLevel": 3},
+            {"text": " 1/round for 6 rounds; "},
+            {"text": "effect", "titleLevel": 3},
+            {"text": " 1d2 Con damage; "},
+            {"text": "cure", "titleLevel": 3},
+            {"text": " 1 save."}
+          ]
+        }
+      ]
+    }
+  ]  
+}

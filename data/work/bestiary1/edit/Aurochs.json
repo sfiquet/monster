@@ -1,0 +1,55 @@
+{
+  "name": "Aurochs",
+  "senses": [
+    {
+      "name": "low-light vision"
+    },
+    {
+      "name": "scent"
+    }
+  ],
+  "specialAtk": [
+    {
+      "name": "stampede"
+    },
+    {
+      "name": "trample",
+      "url": "http://legacy.aonprd.com/bestiary/universalMonsterRules.html#trample",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 2,
+          "dieType": 6,
+          "strengthFactor": 1.5
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Stampede (Ex)",
+      "description": [
+        {
+          "text": "A stampede occurs if three or more creatures with stampede make a trample attack while remaining adjacent to each other. While stampeding, the creatures can trample foes of their size or smaller, and the trample's save DC increases by +2."
+        }
+      ]
+    }
+  ]
+}

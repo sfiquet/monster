@@ -1,6 +1,8 @@
 /* jshint node: true */
 "use strict";
 
+const Monster = require('./monster');
+
 /*
  * Giant Template
  */
@@ -19,12 +21,15 @@ exports.isCompatible = function(monster) {
 	return true;
 };
 
-exports.apply = function(monster) {
-	var weapon,
-		dice,
-		oldSize,
-		size,
-		index;
+exports.apply = function(baseMonster) {
+	let weapon;
+	let dice;
+
+	if (baseMonster === null || !exports.isCompatible(baseMonster)){
+		return null;
+	}
+
+	let monster = new Monster(baseMonster);
 
 	// increase CR by step for fractions
 	monster.CR = ref.getCR(ref.getCRId(monster.CR) + 1);
@@ -52,7 +57,7 @@ exports.apply = function(monster) {
 	}
 
 	// increase size by one category
-	oldSize = monster.size;
+	const oldSize = monster.size;
 	monster.size = ref.getNextSizeUp(monster.size);
 
 	// adjust the resulting space
@@ -60,4 +65,8 @@ exports.apply = function(monster) {
 
 	// adjust the resulting reach
 	monster.reach = sizeLib.calculateReach(oldSize, monster.size, monster.reach, monster.shape);
+
+	return monster;
 };
+
+exports.getErrorMessage = () => 'Cannot apply the Giant template on a Colossal creature';

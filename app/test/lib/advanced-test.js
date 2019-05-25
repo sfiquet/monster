@@ -34,30 +34,56 @@ var cubeLiteral = {
 	};
 
 describe('Advanced Template', function(){
+	
 	describe('isCompatible', function(){
+		
 		it('always returns true for Advanced', function(){
 			var monster;
 			monster = new Monster(cubeLiteral);
 			expect(advanced.isCompatible(monster)).to.be.true;
 		});
 	});
+
 	describe('apply', function(){
-		it('increases the CR by one step including for fractions', function(){
-			var monster;
-			monster = new Monster(cubeLiteral);
-			monster.CR = '1/8';
-			advanced.apply(monster);
-			expect(monster.CR).to.equal('1/6');
-			monster.CR = '1/2';
-			advanced.apply(monster);
-			expect(monster.CR).to.equal(1);
-			advanced.apply(monster);
-			expect(monster.CR).to.equal(2);
+
+		it('returns null when the given monster is null', () => {
+			expect(advanced.apply(null)).to.be.null;
 		});
-		it('modifies the given monster according to the Advanced pattern', function(){
-			var monster;
+
+		it('returns a new monster, leaving the original untouched', () => {
+			const monster = new Monster();
+			const monsterCopy = new Monster(monster);
+			expect(monster).to.deep.equal(monsterCopy);
+
+			const result = advanced.apply(monster);
+			
+			expect(result).to.be.an('object');
+			expect(result).to.not.equal(monster);
+			expect(monster).to.deep.equal(monsterCopy);
+		});
+
+		it('increases the CR by one step including for fractions', function(){
+			let monster;
+			let newMonster;
 			monster = new Monster(cubeLiteral);
-			advanced.apply(monster);
+			
+			monster.CR = '1/8';
+			newMonster = advanced.apply(monster);
+			expect(newMonster.CR).to.equal('1/6');
+
+			monster.CR = '1/2';
+			newMonster = advanced.apply(monster);
+			expect(newMonster.CR).to.equal(1);
+			
+			monster.CR = 1;
+			newMonster = advanced.apply(monster);
+			expect(newMonster.CR).to.equal(2);
+		});
+
+		it('modifies the given monster according to the Advanced pattern', function(){
+			const baseMonster = new Monster(cubeLiteral);
+			const monster = advanced.apply(baseMonster);
+
 			expect(monster.CR).to.equal(4);
 			expect(monster.naturalArmor).to.equal(2);
 			expect(monster.Str).to.equal(14);
@@ -83,18 +109,30 @@ describe('Advanced Template', function(){
 			expect(monster.getMeleeWeaponAttackBonus('slam')).to.equal(4);
 			expect(monster.getMeleeWeaponDamageBonus('slam')).to.equal(3);
 		});
+
 		it('doesn\'t increase Int if 2 or less', function(){
-			var monster;
+			let monster;
+			let newMonster;
 			monster = new Monster(cubeLiteral);
+			
 			monster.Int = 1;
-			advanced.apply(monster);
-			expect(monster.Int).to.equal(1);
+			newMonster = advanced.apply(monster);
+			expect(newMonster.Int).to.equal(1);
+			
 			monster.Int = 2;
-			advanced.apply(monster);
-			expect(monster.Int).to.equal(2);
+			newMonster = advanced.apply(monster);
+			expect(newMonster.Int).to.equal(2);
+			
 			monster.Int = 3;
-			advanced.apply(monster);
-			expect(monster.Int).to.equal(7);
+			newMonster = advanced.apply(monster);
+			expect(newMonster.Int).to.equal(7);
+		});
+	});
+
+	describe('getErrorMessage', () => {
+		
+		it('returns an empty string since there is no incompatible creature', () => {
+			expect(advanced.getErrorMessage()).to.equal('');
 		});
 	});
 });

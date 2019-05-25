@@ -38,205 +38,229 @@ describe('Giant Template', function(){
 
 	describe('apply', function(){
 
+		it('returns null when the given monster is null', () => {
+			expect(giant.apply(null)).to.be.null;
+		});
+
+		it('returns null if the template cannot be applied to the monster', () => {
+			const stats = {size: 'Colossal'};
+			const monster = new Monster(stats);
+			expect(giant.apply(monster)).to.be.null;
+			// monster is not mutated
+			expect(monster).to.deep.equal(new Monster(stats));
+		});
+
+		it('returns a new monster if the template was applied to the monster', () => {
+			const stats = {size: 'Gargantuan', Str: 18, Dex: 16, Con: 14};
+			const monster = new Monster(stats);
+			const newMonster = giant.apply(monster);
+			
+			expect(newMonster).to.be.an('object');
+			expect(newMonster.size).to.equal('Colossal');
+			// monster is not mutated
+			expect(monster).to.deep.equal(new Monster(stats));
+		});
+
 		it('increases the CR by one step including for fractions', function(){
-			var monster;
+			let monster;
+			let newMonster;
 			monster = new Monster();
+
 			monster.CR = '1/8';
-			giant.apply(monster);
-			expect(monster.CR).to.equal('1/6');
+			newMonster = giant.apply(monster);
+			expect(newMonster.CR).to.equal('1/6');
+
 			monster.CR = '1/2';
-			giant.apply(monster);
-			expect(monster.CR).to.equal(1);
-			giant.apply(monster);
-			expect(monster.CR).to.equal(2);
+			newMonster = giant.apply(monster);
+			expect(newMonster.CR).to.equal(1);
+
+			monster.CR = 1;
+			newMonster = giant.apply(monster);
+			expect(newMonster.CR).to.equal(2);
 		});
 
 		it('adds 4 to the Strength', function(){
-			var monster = new Monster({Str: 10});
-			expect(monster.Str).to.equal(10);
-			giant.apply(monster);
-			expect(monster.Str).to.equal(14);
+			const monster = new Monster({Str: 10});
+			const newMonster = giant.apply(monster);
+			expect(newMonster.Str).to.equal(14);
 		});
 
 		it('adds 4 to the Constitution', function(){
-			var monster = new Monster({Con: 10});
-			expect(monster.Con).to.equal(10);
-			giant.apply(monster);
-			expect(monster.Con).to.equal(14);
+			const monster = new Monster({Con: 10});
+			const newMonster = giant.apply(monster);
+			expect(newMonster.Con).to.equal(14);
 		});
 
 		it('has no effect on an undead\'s Constitution or Charisma', function(){
-			var monster = new Monster({type: 'undead', Cha: 10});
+			const monster = new Monster({type: 'undead', Cha: 10});
 			expect(monster.Con).to.be.undefined;
 			expect(monster.Cha).to.equal(10);
-			giant.apply(monster);
-			expect(monster.Con).to.be.undefined;
-			expect(monster.Cha).to.equal(10);
+			const newMonster = giant.apply(monster);
+			expect(newMonster.Con).to.be.undefined;
+			expect(newMonster.Cha).to.equal(10);
 		});
 
 		it('subtracts 2 from the Dexterity', function(){
-			var monster = new Monster({Dex: 10});
-			expect(monster.Dex).to.equal(10);
-			giant.apply(monster);
-			expect(monster.Dex).to.equal(8);
+			const monster = new Monster({Dex: 10});
+			const newMonster = giant.apply(monster);
+			expect(newMonster.Dex).to.equal(8);
 		});
 
 		it('doesn\'t reduce the Dex beyond 1', function(){
-			var monster = new Monster({Dex: 1});
-			expect(monster.Dex).to.equal(1);
-			giant.apply(monster);
-			expect(monster.Dex).to.equal(1);
+			let monster = new Monster({Dex: 1});
+			let newMonster = giant.apply(monster);
+			expect(newMonster.Dex).to.equal(1);
 
 			monster = new Monster({Dex: 2});
-			expect(monster.Dex).to.equal(2);
-			giant.apply(monster);
-			expect(monster.Dex).to.equal(1);
+			newMonster = giant.apply(monster);
+			expect(newMonster.Dex).to.equal(1);
 		});
 
 		it('increases the size by one category', function(){
-			var monster = new Monster({size: 'Fine'});
-			giant.apply(monster);
-			expect(monster.size).to.equal('Diminutive');
+			let monster = new Monster({size: 'Fine'});
+			let newMonster = giant.apply(monster);
+			expect(newMonster.size).to.equal('Diminutive');
 
 			monster = new Monster({size: 'Medium'});
-			giant.apply(monster);
-			expect(monster.size).to.equal('Large');
+			newMonster = giant.apply(monster);
+			expect(newMonster.size).to.equal('Large');
 			
 			monster = new Monster({size: 'Gargantuan'});
-			giant.apply(monster);
-			expect(monster.size).to.equal('Colossal');
+			newMonster = giant.apply(monster);
+			expect(newMonster.size).to.equal('Colossal');
 		});
 
 		it('changes the space to reflect the new size', function(){
-			var monster = new Monster({size: 'Fine', space: 0.5});
-			giant.apply(monster);
-			expect(monster.space).to.equal(1);
+			let monster = new Monster({size: 'Fine', space: 0.5});
+			let newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(1);
 
 			monster = new Monster({size: 'Medium', space: 5});
-			giant.apply(monster);
-			expect(monster.space).to.equal(10);
+			newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(10);
 			
 			monster = new Monster({size: 'Gargantuan', space: 20});
-			giant.apply(monster);
-			expect(monster.space).to.equal(30);
+			newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(30);
 		});
 
 		it('uses the space offset to change the space according to the new size', function(){
-			var monster = new Monster({size: 'Fine', space: 1, spaceOffset: 1});
-			giant.apply(monster);
-			expect(monster.space).to.equal(2.5);
+			let monster = new Monster({size: 'Fine', space: 1, spaceOffset: 1});
+			let newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(2.5);
 
 			monster = new Monster({size: 'Large', space: 15, spaceOffset: 1});
-			giant.apply(monster);
-			expect(monster.space).to.equal(20);
+			newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(20);
 			
 			monster = new Monster({size: 'Gargantuan', space: 15, spaceOffset: -1});
-			giant.apply(monster);
-			expect(monster.space).to.equal(20);
+			newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(20);
 			
 			monster = new Monster({size: 'Huge', space: 5, spaceOffset: -2});
-			giant.apply(monster);
-			expect(monster.space).to.equal(10);
+			newMonster = giant.apply(monster);
+			expect(newMonster.space).to.equal(10);
 		});
 
 		it('changes the reach to reflect the new size when the reach is typical', function(){
-			var monster = new Monster({size: 'Tiny', reach: 0, shape: 'long'});
+			let monster = new Monster({size: 'Tiny', reach: 0, shape: 'long'});
 			expect(monster.reach).to.equal(0);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(5);
+			let newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(5);
 
 			monster = new Monster({size: 'Medium', reach: 5, shape: 'long'});
-			giant.apply(monster);
-			expect(monster.reach).to.equal(5);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(5);
 
 			monster = new Monster({size: 'Medium', reach: 5, shape: 'tall'});
-			giant.apply(monster);
-			expect(monster.reach).to.equal(10);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(10);
 
 			monster = new Monster({size: 'Gargantuan', reach: 15, shape: 'long'});
-			giant.apply(monster);
-			expect(monster.reach).to.equal(20);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(20);
 
 			monster = new Monster({size: 'Gargantuan', reach: 20, shape: 'tall'});
-			giant.apply(monster);
-			expect(monster.reach).to.equal(30);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(30);
 		});
 
 		it('keeps the reach unchanged when the reach is atypical but the typical reach would not be affected by the change of size', function(){
-			var monster;
+			let monster;
+			let newMonster;
 			// Diminutive to Tiny
 			monster = new Monster({size: 'Diminutive', reach: 5, shape: 'long'});
-			expect(monster.reach).to.equal(5);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(5);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(5);
 
 			// Small to Medium
 			monster = new Monster({size: 'Small', reach: 10, shape: 'tall'});
-			expect(monster.reach).to.equal(10);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(10);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(10);
 
 			// Medium long to Large
 			monster = new Monster({size: 'Medium', reach: 10, shape: 'long'});
-			expect(monster.reach).to.equal(10);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(10);
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(10);
 		});
 
 		it('changes the reach in the same proportion to the typical reach', function(){
-			var monster;
+			let monster;
+			let newMonster;
 			// Medium tall to Large, larger reach than typical
 			monster = new Monster({size: 'Medium', reach: 10, shape: 'tall'});
 			expect(monster.reach).to.equal(10); // x2 typical reach for Medium
-			giant.apply(monster);
-			expect(monster.reach).to.equal(20); // x2 typical reach for Large tall
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(20); // x2 typical reach for Large tall
 
 			monster = new Monster({size: 'Medium', reach: 15, shape: 'tall'});
 			expect(monster.reach).to.equal(15); // x3 typical reach for Medium
-			giant.apply(monster);
-			expect(monster.reach).to.equal(30); // x3 typical reach for Large tall
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(30); // x3 typical reach for Large tall
 
 			// Gargantuan tall to Colossal, smaller reach than typical
 			monster = new Monster({size: 'Gargantuan', reach: 10, shape: 'tall'});
 			expect(monster.reach).to.equal(10); // 1/2 typical reach for Gargantuan tall
-			giant.apply(monster);
-			expect(monster.reach).to.equal(15); // 1/2 typical reach for Colossal tall
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(15); // 1/2 typical reach for Colossal tall
 		});
 
 		it('adds the reach to the typical reach for Small when the original monster is Tiny (can\'t calculate proportion)', function(){
-			var monster;
 			// Tiny to Small
-			monster = new Monster({size: 'Tiny', reach: 5, shape: 'long'});
-			expect(monster.reach).to.equal(5);
-			giant.apply(monster);
-			expect(monster.reach).to.equal(10);			
+			const monster = new Monster({size: 'Tiny', reach: 5, shape: 'long'});
+			const newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(10);			
 		});
 
 		it('ignores fractions above 5 ft', function(){
-			var monster;
+			let monster;
+			let newMonster;
 
 			// Gargantuan to Colossal, smaller reach than typical
 			monster = new Monster({size: 'Gargantuan', reach: 5, shape: 'tall'});
 			expect(monster.reach).to.equal(5); // x1/4 typical reach for Gargantuan tall
-			giant.apply(monster);
-			expect(monster.reach).to.equal(5); // x1/4 typical reach for Colossal tall (7.5), rounded down to nearest 5 ft
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(5); // x1/4 typical reach for Colossal tall (7.5), rounded down to nearest 5 ft
 
 			// Gargantuan long to Colossal, smaller reach than typical
 			monster = new Monster({size: 'Gargantuan', reach: 10, shape: 'long'});
 			expect(monster.reach).to.equal(10); // 2/3 typical reach for Gargantuan tall
-			giant.apply(monster);
-			expect(monster.reach).to.equal(10); // 2/3 typical reach for Colossal tall (13.3) rounded down to nearest 5 ft
+			newMonster = giant.apply(monster);
+			expect(newMonster.reach).to.equal(10); // 2/3 typical reach for Colossal tall (13.3) rounded down to nearest 5 ft
 		});
 
 		it('increases natural armor by 3', function(){
-			var monster = new Monster();
+			const monster = new Monster();
 			expect(monster.naturalArmor).to.equal(0);
-			giant.apply(monster);
-			expect(monster.naturalArmor).to.equal(3);
+			const newMonster = giant.apply(monster);
+			expect(newMonster.naturalArmor).to.equal(3);
 		});
 
 		it('increases attack dice rolls by one step', function(){
-			var monster = new Monster({
+			let monster;
+			let newMonster;
+
+			monster = new Monster({
 				melee: {
 					slam: {
 						name: 'slam', 
@@ -247,9 +271,9 @@ describe('Giant Template', function(){
 					}}});
 			expect(monster.melee.slam.nbDice).to.equal(1);
 			expect(monster.melee.slam.dieType).to.equal(6);
-			giant.apply(monster);
-			expect(monster.melee.slam.nbDice).to.equal(1);
-			expect(monster.melee.slam.dieType).to.equal(8);
+			newMonster = giant.apply(monster);
+			expect(newMonster.melee.slam.nbDice).to.equal(1);
+			expect(newMonster.melee.slam.dieType).to.equal(8);
 
 			monster = new Monster({
 				melee: {
@@ -262,9 +286,9 @@ describe('Giant Template', function(){
 					}}});
 			expect(monster.melee.slam.nbDice).to.equal(1);
 			expect(monster.melee.slam.dieType).to.equal(1);
-			giant.apply(monster);
-			expect(monster.melee.slam.nbDice).to.equal(1);
-			expect(monster.melee.slam.dieType).to.equal(2);
+			newMonster = giant.apply(monster);
+			expect(newMonster.melee.slam.nbDice).to.equal(1);
+			expect(newMonster.melee.slam.dieType).to.equal(2);
 
 			monster = new Monster({
 				melee: {
@@ -277,9 +301,9 @@ describe('Giant Template', function(){
 					}}});
 			expect(monster.melee.slam.nbDice).to.equal(1);
 			expect(monster.melee.slam.dieType).to.equal(4);
-			giant.apply(monster);
-			expect(monster.melee.slam.nbDice).to.equal(1);
-			expect(monster.melee.slam.dieType).to.equal(6);
+			newMonster = giant.apply(monster);
+			expect(newMonster.melee.slam.nbDice).to.equal(1);
+			expect(newMonster.melee.slam.dieType).to.equal(6);
 
 			monster = new Monster({
 				melee: {
@@ -292,9 +316,9 @@ describe('Giant Template', function(){
 					}}});
 			expect(monster.melee.slam.nbDice).to.equal(1);
 			expect(monster.melee.slam.dieType).to.equal(8);
-			giant.apply(monster);
-			expect(monster.melee.slam.nbDice).to.equal(2);
-			expect(monster.melee.slam.dieType).to.equal(6);
+			newMonster = giant.apply(monster);
+			expect(newMonster.melee.slam.nbDice).to.equal(2);
+			expect(newMonster.melee.slam.dieType).to.equal(6);
 
 			monster = new Monster({
 				melee: {
@@ -307,10 +331,17 @@ describe('Giant Template', function(){
 					}}});
 			expect(monster.melee.slam.nbDice).to.equal(2);
 			expect(monster.melee.slam.dieType).to.equal(8);
-			giant.apply(monster);
+			newMonster = giant.apply(monster);
 			// note: uses Paizo FAQ rules - the natural attack table gives 4d6
-			expect(monster.melee.slam.nbDice).to.equal(3);
-			expect(monster.melee.slam.dieType).to.equal(8);
+			expect(newMonster.melee.slam.nbDice).to.equal(3);
+			expect(newMonster.melee.slam.dieType).to.equal(8);
+		});
+	});
+
+	describe('getErrorMessage', () => {
+		
+		it('returns an error message', () => {
+			expect(giant.getErrorMessage()).to.equal('Cannot apply the Giant template on a Colossal creature');
 		});
 	});
 });

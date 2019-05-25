@@ -2,15 +2,12 @@
 
 "use strict";
 
-var url 		= require('url'),
-	Database 	= require('./database'),
-	format		= require('./formatmonster'),
-	formatOptions = require('./formatoptions'),
-	urlutil		= require('./urlutil'),
-	advanced	= require('./advanced'),
-	giant		= require('./giant'),
-	young		= require('./young');
-
+const Database = require('./database');
+const format = require('./formatmonster');
+const formatOptions = require('./formatoptions');
+const formatError = require('./formaterror');
+const urlutil = require('./urlutil');
+const bp = require('./blueprint');
 
 exports.getDefault = function getDefaultAdvancePage(req, res){
 	res.redirect(req.url + '/no-monster/original');
@@ -21,77 +18,49 @@ exports.getDefault = function getDefaultAdvancePage(req, res){
  * GET handler for Advancement page
  */
 exports.get = function getAdvancePage(req, res){
-	var options = formatOptions.getOptions(req.url),
-		myDB,
-		title;
-	
-	/**
-	 * isValidOptions
-	 * awaits implementation - to check that selected options are valid
-	 */
-	var isValidOptions = function(options){
-		return false;
-	};
-	
-	/**
-	 * renderNoMonster
-	 */
-	 function renderNoMonster(){
-		res.render('advancement-form', { pageTitle: 'No Monster Selected', options: options, postTo: req.url });
-	 }
-	
-	// check that we have valid options - reset if not
-	// TO DO: do this later
-	/*
-	if (!isValidOptions(req.query.options)) {
-		req.query.options = "";
+	// helper function
+	function renderNoMonster(options, url){
+		res.render('advancement-form', { pageTitle: 'No Monster Selected', options: options, postTo: url });
 	}
-	*/
-	
+
+	var options = formatOptions.getOptions(req.url);
+		
 	// check whether a monster was given: no need to query the DB if not
 	if (req.params.monster === "no-monster") {
-		renderNoMonster();
+		renderNoMonster(options, req.url);
 		return;
 	}
 	
-	myDB = new Database();
-	myDB.findMonster(req.params.monster, function(err, stats){
-		var optObj, 
-			i;
-		
+	const myDB = new Database();
+	myDB.findMonster(req.params.monster, function(err, baseMonster){
 		if (err) {
 			// TO DO: probably needs better error handling than that
 			console.log('Database Error: ' + err);
 		}
 		
 		// make sure we have a valid monster selection
-		if (err || stats === {}) {
-			renderNoMonster();
-		}
+		if (err || baseMonster === {}) {
+			renderNoMonster(options, req.url);
+
 		// format the data for the template
-		else {
-			optObj = urlutil.extractAdvanceOptions(req.url);
-			if (optObj.advanced) {
-				for (i = 0; i < optObj.advanced; i++) {
-					advanced.apply(stats);				
-				}
-			}
-			if (optObj.giant) {
-				for (i = 0; i < optObj.giant; i++) {
-					giant.apply(stats);				
-				}
-			}
-			if (optObj.young) {
-				for (i = 0; i < optObj.young; i++) {
-					young.apply(stats);				
-				}
-			}
-			stats = format.getMonsterProfile(stats);
-			title = stats.name;
+		} else {
+			let name = baseMonster.name;
+			let title = name;
 			if (options) {
-				title += ' - ' + options;
+				title += ' — ' + options;
 			}
-			res.render('advancement-form', { pageTitle: title, monster: stats.name, options: options, stats: stats, postTo: req.url});
+
+			const optObj = urlutil.extractAdvanceOptions(req.url);
+
+			const blueprint = bp.createBlueprint(optObj);
+			const {error, newMonster} = blueprint.reshape(baseMonster);
+			if (error){
+				res.render('advancement-form', { pageTitle: title, monster: name, options: options, error: formatError.format(error), postTo: req.url });
+				return;
+			}
+
+			const stats = format.getMonsterProfile(newMonster);
+			res.render('advancement-form', { pageTitle: title, monster: name, options: options, stats: stats, postTo: req.url });
 		}
 	});
 };

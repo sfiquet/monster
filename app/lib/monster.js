@@ -26,14 +26,12 @@ function Monster() {
 	this.alignment = properties.alignment || 'N';
 	this.size =	properties.size || 'Medium';
 	this.type = properties.type || 'magical beast';
-	this.senses = properties.senses || [];
 	this.racialHD = properties.racialHD || 1;
 	this.naturalArmor = properties.naturalArmor || 0;
-	this.speed = properties.speed || { land: 30 };
+	this.speed = JSON.parse(JSON.stringify(properties.speed || { land: 30 }));
 	this.space = properties.space || 5;
 	// a value of 0 is valid for reach
 	this.reach = (properties.reach === undefined? 5: properties.reach);
-	this.extraReach = properties.extraReach;
 	this.shape = properties.shape || 'tall';
 	// if the stats are undefined, leave them undefined
 	this.Str  = properties.Str;
@@ -45,23 +43,33 @@ function Monster() {
 	this.baseFort = properties.baseFort || 0;
 	this.baseRef  = properties.baseRef || 0;
 	this.baseWill = properties.baseWill || 0;
-	this.melee = properties.melee || {};
 	this.environment = properties.environment;
 	this.organization = properties.organization;
 	this.treasure = properties.treasure;
-	// this data is optional, leave undefined if not specified
-	this.optDefense = properties.optDefense;
-	this.weaknesses = properties.weaknesses;
-	this.languages = properties.languages;
-	this.SQ = properties.SQ;
-	this.specialAtk = properties.specialAtk;
-	this.feats = new OrderedSet(properties.feats);
+
+	// data that needs to be cloned
+	this.senses = JSON.parse(JSON.stringify(properties.senses || []));
+	this.speed = JSON.parse(JSON.stringify(properties.speed || { land: 30 }));
+	this.feats = JSON.parse(JSON.stringify(properties.feats || []));
+	this.featSet = new OrderedSet(this.feats);
+	this.melee = JSON.parse(JSON.stringify(properties.melee || {}));
+
+	// skills is cloned in setSkills
 	this.skills = [];
 	this.skillSet = {};
 	this.setSkills(properties.skills);
-	this.specialAbilities = properties.specialAbilities;
-	this.specialCMB = properties.specialCMB;
-	this.specialCMD = properties.specialCMD;
+
+	// this data is optional, leave undefined if not specified
+	this.SQ = properties.SQ ? JSON.parse(JSON.stringify(properties.SQ)) : undefined;
+	this.optDefense = properties.optDefense ? JSON.parse(JSON.stringify(properties.optDefense)) : undefined;
+	this.specialAtk = properties.specialAtk ? JSON.parse(JSON.stringify(properties.specialAtk)) : undefined;
+	this.specialCMB = properties.specialCMB ? JSON.parse(JSON.stringify(properties.specialCMB)) : undefined;
+	this.specialCMD = properties.specialCMD ? JSON.parse(JSON.stringify(properties.specialCMD)) : undefined;
+	this.specialAbilities = properties.specialAbilities ? JSON.parse(JSON.stringify(properties.specialAbilities)) : undefined;
+	this.extraReach = properties.extraReach ? JSON.parse(JSON.stringify(properties.extraReach)) : undefined;
+	this.weaknesses = properties.weaknesses ? JSON.parse(JSON.stringify(properties.weaknesses)) : undefined;
+	
+	this.languages = properties.languages;
 
 	// spaceOffset represents the number of steps between the actual size of 
 	// the creature and the typical size for its space:
@@ -107,7 +115,7 @@ Monster.prototype.setSkills = function(skillArray){
 			return;	// wrong format
 	}
 
-	this.skills = skillArray;
+	this.skills = JSON.parse(JSON.stringify(skillArray));
 	this.skillSet = skillArray.reduce((dict, item) => {
 		let key = item.name;
 		let specialty = item.specialty;
@@ -787,7 +795,7 @@ Monster.prototype.getRacialModifier = function(skill, specialty){
  * returns an array containing the names of the monster's feats
  */
 Monster.prototype.getFeatsList = function(){
-	return this.feats.getKeys();
+	return this.featSet.getKeys();
 };
 
 /**
@@ -795,7 +803,7 @@ Monster.prototype.getFeatsList = function(){
  * returns an object describing the given feat or undefined if not found
  */
 Monster.prototype.getFeat = function(featName){
-	return this.feats.getItemByKey(featName);
+	return this.featSet.getItemByKey(featName);
 };
 
 /**

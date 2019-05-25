@@ -1,13 +1,21 @@
 /* jshint node: true */
 "use strict";
 
-var ref = require('./reference');
+const ref = require('./reference');
+const Monster = require('./monster');
 
-exports.isCompatible = function(monster) {
+exports.isCompatible = function(/* monster */) {
 	return true;
 };
 
-exports.apply = function(monster) {
+exports.apply = function(baseMonster) {
+
+	if (baseMonster === null || !exports.isCompatible(baseMonster)){
+		return null;
+	}
+
+	let monster = new Monster(baseMonster);
+
 	// increase CR by step for fractions
 	monster.CR = ref.getCR(ref.getCRId(monster.CR) + 1);
 	
@@ -18,4 +26,8 @@ exports.apply = function(monster) {
 	monster.Int = monster.Int && monster.Int > 2 ? monster.Int + 4 : monster.Int;
 	monster.Wis = monster.Wis ? monster.Wis + 4 : undefined;
 	monster.Cha = monster.Cha ? monster.Cha + 4 : undefined;
+
+	return monster;
 };
+
+exports.getErrorMessage = () => '';

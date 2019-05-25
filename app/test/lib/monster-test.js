@@ -106,9 +106,7 @@ describe('Monster', function(){
 			expect(myMonster.baseFort).to.equal(0);
 			expect(myMonster.baseRef).to.equal(0);
 			expect(myMonster.baseWill).to.equal(0);
-			expect(myMonster.senses).to.exist;
-			expect(myMonster.senses).to.be.an.instanceof(Array);
-			expect(myMonster.senses).to.be.empty;
+			expect(myMonster.senses).to.deep.equal([]);
 			expect(myMonster.space).to.equal(5);
 			expect(myMonster.reach).to.equal(5);
 			expect(myMonster.extraReach).to.be.undefined;
@@ -117,8 +115,23 @@ describe('Monster', function(){
 			expect(myMonster.specialAtk).to.be.undefined;
 			expect(myMonster.specialAbilities).to.be.undefined;
 			expect(myMonster.specialCMB).to.be.undefined;
+			expect(myMonster.specialCMD).to.be.undefined;
+			expect(myMonster.weaknesses).to.be.undefined;
+			expect(myMonster.languages).to.be.undefined;
 			expect(myMonster.spaceOffset).to.be.undefined;
 			expect(myMonster.shape).to.equal('tall');
+			expect(myMonster.environment).to.be.undefined;
+			expect(myMonster.organization).to.be.undefined;
+			expect(myMonster.treasure).to.be.undefined;
+			expect(myMonster.speed).to.deep.equal({land: 30});
+			expect(myMonster.feats).to.deep.equal([]);
+			expect(myMonster.featSet).to.deep.equal(new OrderedSet([]));
+			expect(myMonster.melee).to.deep.equal({});
+			expect(myMonster.skills).to.deep.equal([]);
+			expect(myMonster.skillSet).to.deep.equal({});
+			expect(myMonster.Fort).to.be.an('object');
+			expect(myMonster.Ref).to.be.an('object');
+			expect(myMonster.Will).to.be.an('object');
 		});
 		
 		it('creates a monster from given literal', function(){
@@ -145,14 +158,40 @@ describe('Monster', function(){
 					baseFort: 5, // should those be deduced from type and HD?
 					baseRef: 5,
 					baseWill: 2,
+					environment: 'underground',
+					organization: 'solitary',
+					treasure: 'none',
+					speed: {land: 20, climb: 20},
+					feats: [{name: 'Improved Initiative'}],
 					senses: [
 							{name: 'darkvision', value: 60, unit: 'ft.'}, 
 							{name: 'scent'}
 							],
+					melee: {
+						claw: {
+							name: 'claw',
+							type: 'natural',
+							nbAttacks: 2,
+							nbDice: 1,
+							dieType: 8,
+							extraDamage: ['grab']
+						}
+					},
+					skills: [
+						{
+							"name": "Perception",
+							"ranks": 7
+						}
+					],
+					SQ: [
+						[{"text": "transparent"}]
+					],
 					optDefense: {
 						abilities: ['freedom of movement', 'ferocity'],
 						immune: ['cold', 'fire', 'poison']
 					},
+					weaknesses: ['cold'],
+					languages: 'common',
 					specialAtk: [
 						{
 							name: 'bleed', 
@@ -161,6 +200,26 @@ describe('Monster', function(){
 						},
 						{
 							name: 'corrosion'
+						}
+					],
+					specialCMB: [
+						{ 
+							name: 'grapple', 
+							components: [{ 
+								name: 'grab', 
+								type: 'melee', 
+								bonus: 4 
+							}]
+						}
+					],
+					specialCMD: [
+						{ 
+							name: 'grapple', 
+							components: [ { 
+								name: 'Improved Grapple', 
+								type: 'feat', 
+								bonus: 2 
+							} ]
 						}
 					],
 					specialAbilities: [
@@ -198,22 +257,86 @@ describe('Monster', function(){
 			expect(myMonster.baseFort).to.equal(5);
 			expect(myMonster.baseRef).to.equal(5);
 			expect(myMonster.baseWill).to.equal(2);
+			expect(myMonster.space).to.equal(10);
+			expect(myMonster.reach).to.equal(5);
+			expect(myMonster.environment).to.equal('underground');
+			expect(myMonster.organization).to.equal('solitary');
+			expect(myMonster.treasure).to.equal('none');
+			expect(myMonster.languages).to.equal('common');
+
 			expect(myMonster.senses).to.have.length(2);
 			expect(myMonster.senses[0]).to.deep.equal({name: 'darkvision', value: 60, unit: 'ft.'});
 			expect(myMonster.senses[1]).to.deep.equal({name: 'scent'});
+
+			expect(myMonster.speed).to.deep.equal({land: 20, climb: 20});
+
+			expect(myMonster.feats).to.deep.equal([{name: 'Improved Initiative'}]);
+			expect(myMonster.featSet).to.deep.equal(new OrderedSet([{name: 'Improved Initiative'}]));
+
+			expect(myMonster.melee).to.deep.equal({
+				claw: {
+					name: 'claw',
+					type: 'natural',
+					nbAttacks: 2,
+					nbDice: 1,
+					dieType: 8,
+					extraDamage: ['grab']
+				}
+			});
+
+			expect(myMonster.skills).to.deep.equal([
+				{
+					"name": "Perception",
+					"ranks": 7
+				}
+			]);
+			expect(myMonster.skillSet).to.deep.equal({
+				Perception: {
+					"name": "Perception",
+					"ranks": 7
+				}
+			});
+
+			expect(myMonster.SQ).to.deep.equal([[{"text": "transparent"}]]);
+
 			expect(myMonster.optDefense).to.exist;
 			expect(myMonster.optDefense.abilities).to.exist;
 			expect(myMonster.optDefense.abilities).to.deep.equal(['freedom of movement', 'ferocity']);
 			expect(myMonster.optDefense.immune).to.exist;
 			expect(myMonster.optDefense.immune).to.deep.equal(['cold', 'fire', 'poison']);
-			expect(myMonster.space).to.equal(10);
-			expect(myMonster.reach).to.equal(5);
+
+			expect(myMonster.weaknesses).to.deep.equal(['cold']);
+			
 			expect(myMonster.extraReach).to.have.length(2);
 			expect(myMonster.extraReach[0]).to.deep.equal({distance: 20, weapons: ['arms', 'tentacles']});
 			expect(myMonster.extraReach[1]).to.deep.equal({distance: 10, weapons: ['bite']});
+			
 			expect(myMonster.specialAtk).to.have.length(2);
 			expect(myMonster.specialAtk[0]).to.deep.equal({name: 'bleed', url: 'http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#bleed', details: [{ text: '2d6' }]});
 			expect(myMonster.specialAtk[1]).to.deep.equal({name: 'corrosion'});
+
+			expect(myMonster.specialCMB).to.deep.equal([
+				{ 
+					name: 'grapple', 
+					components: [{ 
+						name: 'grab', 
+						type: 'melee', 
+						bonus: 4 
+					}]
+				}
+			]);
+
+			expect(myMonster.specialCMD).to.deep.equal([
+				{ 
+					name: 'grapple', 
+					components: [ { 
+						name: 'Improved Grapple', 
+						type: 'feat', 
+						bonus: 2 
+					} ]
+				}
+			]);
+			
 			expect(myMonster.specialAbilities).to.have.length(2);
 			expect(myMonster.specialAbilities[0]).to.deep.equal(
 				{
@@ -239,6 +362,91 @@ describe('Monster', function(){
 		it('creates an object even if not called with new', function(){
 			myMonster = Monster();
 			expect(myMonster).to.be.an.instanceof(Monster);
+		});
+
+		it('creates a deep clone when passed an existing Monster object', () => {
+			let original = new Monster(tigerLiteral);
+			let copy = new Monster(original);
+			expect(copy).to.not.equal(original);
+			expect(copy).to.deep.equal(original);
+			// check that all the references (objects and arrays) are different
+			expect(copy.speed).to.not.equal(original.speed);
+			expect(copy.feats).to.not.equal(original.feats);
+			expect(copy.melee).to.not.equal(original.melee);
+			expect(copy.skills).to.not.equal(original.skills);
+			expect(copy.senses).to.not.equal(original.senses);
+			expect(copy.skillSet).to.not.equal(original.skillSet);
+			expect(copy.Fort).to.not.equal(original.Fort);
+			expect(copy.Ref).to.not.equal(original.Ref);
+			expect(copy.Will).to.not.equal(original.Will);
+
+			// check the references that can be undefined separately
+			expect(copy.SQ).to.be.undefined;
+			expect(copy.optDefense).to.be.undefined;
+			expect(copy.specialAtk).to.be.undefined;
+			expect(copy.specialCMB).to.be.undefined;
+			expect(copy.specialCMD).to.be.undefined;
+			expect(copy.specialAbilities).to.be.undefined;
+			expect(copy.extraReach).to.be.undefined;
+			expect(copy.weaknesses).to.be.undefined;
+
+			// now check with those references being defined
+			let definedLiteral = Object.assign({}, tigerLiteral, {
+				SQ: [
+					[{text: 'amphibious'}]
+				],
+				optDefense: {
+						immune: ['cold', 'fire', 'poison']					
+				},
+				specialAtk: [
+						{name: 'corrosion'}
+				],
+				specialCMB: [
+					{ 
+						name: 'grapple', 
+						components: [{ 
+							name: 'grab', 
+							type: 'melee', 
+							bonus: 4 
+						}]
+					}
+				],
+				specialCMD: [
+					{ 
+						name: 'grapple', 
+						components: [ { 
+							name: 'Improved Grapple', 
+							type: 'feat', 
+							bonus: 2 
+						} ]
+					}
+				],
+				specialAbilities: [
+					{
+						title: 'Corrosion (Ex)',
+						description: [
+							{text: ' An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor.'}
+						]
+					}
+				],
+				extraReach: [
+					{
+						distance: 20, 
+						weapons: ['arm']
+					}
+				],
+				weaknesses: ["cold"]
+			});
+			original = new Monster(definedLiteral);
+			copy = new Monster(original);
+			expect(copy.SQ).to.not.equal(original.SQ);
+			expect(copy.optDefense).to.not.equal(original.optDefense);
+			expect(copy.specialAtk).to.not.equal(original.specialAtk);
+			expect(copy.specialCMB).to.not.equal(original.specialCMB);
+			expect(copy.specialCMD).to.not.equal(original.specialCMD);
+			expect(copy.specialAbilities).to.not.equal(original.specialAbilities);
+			expect(copy.extraReach).to.not.equal(original.extraReach);
+			expect(copy.weaknesses).to.not.equal(original.weaknesses);
 		});
 
 		it('stores the spaceOffset property when provided', function(){
@@ -457,18 +665,13 @@ describe('Monster', function(){
 		});
 		
 		it('applies the Skill Focus feat correctly', function(){
-			tiger.feats = new OrderedSet([
-				{
+			const featArray = {
+				feats: [{
 					name: 'Skill Focus',
-					url: 'url/skillfocus',
-					details: [
-						{
-							name: 'Perception',
-							url: 'url/perception'
-						}
-					]
-				}
-			]);
+					details: [{name: 'Perception'}]
+				}]
+			};
+			let tiger = new Monster(Object.assign({}, tigerLiteral, featArray));
 			expect(tiger.getSkillBonus('Perception')).to.equal(4);
 			tiger.setSkills([{'name': 'Perception', 'ranks': 9}]);
 			expect(tiger.getSkillBonus('Perception')).to.equal(16);
@@ -477,25 +680,21 @@ describe('Monster', function(){
 		});
 
 		it('applies the Skill Focus feat correctly to specialised skills', () => {
-			tiger.feats = new OrderedSet([
-				{
+			const featArray = {
+				feats: [{
 					name: 'Skill Focus',
-					url: 'url/skillfocus',
-					details: [
-						{
-							name: 'Profession',
-							specialty: 'butcher',
-							url: 'url/perception'
-						}
-					]
-				}
-			]);
+					details: [{
+						name: 'Profession',
+						specialty: 'butcher',
+					}]
+				}]
+			};
+			let tiger = new Monster(Object.assign({}, tigerLiteral, featArray));
 			expect(tiger.getSkillBonus('Profession', 'butcher')).to.equal(4);
 			tiger.setSkills([{'name': 'Profession', 'specialty': 'butcher', 'ranks': 9}]);
 			expect(tiger.getSkillBonus('Profession', 'butcher')).to.equal(13);
 			tiger.setSkills([{'name': 'Profession', 'specialty': 'butcher', 'ranks': 10}]);
 			expect(tiger.getSkillBonus('Profession', 'butcher')).to.equal(17);
-
 		});
 	});
 	
@@ -887,8 +1086,10 @@ describe('Monster', function(){
 	describe('setSkills', function(){
 		it('sets up the skills data in the monster from the JSON representation passed as parameter', function(){
 			var tiger = new Monster(tigerLiteral);
-			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}, {'name': 'Stealth', 'ranks': 4, 'racial': 8}]);
-			expect(tiger.skills).to.deep.equal([{'name': 'Acrobatics', 'ranks': 4}, {'name': 'Stealth', 'ranks': 4, 'racial': 8}]);
+			const skillArray = [{'name': 'Acrobatics', 'ranks': 4}, {'name': 'Stealth', 'ranks': 4, 'racial': 8}];
+			tiger.setSkills(skillArray);
+			expect(tiger.skills).to.not.equal(skillArray);
+			expect(tiger.skills).to.deep.equal(skillArray);
 			expect(tiger.skillSet).to.exist;
 			expect(tiger.skillSet).to.be.an.instanceof(Object);
 			expect(tiger.skillSet).to.deep.equal({
@@ -1202,57 +1403,38 @@ describe('Monster', function(){
 			});
 
 			it('returns 3 for a skill that has Skill Focus and less than 10 ranks', () => {
-				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20});
-				monster.setSkills([{name: 'Appraise', ranks: 5}]);
-				monster.feats = new OrderedSet([
-					{
+				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20, 
+					skills: [{name: 'Appraise', ranks: 5}], 
+					feats: [{
 						name: 'Skill Focus',
-						url: 'url/skillfocus',
-						details: [
-							{
-								name: 'Appraise',
-								url: 'url/appraise'
-							}
-						]
-					}
-				]);
+						details: [{name: 'Appraise'}]
+					}]
+				});
 				expect(monster.getSkillBonusFromFeats('Appraise')).to.equal(3);
 			});
 
 			it('returns 6 for a skill that has Skill Focus and 10 ranks or more', () => {
-				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20});
-				monster.setSkills([{name: 'Appraise', ranks: 10}]);
-				monster.feats = new OrderedSet([
-					{
+				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20,
+					skills: [{name: 'Appraise', ranks: 10}],
+					feats: [{
 						name: 'Skill Focus',
-						url: 'url/skillfocus',
-						details: [
-							{
-								name: 'Appraise',
-								url: 'url/appraise'
-							}
-						]
-					}
-				]);
+						details: [{name: 'Appraise'}]
+					}]
+				});
 				expect(monster.getSkillBonusFromFeats('Appraise')).to.equal(6);
 			});
 
 			it('works with specialised skills', () => {
-				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20});
-				monster.setSkills([{name: 'Knowledge', specialty: 'planes', ranks: 10}]);
-				monster.feats = new OrderedSet([
-					{
+				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20,
+					skills: [{name: 'Knowledge', specialty: 'planes', ranks: 10}],
+					feats: [{
 						name: 'Skill Focus',
-						url: 'url/skillfocus',
-						details: [
-							{
+						details: [{
 								name: 'Knowledge',
 								specialty: 'planes',
-								url: 'url/appraise'
-							}
-						]
-					}
-				]);
+							}]
+					}]
+				});
 				expect(monster.getSkillBonusFromFeats('Knowledge', 'planes')).to.equal(6);
 				expect(monster.getSkillBonusFromFeats('Knowledge', 'religion')).to.equal(0);
 			});

@@ -5,8 +5,9 @@
  * Young Template
  */
 
-var ref = require('./reference'),
-	sizeLib = require('./sizechange');
+const ref = require('./reference');
+const sizeLib = require('./sizechange');
+const Monster = require('./monster');
 
 exports.isCompatible = function(monster) {
 
@@ -43,11 +44,17 @@ exports.isCompatible = function(monster) {
 	return true;
 };
 
-exports.apply = function(monster){
+exports.apply = function(baseMonster){
 	var weapon,
 		dice,
 		oldSize;
 
+	if (baseMonster === null || !exports.isCompatible(baseMonster)){
+		return null;
+	}
+
+	let monster = new Monster(baseMonster);
+	
 	// reduce CR by one step
 	monster.CR = ref.getCR(ref.getCRId(monster.CR) - 1);
 
@@ -95,4 +102,8 @@ exports.apply = function(monster){
 
 	// adjust the resulting reach
 	monster.reach = sizeLib.calculateReach(oldSize, monster.size, monster.reach, monster.shape);
+
+	return monster;
 };
+
+exports.getErrorMessage = () => 'Cannot apply the Young template when the creature matches any of the following conditions: Barghest, Dragon, Fine size, 1/8 CR';

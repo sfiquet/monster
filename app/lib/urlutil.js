@@ -19,7 +19,7 @@ exports.buildAdvanceUrl = buildAdvanceUrl;
 
 /**
  * extractAdvanceOptions
- * parses the options segment of an url and returns an array
+ * parses the options segment of an url and returns a dictionary object
  */
 function extractAdvanceOptions(urlStr) {
 	var slug,

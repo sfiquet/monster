@@ -23,7 +23,8 @@ exports.get = function getAdvancePage(req, res){
 		res.render('advancement-form', { pageTitle: 'No Monster Selected', options: options, postTo: url });
 	}
 
-	var options = formatOptions.getOptions(req.url);
+	const optDict = urlutil.extractAdvanceOptions(req.url);
+	const options = formatOptions.getOptions(optDict);
 		
 	// check whether a monster was given: no need to query the DB if not
 	if (req.params.monster === "no-monster") {
@@ -50,9 +51,7 @@ exports.get = function getAdvancePage(req, res){
 				title += ' — ' + options;
 			}
 
-			const optObj = urlutil.extractAdvanceOptions(req.url);
-
-			const blueprint = bp.createBlueprint(optObj);
+			const blueprint = bp.createBlueprint(optDict);
 			const {error, newMonster} = blueprint.reshape(baseMonster);
 			if (error){
 				res.render('advancement-form', { pageTitle: title, monster: name, options: options, error: formatError.format(error), postTo: req.url });

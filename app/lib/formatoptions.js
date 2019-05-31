@@ -1,19 +1,19 @@
-/* jshint node: true */
 "use strict";
 
-var urlutil = require('./urlutil'),
-	capitalize = require('underscore.string/capitalize');
+const capitalize = require('underscore.string/capitalize');
 
 exports.getOptions = getOptions;
 
-/**
- * getOptions
- * creates a string to be displayed on the web page
+/*
+getOptions
+creates a string to be displayed on the web page
+Input:  optDict: options key-value dictionary
+        key: template name, value: number of applications
+        e.g. {advanced: 2, giant: 1}
  */
-function getOptions(url) {
-	var options = urlutil.extractAdvanceOptions(url),
-		result = 'Original',
-		keys;
+function getOptions(options) {
+	let result = 'Original';
+	let keys;
 	
 	if (!options){
 		return result;

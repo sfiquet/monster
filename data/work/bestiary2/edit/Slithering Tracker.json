@@ -1,0 +1,67 @@
+{
+  "name": "Slithering Tracker",
+  "senses": [
+    {
+      "name": "blindsense", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects", 
+      "ooze traits"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "blood drain (1d2 Constitution)"
+    },
+    {
+      "name": "grab (Colossal)"
+    }
+  ],
+  "specialCMB": [
+    {
+      "name": "grapple",
+      "components": [
+        {
+          "name": "grab",
+          "type": "melee",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Paralysis (Ex)",
+      "description": [
+        {
+          "text": "Any creature that is hit by a slithering tracker's slam attack comes into contact with the anesthetizing slime it secretes. The opponent must succeed on a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Fortitude save or be paralyzed—at the end of each round thereafter, the paralyzed victim can attempt a new Fortitude save to recover from this paralysis. When a victim recovers from a slithering tracker's paralysis, the victim is staggered for 1d6 rounds. This DC is Constitution-based."
+        }
+      ]
+    },
+    {
+      "title": "Transparent (Ex)",
+      "description": [
+        {
+          "text": "Because of its lack of coloration, a slithering tracker is difficult to discern from its surroundings in most environments. The slithering tracker gains a +8 racial bonus on Stealth checks as a result, and can move at full speed without taking a penalty on Stealth checks. A creature that fails to notice a slithering tracker and walks into it automatically takes damage as if struck by the slithering tracker's slam attack and is immediately subject to a grab attempt and paralysis by the ooze."
+        }
+      ]
+    }
+  ]  
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Giant Tick",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "scent"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "blood drain (1 Constitution)"
+    }
+  ],
+  "specialCMB": [
+    {
+      "name": "grapple",
+      "components": [
+        {
+          "name": "grab",
+          "type": "racial",
+          "bonus": 8
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 12
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Grab (Ex)",
+      "description": [
+        {
+          "text": "A giant tick can grab targets of any size, and has a +8 racial bonus on grapple checks rather than the normal +4 bonus most creatures with grab possess."
+        }
+      ]
+    },
+    {
+      "title": "Disease (Ex)",
+      "description": [
+        {"text": "Red ache", "titleLevel": 2},
+        {"text": ": Bite—injury; "},
+        {"text": "save", "titleLevel": 3},
+        {"text": " Fort DC "},
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {"text": "; "},
+        {"text": "onset", "titleLevel": 3},
+        {"text": " 1d3 days; "},
+        {"text": "frequency", "titleLevel": 3},
+        {"text": " 1/day; "},
+        {"text": "effect", "titleLevel": 3},
+        {"text": " 1d6 Str damage; "},
+        {"text": "cure", "titleLevel": 3},
+        {"text": " 2 consecutive saves. The DC is Constitution-based."}
+      ]
+    }
+  ]  
+}

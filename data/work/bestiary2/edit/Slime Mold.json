@@ -1,0 +1,65 @@
+{
+  "name": "Slime Mold",
+  "optDefense": {
+    "immune": [
+      "ooze traits"
+    ],
+    "resist": [
+      {
+        "name": "fire",
+        "value": 10
+      }
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "engulf",
+      "details": [
+        {"text": "DC "},
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        },
+        {"text": ", "},
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 6,
+          "strengthFactor": 1.5
+        },
+        {"text": " bludgeoning plus disease"}
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Disease (Ex)",
+      "description": [
+        {"text": "Fungal rot", "titleLevel": 2},
+        {"text": ": Slam—contact; "},
+        {"text": "save", "titleLevel": 3},
+        {"text": " Fortitude DC "},
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {"text": "; "},
+        {"text": "onset", "titleLevel": 3},
+        {"text": " 1 day; "},
+        {"text": "frequency", "titleLevel": 3},
+        {"text": " 1/day; "},
+        {"text": "effect", "titleLevel": 3},
+        {"text": " 1d2 Str damage and 1 Con damage and fatigue; "},
+        {"text": "cure", "titleLevel": 3},
+        {"text": " 1 save. Any creature that touches a slime mold with an unarmed strike or a natural attack is also exposed to this foul disease. The save DC is Constitution-based."}
+      ]
+    }
+  ]  
+}

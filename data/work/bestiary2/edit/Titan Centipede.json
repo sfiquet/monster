@@ -1,0 +1,63 @@
+{
+  "name": "Titan Centipede",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "trample",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 6,
+          "dieType": 6,
+          "strengthFactor": 1.5
+        },
+        {
+          "text": ", DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Poison (Ex)",
+      "description": [
+        {"text": "Bite—injury; "},
+        {"text": "save", "titleLevel": 3},
+        {"text": " Fort DC "},
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {"text": "; "},
+        {"text": "frequency", "titleLevel": 3},
+        {"text": " 1/round for 6 rounds; "},
+        {"text": "effect", "titleLevel": 3},
+        {"text": " 1d6 Dex; "},
+        {"text": "cure", "titleLevel": 3},
+        {"text": " 2 consecutive saves."}
+      ]
+    }
+  ]
+}

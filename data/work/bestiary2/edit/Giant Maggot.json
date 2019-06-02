@@ -1,0 +1,44 @@
+{
+  "name": "Giant Maggot",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "disease", 
+      "mind-affecting effects"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "regurgitate"
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Regurgitate (Ex)",
+      "description": [
+        {
+          "text": "Once per day, a giant maggot can empty its putrid stomach upon one creature within 5 feet. The target must make a DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " Fortitude save or be sickened for 1 minute (or until the target spends a full-round action with at least a gallon of water to wash off the filth). The save DC is Constitution-based."
+        }
+      ]
+    }
+  ]  
+}

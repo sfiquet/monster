@@ -17,7 +17,10 @@
   },
   "specialAtk": [
     {
-      "name": "blood drain (1 Constitution)"
+      "name": "blood drain",
+      "details": [
+        {"text": "1 Constitution"}
+      ]
     }
   ],
   "specialCMB": [

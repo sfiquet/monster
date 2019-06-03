@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - additional title level for formatting curse, disease and poison
 - Database: use srdimport to import monsters
   - Bestiary 1: import 16 monsters, including the 5 that were previously in the database
-  - Bestiary 2: import 9 monsters
+  - Bestiary 2: import 8 monsters
 
 ### Changed
 - Data: modified skill format to support specialised skills

@@ -1554,7 +1554,12 @@
     },
     "specialAtk": [
       {
-        "name": "blood drain (1 Constitution)"
+        "name": "blood drain",
+        "details": [
+          {
+            "text": "1 Constitution"
+          }
+        ]
       }
     ],
     "specialCMB": [
@@ -1714,7 +1719,12 @@
     },
     "specialAtk": [
       {
-        "name": "bleed (1d8)"
+        "name": "bleed",
+        "details": [
+          {
+            "text": "1d8"
+          }
+        ]
       },
       {
         "name": "dazzling brightness"
@@ -2466,149 +2476,6 @@
           },
           {
             "text": " 1 save. Any creature that touches a slime mold with an unarmed strike or a natural attack is also exposed to this foul disease. The save DC is Constitution-based."
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Slithering Tracker",
-    "source": "PFRPG Bestiary 2",
-    "alignment": "N",
-    "size": "Small",
-    "environment": "any ruins or underground",
-    "organization": "solitary or pair",
-    "languages": "Undercommon (cannot speak)",
-    "treasure": "incidental",
-    "type": "ooze",
-    "CR": 4,
-    "space": 5,
-    "reach": 5,
-    "racialHD": 4,
-    "Str": 16,
-    "Dex": 18,
-    "Con": 23,
-    "Wis": 10,
-    "Int": 11,
-    "Cha": 1,
-    "speed": {
-      "land": 10,
-      "climb": 10
-    },
-    "feats": [
-      {
-        "name": "Skill Focus",
-        "details": [
-          {
-            "name": "Perception"
-          }
-        ]
-      },
-      {
-        "name": "Skill Focus",
-        "details": [
-          {
-            "name": "Stealth"
-          }
-        ]
-      }
-    ],
-    "melee": {
-      "slam": {
-        "name": "slam",
-        "nbAttacks": 2,
-        "nbDice": 1,
-        "dieType": 6,
-        "extraDamage": [
-          "grab",
-          "paralysis"
-        ],
-        "type": "natural"
-      }
-    },
-    "SQ": [
-      [
-        {
-          "text": "transparent"
-        }
-      ]
-    ],
-    "skills": [
-      {
-        "name": "Perception",
-        "ranks": 7
-      },
-      {
-        "name": "Stealth",
-        "racial": 8,
-        "ranks": 1
-      }
-    ],
-    "naturalArmor": 0,
-    "baseFort": 1,
-    "baseRef": 1,
-    "baseWill": 1,
-    "shape": "long",
-    "senses": [
-      {
-        "name": "blindsense",
-        "value": 60,
-        "unit": "ft."
-      }
-    ],
-    "optDefense": {
-      "immune": [
-        "mind-affecting effects",
-        "ooze traits"
-      ]
-    },
-    "specialAtk": [
-      {
-        "name": "blood drain (1d2 Constitution)"
-      },
-      {
-        "name": "grab (Colossal)"
-      }
-    ],
-    "specialCMB": [
-      {
-        "name": "grapple",
-        "components": [
-          {
-            "name": "grab",
-            "type": "melee",
-            "bonus": 4
-          }
-        ]
-      }
-    ],
-    "specialCMD": [
-      {
-        "name": "trip",
-        "cantFail": true
-      }
-    ],
-    "specialAbilities": [
-      {
-        "title": "Paralysis (Ex)",
-        "description": [
-          {
-            "text": "Any creature that is hit by a slithering tracker's slam attack comes into contact with the anesthetizing slime it secretes. The opponent must succeed on a DC "
-          },
-          {
-            "calc": "DC",
-            "baseStat": "Con"
-          },
-          {
-            "text": " Fortitude save or be paralyzed—at the end of each round thereafter, the paralyzed victim can attempt a new Fortitude save to recover from this paralysis. When a victim recovers from a slithering tracker's paralysis, the victim is staggered for 1d6 rounds. This DC is Constitution-based."
-          }
-        ]
-      },
-      {
-        "title": "Transparent (Ex)",
-        "description": [
-          {
-            "text": "Because of its lack of coloration, a slithering tracker is difficult to discern from its surroundings in most environments. The slithering tracker gains a +8 racial bonus on Stealth checks as a result, and can move at full speed without taking a penalty on Stealth checks. A creature that fails to notice a slithering tracker and walks into it automatically takes damage as if struck by the slithering tracker's slam attack and is immediately subject to a grab attempt and paralysis by the ooze."
           }
         ]
       }

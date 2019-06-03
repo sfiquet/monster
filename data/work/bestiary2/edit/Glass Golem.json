@@ -28,7 +28,10 @@
   },
   "specialAtk": [
     {
-      "name": "bleed (1d8)"
+      "name": "bleed",
+      "details": [
+        {"text": "1d8"}
+      ]
     },
     {
       "name": "dazzling brightness"

@@ -749,6 +749,197 @@
     ]
   },
   {
+    "name": "Blood Golem",
+    "source": "PFRPG Bestiary 4",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 6,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 8,
+    "Str": 14,
+    "Dex": 19,
+    "Wis": 14,
+    "Cha": 1,
+    "speed": {
+      "land": 10
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 2,
+        "dieType": 6,
+        "extraDamage": [
+          "bleed",
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "clotted skin"
+        }
+      ],
+      [
+        {
+          "text": "compression"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 6,
+    "baseFort": 2,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "amorphous"
+      ],
+      "DR": [
+        {
+          "value": 5,
+          "negatedByAny": [
+            "bludgeoning"
+          ]
+        }
+      ],
+      "immune": [
+        "construct traits",
+        "magic"
+      ]
+    },
+    "weaknesses": [
+      "vulnerable to bleed"
+    ],
+    "specialAtk": [
+      {
+        "name": "bleed",
+        "details": [
+          {
+            "text": "1d6"
+          }
+        ]
+      },
+      {
+        "name": "blood drain",
+        "details": [
+          {
+            "text": "1d2 Con"
+          }
+        ]
+      },
+      {
+        "name": "constrict",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 2,
+            "dieType": 6,
+            "strengthFactor": 1
+          },
+          {
+            "text": " plus bleed"
+          }
+        ]
+      }
+    ],
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Blood Drain (Su)",
+        "description": [
+          {
+            "text": "A blood golem heals 5 hit points each round it drains blood."
+          }
+        ]
+      },
+      {
+        "title": "Clotted Skin (Ex)",
+        "description": [
+          {
+            "text": "A blood golem can congeal its surface into a hard skin as a full-round action, allowing it to assume a vaguely humanoid form. With its skin, it gains DR 5/bludgeoning, natural armor +6, and speed 30, but loses its amorphous and compression abilities. It can liquefy this skin as a full-round action, losing its DR and natural armor, changing its speed to 10 feet, and regaining the amorphous and compression abilities. The golem normally maintains its congealed skin, liquefying itself only when it has to pass through obstacles that would hinder its solid form."
+          }
+        ]
+      },
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A blood golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "Cure spells affect it as if it were a living creature, but only cure the minimum amount of damage."
+                }
+              ],
+              [
+                {
+                  "text": "Spells and effects that specifically affect blood (such as "
+                },
+                {
+                  "text": "boiling blood",
+                  "isMagic": true
+                },
+                {
+                  "text": ") affect it normally."
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Vulnerable to Bleed (Ex)",
+        "description": [
+          {
+            "text": "Bleed effects, blood drain, and attacks that target a creature's blood affect a blood golem normally. The golem can spend a full-round action to harden its clotted outer shell to end a bleed effect."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Carnivorous Blob",
     "source": "PFRPG Bestiary 2",
     "alignment": "N",
@@ -3137,6 +3328,126 @@
     ]
   },
   {
+    "name": "Tiberolith",
+    "source": "PFRPG Bestiary 4",
+    "alignment": "N",
+    "size": "Huge",
+    "environment": "any coastlines or water",
+    "organization": "solitary, pair, or squad (3-4)",
+    "treasure": "standard",
+    "type": "construct",
+    "CR": 10,
+    "space": 15,
+    "reach": 15,
+    "racialHD": 13,
+    "Str": 26,
+    "Dex": 11,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 30
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 2,
+        "nbDice": 3,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 16,
+    "baseFort": 4,
+    "baseRef": 4,
+    "baseWill": 4,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "spell trap"
+      ],
+      "DR": [
+        {
+          "value": 10,
+          "negatedByAny": [
+            "adamantine"
+          ]
+        },
+        {
+          "value": 10,
+          "negatedByAny": [
+            "bludgeoning"
+          ]
+        }
+      ],
+      "immune": [
+        "acid",
+        "construct traits"
+      ],
+      "resist": [
+        {
+          "name": "electricity",
+          "value": 30
+        }
+      ],
+      "SR": {
+        "value": 24
+      }
+    },
+    "specialAtk": [
+      {
+        "name": "corrosive strikes"
+      },
+      {
+        "name": "shockwave"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Corrosive Strikes (Ex)",
+        "description": [
+          {
+            "text": "A tiberolith reduced to 30 or fewer hit points leaks acid, and deals an additional 1d6 points of acid damage with its slam attacks."
+          }
+        ]
+      },
+      {
+        "title": "Shockwave (Su)",
+        "description": [
+          {
+            "text": "Three times per day, a tiberolith can unleash a burst of electricity. This blast deals 12d6 points of electricity damage to all creatures within 30 feet (Reflex DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " half). A tiberolith is immune to its shockwave and that of other tiberoliths. The save DC is Constitution-based."
+          }
+        ]
+      },
+      {
+        "title": "Spell Trap (Su)",
+        "description": [
+          {
+            "text": "When a tiberolith is targeted by a spell that allows spell resistance and its spell resistance fails to protect it against that spell, the spell instead becomes trapped in the tiberolith's magical runes. The runes can only trap one spell at a time; if a second spell would become trapped, the first spell affects the tiberolith normally (including allowing a saving throw, if appropriate) and the second spell is trapped. A trapped spell dissipates harmlessly after 24 hours."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Titan Centipede",
     "source": "PFRPG Bestiary 2",
     "alignment": "N",
@@ -3407,6 +3718,119 @@
           },
           {
             "text": " Fortitude save or the flesh around the point of contact swiftly begins to rot away, exposing raw bone with shocking swiftness. This hideous affliction causes 1d4 points of Strength damage and 1d4 points of Constitution damage. This is a poison effect. The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Wax Golem",
+    "source": "PFRPG Bestiary 4",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any",
+    "organization": "solitary or gang (2-4)",
+    "treasure": "none",
+    "type": "construct",
+    "CR": 3,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 14,
+    "Dex": 9,
+    "Wis": 11,
+    "Cha": 1,
+    "speed": {
+      "land": 30
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "conditional sentience"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 6,
+    "baseFort": 1,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "cold",
+        "construct traits",
+        "magic"
+      ]
+    },
+    "weaknesses": [
+      "vulnerable to fire"
+    ],
+    "specialAbilities": [
+      {
+        "title": "Conditional Sentience (Su)",
+        "description": [
+          {
+            "text": "A wax golem constructed to look like a humanoid (whether a particular individual or not) has a small chance of gaining sentience and genuinely believing it is a living creature. Each week, such a wax golem has a cumulative 1% chance of becoming sentient (on the second week the chance is 2%, the third week 3%, and so on), to a maximum of 5%. If it does attain sentience, the golem gains an Intelligence score of 10, retroactive skill points, feats dependent on its Hit Dice, and 1 class level with the potential to gain more. If it was crafted to resemble a specific individual, it also gains a +10 racial bonus on Disguise checks made to impersonate that individual. A sentient wax golem ventures into the world and tries to live a life similar to that of the person (or type of person) it resembles. However, if the sentient wax golem ever encounters the person it is modeled after, it attempts to stealthily kill that person and take her place. The only way for a sentient wax golem to lose its sentience is either to take an amount of fire damage equal to half its hit points (which melts its features away) or to be destroyed."
+          }
+        ]
+      },
+      {
+        "title": "Immunity to Magic (Ex)",
+        "description": [
+          {
+            "text": "A wax golem is immune to any spell or spell-like ability that allows spell resistance, with the exception of spells and spell-like abilities that have the fire descriptor. In addition, certain spells and effects function differently against the creature, as noted below."
+          }
+        ],
+        "extra": [
+          {
+            "type": "list",
+            "content": [
+              [
+                {
+                  "text": "A magical attack that deals fire damage slows a wax golem (as the "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " spell) for 2d6 rounds (no save). In addition, for 3 rounds after taking fire damage, every time a wax golem uses its slam attack, it deals an additional 1d4 points of fire damage due to its molten wax."
+                }
+              ],
+              [
+                {
+                  "text": "A magical attack that deals cold damage breaks any "
+                },
+                {
+                  "text": "slow",
+                  "isMagic": true
+                },
+                {
+                  "text": " effect on the golem and heals 1 point of damage for each 3 points of damage the attack would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A wax golem gains no saving throw against cold effects."
+                }
+              ]
+            ]
           }
         ]
       }

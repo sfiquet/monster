@@ -1,0 +1,59 @@
+{
+  "name": "Wax Golem",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "cold", 
+      "construct traits", 
+      "magic"
+    ]
+  },
+  "weaknesses": [
+    "vulnerable to fire"
+  ],
+  "specialAbilities": [
+    {
+      "title": "Conditional Sentience (Su)",
+      "description": [
+        {
+          "text": "A wax golem constructed to look like a humanoid (whether a particular individual or not) has a small chance of gaining sentience and genuinely believing it is a living creature. Each week, such a wax golem has a cumulative 1% chance of becoming sentient (on the second week the chance is 2%, the third week 3%, and so on), to a maximum of 5%. If it does attain sentience, the golem gains an Intelligence score of 10, retroactive skill points, feats dependent on its Hit Dice, and 1 class level with the potential to gain more. If it was crafted to resemble a specific individual, it also gains a +10 racial bonus on Disguise checks made to impersonate that individual. A sentient wax golem ventures into the world and tries to live a life similar to that of the person (or type of person) it resembles. However, if the sentient wax golem ever encounters the person it is modeled after, it attempts to stealthily kill that person and take her place. The only way for a sentient wax golem to lose its sentience is either to take an amount of fire damage equal to half its hit points (which melts its features away) or to be destroyed."
+        }
+      ]
+    },
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A wax golem is immune to any spell or spell-like ability that allows spell resistance, with the exception of spells and spell-like abilities that have the fire descriptor. In addition, certain spells and effects function differently against the creature, as noted below."
+        }
+      ],
+      "extra": [
+        {
+          "type": "list",
+          "content": [
+            [
+              {"text": "A magical attack that deals fire damage slows a wax golem (as the "},
+              {"text": "slow", "isMagic": true},
+              {"text": " spell) for 2d6 rounds (no save). In addition, for 3 rounds after taking fire damage, every time a wax golem uses its slam attack, it deals an additional 1d4 points of fire damage due to its molten wax."}
+            ],
+            [
+              {"text": "A magical attack that deals cold damage breaks any "},
+              {"text": "slow", "isMagic": true},
+              {"text": " effect on the golem and heals 1 point of damage for each 3 points of damage the attack would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. A wax golem gains no saving throw against cold effects."}
+            ]
+          ]
+        }
+      ]      
+    }
+  ]  
+}

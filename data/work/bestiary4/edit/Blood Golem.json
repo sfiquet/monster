@@ -1,0 +1,127 @@
+{
+  "name": "Blood Golem",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "amorphous"
+    ],
+    "DR": [
+      {
+        "value": 5,
+        "negatedByAny": ["bludgeoning"]
+      }
+    ],
+    "immune": [
+      "construct traits",
+      "magic"
+    ]
+  },
+  "weaknesses": [
+    "vulnerable to bleed"
+  ],
+  "specialAtk": [
+    {
+      "name": "bleed",
+      "details": [
+        {"text": "1d6"}
+      ]
+    },
+    {
+      "name": "blood drain",
+      "details": [
+        {"text": "1d2 Con"}
+      ]
+    },
+    {
+      "name": "constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 2,
+          "dieType": 6,
+          "strengthFactor": 1
+        },
+        {
+          "text": " plus bleed"
+        }
+      ]
+    }
+  ],
+  "specialCMB": [
+    {
+      "name": "grapple",
+      "components": [
+        {
+          "name": "grab",
+          "type": "melee",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Blood Drain (Su)",
+      "description": [
+        {
+          "text": "A blood golem heals 5 hit points each round it drains blood."
+        }
+      ]
+    },
+    {
+      "title": "Clotted Skin (Ex)",
+      "description": [
+        {
+          "text": "A blood golem can congeal its surface into a hard skin as a full-round action, allowing it to assume a vaguely humanoid form. With its skin, it gains DR 5/bludgeoning, natural armor +6, and speed 30, but loses its amorphous and compression abilities. It can liquefy this skin as a full-round action, losing its DR and natural armor, changing its speed to 10 feet, and regaining the amorphous and compression abilities. The golem normally maintains its congealed skin, liquefying itself only when it has to pass through obstacles that would hinder its solid form."
+        }
+      ]
+    },
+    {
+      "title": "Immunity to Magic (Ex)",
+      "description": [
+        {
+          "text": "A blood golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature."
+        }
+      ],
+      "extra": [
+        {
+          "type": "list",
+          "content": [
+            [
+              {"text": "Cure spells affect it as if it were a living creature, but only cure the minimum amount of damage."}
+            ],
+            [
+              {"text": "Spells and effects that specifically affect blood (such as "},
+              {"text": "boiling blood", "isMagic": true},
+              {"text": ") affect it normally."}
+            ]
+          ]
+        }
+      ]      
+    },
+    {
+      "title": "Vulnerable to Bleed (Ex)",
+      "description": [
+        {
+          "text": "Bleed effects, blood drain, and attacks that target a creature's blood affect a blood golem normally. The golem can spend a full-round action to harden its clotted outer shell to end a bleed effect."
+        }
+      ]
+    }
+  ]  
+}

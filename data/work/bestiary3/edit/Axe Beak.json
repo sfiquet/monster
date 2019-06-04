@@ -1,0 +1,24 @@
+{
+  "name": "Axe Beak",
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "specialAtk": [
+    {
+      "name": "sudden charge"
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Sudden Charge (Ex)",
+      "description": [
+        {
+          "text": "When making a charge attack, an axe beak makes a single bite attack. If successful, it may also attempt to trip its opponent as a free action without provoking an attack of opportunity. If the attempt fails, the axe beak cannot be tripped in return."
+        }
+      ]
+    }
+  ]  
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Phantom Fungus",
+  "feats": [
+    {
+      "name": "Skill Focus",
+      "details": [
+        {
+          "name": "Perception"
+        },
+        {
+          "name": "Stealth"
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Perception",
+      "ranks": 4
+    },
+    {
+      "name": "Stealth",
+      "racial": 4
+    }
+  ],
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 30,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    },
+    {
+      "name": "tremorsense", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "phantom flesh"
+    ],
+    "immune": [
+      "plant traits"
+    ]
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 2
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Phantom Flesh (Su)",
+      "description": [
+        {
+          "text": "As a move action, a phantom fungus can turn invisible as if using "
+        },
+        {
+          "text": "greater invisibility",
+          "isMagic": true
+        },
+        {
+          "text": " (caster level 4th). A moment after it attacks with invisibility, the creature appears briefly as a semi-transparent version of its normal self. This allows any viewer with line of sight to the phantom fungus to pinpoint its location at the time of the attack (though if the creature moves after it attacks, opponents have to pinpoint it again). An opponent can ready an action to strike at the fungus when it momentarily appears, in which case the creature only has concealment instead of invisibility (20% miss chance). The fungus can turn completely visible as a move action, though it normally remains invisible all the time. If killed while invisible, it becomes visible 1d4 minutes later."
+        }
+      ]
+    }
+  ]  
+}

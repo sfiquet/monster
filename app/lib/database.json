@@ -251,6 +251,82 @@
     ]
   },
   {
+    "name": "Axe Beak",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "temperate plains",
+    "organization": "solitary, pair, or flock (3-6)",
+    "treasure": "incidental",
+    "type": "animal",
+    "CR": 2,
+    "space": 10,
+    "reach": 10,
+    "racialHD": 3,
+    "Str": 18,
+    "Dex": 17,
+    "Con": 16,
+    "Wis": 11,
+    "Int": 2,
+    "Cha": 10,
+    "speed": {
+      "land": 50
+    },
+    "feats": [
+      {
+        "name": "Run"
+      },
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "naturalArmor": 2,
+    "baseFort": 3,
+    "baseRef": 3,
+    "baseWill": 1,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "specialAtk": [
+      {
+        "name": "sudden charge"
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Sudden Charge (Ex)",
+        "description": [
+          {
+            "text": "When making a charge attack, an axe beak makes a single bite attack. If successful, it may also attempt to trip its opponent as a free action without provoking an attack of opportunity. If the attempt fails, the axe beak cannot be tripped in return."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Basidirond",
     "source": "PFRPG Bestiary",
     "alignment": "N",
@@ -1171,6 +1247,120 @@
     ]
   },
   {
+    "name": "Dire Corby",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "NE",
+    "size": "Medium",
+    "environment": "any underground",
+    "organization": "gang (2-5), hunting flock (1-3 dread corbies and 5-10 dire corbies), or rookery (1-10 dread corbies and 10-50 dire corbies plus 1 barbarian or fighter of 3rd-5th level per 10 adults)",
+    "languages": "Undercommon",
+    "treasure": "standard",
+    "type": "monstrous humanoid",
+    "CR": 1,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 2,
+    "Str": 13,
+    "Dex": 12,
+    "Con": 15,
+    "Wis": 10,
+    "Int": 7,
+    "Cha": 8,
+    "speed": {
+      "land": 30,
+      "climb": 30
+    },
+    "feats": [
+      {
+        "name": "Blind-Fight"
+      },
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Stealth"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "claw": {
+        "name": "claw",
+        "nbAttacks": 2,
+        "nbDice": 1,
+        "dieType": 4,
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "racial": 8,
+        "ranks": 1
+      },
+      {
+        "name": "Climb",
+        "ranks": 1
+      },
+      {
+        "name": "Perception",
+        "racial": 2,
+        "ranks": 1
+      },
+      {
+        "name": "Stealth",
+        "ranks": 1
+      }
+    ],
+    "naturalArmor": 2,
+    "baseFort": 0,
+    "baseRef": 3,
+    "baseWill": 3,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "ferocity"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "leap"
+      },
+      {
+        "name": "rend",
+        "details": [
+          {
+            "text": "2 claws, "
+          },
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 1,
+            "dieType": 4,
+            "strengthFactor": 1.5
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Leap (Ex)",
+        "description": [
+          {
+            "text": "A dire corby can perform a special kind of pounce attack by jumping into combat. When a dire corby charges, it can make a DC 20 Acrobatics check to jump into the air and land next to its enemies. If it succeeds at this Acrobatics check, it can make a full attack (two claw attacks, plus a rend attack if both claws hit) against foes in reach. If it fails, it can still make its one attack as normal for a charge."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Flesh Golem",
     "source": "PFRPG Bestiary",
     "alignment": "N",
@@ -1281,6 +1471,117 @@
                 }
               ]
             ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Garden Ooze",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "N",
+    "size": "Small",
+    "environment": "temperate forests, marshes, and urban",
+    "organization": "solitary, pair, or patch (3-5)",
+    "treasure": "none",
+    "type": "ooze",
+    "CR": 2,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 3,
+    "Str": 11,
+    "Dex": 16,
+    "Con": 15,
+    "Wis": 1,
+    "Cha": 2,
+    "speed": {
+      "land": 20,
+      "climb": 20
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "extraDamage": [
+          "1d8 acid"
+        ],
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "camouflage"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 1,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "ooze traits"
+      ],
+      "immune": [
+        "acid"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "acid"
+      },
+      {
+        "name": "stink"
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Acid (Ex)",
+        "description": [
+          {
+            "text": "A garden ooze excretes digestive acid that can dissolve flesh. Creatures made of harder materials or plant matter are immune to the ooze's acid."
+          }
+        ]
+      },
+      {
+        "title": "Camouflage (Ex)",
+        "description": [
+          {
+            "text": "A garden ooze is difficult to spot when it is at rest among plant growth of any type. A DC 15 Perception check is required to notice the ooze is a separate entity and not a diseased portion of the plant it rests upon. The ooze automatically hits with a slam against any creature that fails to notice the ooze and enters its square."
+          }
+        ]
+      },
+      {
+        "title": "Stink (Ex)",
+        "description": [
+          {
+            "text": "Once every 24 hours, a garden ooze can release foul-smelling gases in a 5-foot-radius spread centered on the ooze. The ooze usually does so after it is first injured. The stench of these vapors is overpowering during the first round it exists, causing living creatures within it to become sickened for 1d3 rounds (Fort DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": " negates). This is a poison effect. The save DC is Constitution-based."
           }
         ]
       }
@@ -1404,6 +1705,111 @@
         "description": [
           {
             "text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Giant Ant Lion",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "warm deserts",
+    "organization": "solitary or nest (2-4)",
+    "treasure": "incidental",
+    "type": "vermin",
+    "CR": 5,
+    "space": 10,
+    "reach": 5,
+    "racialHD": 8,
+    "Str": 20,
+    "Dex": 11,
+    "Con": 17,
+    "Wis": 11,
+    "Cha": 10,
+    "speed": {
+      "land": 30,
+      "burrow": 10
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 2,
+        "dieType": 8,
+        "extraDamage": [
+          "grab"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 10,
+    "baseFort": 6,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "tremorsense",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "sand trap"
+      }
+    ],
+    "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Sand Trap (Ex)",
+        "description": [
+          {
+            "text": "A giant ant lion can create a 60-foot-diameter, 20-foot-deep pit in any sand or soft earth surface. Creating a sand trap takes 1 hour. A DC 15 Perception check allows a creature to realize such a depression in the sand is in fact a trap. Any creature that steps into the trap slides to the center if it fails a DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Dex"
+          },
+          {
+            "text": " Reflex save—such victims take no damage, but they do fall prone. A giant ant lion can make an attack of opportunity against any creature that falls to the bottom of its sand trap. These creatures can move across sand traps at their normal speed and are immune to the trap's effects. Other creatures can navigate the trap's walls with a DC 20 Climb check. The save DC is Dexterity-based."
           }
         ]
       }
@@ -2218,6 +2624,119 @@
         "description": [
           {
             "text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Phantom Fungus",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any underground",
+    "organization": "solitary or grove (2-5)",
+    "treasure": "incidental",
+    "type": "plant",
+    "CR": 3,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 4,
+    "Str": 15,
+    "Dex": 10,
+    "Con": 16,
+    "Wis": 11,
+    "Int": 2,
+    "Cha": 9,
+    "speed": {
+      "land": 20,
+      "climb": 20
+    },
+    "feats": [
+      {
+        "name": "Skill Focus",
+        "details": [
+          {
+            "name": "Perception"
+          },
+          {
+            "name": "Stealth"
+          }
+        ]
+      }
+    ],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 2,
+        "dieType": 6,
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "racial": 4
+      }
+    ],
+    "naturalArmor": 5,
+    "baseFort": 4,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "tall",
+    "senses": [
+      {
+        "name": "blindsight",
+        "value": 30,
+        "unit": "ft."
+      },
+      {
+        "name": "low-light vision"
+      },
+      {
+        "name": "tremorsense",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "abilities": [
+        "phantom flesh"
+      ],
+      "immune": [
+        "plant traits"
+      ]
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 2
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Phantom Flesh (Su)",
+        "description": [
+          {
+            "text": "As a move action, a phantom fungus can turn invisible as if using "
+          },
+          {
+            "text": "greater invisibility",
+            "isMagic": true
+          },
+          {
+            "text": " (caster level 4th). A moment after it attacks with invisibility, the creature appears briefly as a semi-transparent version of its normal self. This allows any viewer with line of sight to the phantom fungus to pinpoint its location at the time of the attack (though if the creature moves after it attacks, opponents have to pinpoint it again). An opponent can ready an action to strike at the fungus when it momentarily appears, in which case the creature only has concealment instead of invisibility (20% miss chance). The fungus can turn completely visible as a move action, though it normally remains invisible all the time. If killed while invisible, it becomes visible 1d4 minutes later."
           }
         ]
       }

@@ -1,0 +1,65 @@
+{
+  "name": "Garden Ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "ooze traits"
+    ],
+    "immune": [
+      "acid"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "acid"
+    },
+    {
+      "name": "stink"
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "A garden ooze excretes digestive acid that can dissolve flesh. Creatures made of harder materials or plant matter are immune to the ooze's acid."
+        }
+      ]
+    },
+    {
+      "title": "Camouflage (Ex)",
+      "description": [
+        {
+          "text": "A garden ooze is difficult to spot when it is at rest among plant growth of any type. A DC 15 Perception check is required to notice the ooze is a separate entity and not a diseased portion of the plant it rests upon. The ooze automatically hits with a slam against any creature that fails to notice the ooze and enters its square."
+        }
+      ]
+    },
+    {
+      "title": "Stink (Ex)",
+      "description": [
+        {
+          "text": "Once every 24 hours, a garden ooze can release foul-smelling gases in a 5-foot-radius spread centered on the ooze. The ooze usually does so after it is first injured. The stench of these vapors is overpowering during the first round it exists, causing living creatures within it to become sickened for 1d3 rounds (Fort DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": " negates). This is a poison effect. The save DC is Constitution-based."
+        }
+      ]
+    }
+  ]  
+}

@@ -76,6 +76,7 @@ body {
 }
 
 footer {
+	margin-top: 1rem;
 	border-top: 2px solid darkred;
 	text-align: center;
 	font-size: .9em;
@@ -113,10 +114,6 @@ a {
 
 a:active, a:hover {
 	text-decoration: underline;
-}
-
-li a {
-	line-height: 48px;
 }
 
 .button {
@@ -162,9 +159,6 @@ li a {
 	body {
 		font-size: 10pt;
 	}
-	li a {
-		line-height: 1.4;
-	}
 }
 
 /* Open Game License page */
@@ -200,13 +194,63 @@ li a {
 	}
 	.about li {
 		padding: 0;
+		line-height: 1.4;
 	}
 }
 
 /* Monster selection */
-#monster-list {
+.monster-list {
 	list-style-type: none;
 	margin: 0 auto;
+	padding: 0;
+}
+
+.monster-list li > a {
+	display: block;
+	font-size: 1.25rem;
+	padding: calc((40px - 1em)/2) .5em;
+	text-align: center;
+}
+
+.monster-list li:nth-child(odd) > a {
+	background-color: linen;
+	color: darkred;
+}
+
+.monster-list li:nth-child(even) > a {
+	background-color: floralwhite;
+	color: darkred;
+}
+
+@media (min-width: 576px){
+	.monster-list {
+		column-count: 2;
+	}
+}
+@media (min-width: 768px){
+	.monster-list {
+		column-count: 3;
+	}
+}
+@media (min-width: 992px){
+	.monster-list li:nth-child(n) > a {
+		background-color: white;
+	}
+	.monster-list li > a {
+		font-size: 1em;
+		padding: .5em;
+		text-align: left;
+	}
+}
+@media print {
+	.monster-list li:nth-child(n) > a {
+		background-color: white;
+	}
+	.monster-list li > a {
+		font-size: 10pt;
+		padding: 0;
+		text-align: left;
+	}
 }
 
 /* Customisation options */

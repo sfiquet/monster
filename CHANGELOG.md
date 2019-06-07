@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Data: modified skill format to support specialised skills
 - Data & App: represent DR, Resist and SR as values instead of text
 - Srdimport: create a separate JSON file for each monster
+- App: improve monster selection UI
 
 ### Fixed
 - Calculations: implement proper support for monster type class skills

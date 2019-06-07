@@ -1,7 +1,7 @@
-<div class="content">
-	<h2 class="content-title">Select Monster</h2>
+<div>
+	<h2>Select Monster</h2>
 	{{#if monsters}}
-		<ul id="monster-list" title="Click on a monster to select it.">
+		<ul class="monster-list" title="Click on a monster to select it.">
 			{{#each monsters}}
 				<li><a href="{{this.url}}">{{this.name}}</a></li>
 			{{/each}}

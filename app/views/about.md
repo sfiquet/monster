@@ -5,15 +5,21 @@ As the application is entirely based on Open Game License (OGL) content, this pa
 
 ## Monsters
 
-The monsters currently supported by the application come from the [Bestiary](http://legacy.aonprd.com/bestiary/monsterIndex.html):
+Currently the database holds 32 monsters from the first 4 Bestiaries. More will be added as the application is developed. 
 
-- [Black pudding](http://legacy.aonprd.com/bestiary/blackPudding.html#black-pudding)
-- [Gelatinous Cube](http://legacy.aonprd.com/bestiary/gelatinousCube.html#gelatinous-cube)
-- [Gray Ooze](http://legacy.aonprd.com/bestiary/grayOoze.html#gray-ooze)
-- [Ochre Jelly](http://legacy.aonprd.com/bestiary/ochreJelly.html#ochre-jelly)
-- [Wight](http://legacy.aonprd.com/bestiary/wight.html#wight)
+The current monsters have the following types:
+- animal: 3
+- construct: 11
+- magical beast: 1
+- monstrous humanoid: 1
+- ooze: 7
+- plant: 4
+- undead: 1
+- vermin: 4
 
-More will be added as the application is developed.
+Aberrations, humanoids and outsiders need special handling and are currently not supported.
+
+Dragons and feys are not specifically excluded but have stats that are not implemented yet, such as spells or fly speed.
 
 ## Calculation Rules
 In order to apply templates only core data is stored. Everything else is calculated by applying generic rules from the Core Rulebook and monster-specific rules from the Bestiaries.

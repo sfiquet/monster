@@ -4,33 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.2.0 - 2019-06-08
 ### Added
-- Srdimport: disable importing of monsters with unsupported features
-  - subtypes
-  - types: aberration, humanoid and outsider
-- Specialised skills support, including in racial modifiers and with Skill Focus:
-  - app
-  - srdimport
-- new Build utility: generate the database from the output of srdimport and manually edited files
-- Srdimport: import monster source and languages
-- App: support complex content in special abilities
+- Support complex content in Special Abilities (App)
   - multiple paragraphs
   - titled paragraphs
   - lists
   - tables
   - additional title level for formatting curse, disease and poison
+- Support specialised skills: Craft, Knowledge, Perform, Profession; including in racial modifiers and with Skill Focus (Srdimport & App)
 - Database: use srdimport to import monsters
   - Bestiary 1: import 16 monsters, including the 5 that were previously in the database
   - Bestiary 2: import 8 monsters
   - Bestiary 3: import 5 monsters
   - Bestiary 4: import 3 monsters
+- Srdimport: disable importing of monsters with unsupported features
+  - subtypes
+  - types: aberration, humanoid and outsider
+- Srdimport: import monster source and languages
+- new Build utility: generate the database from the output of srdimport and manually edited files
 
 ### Changed
 - Data: modified skill format to support specialised skills
 - Data & App: represent DR, Resist and SR as values instead of text
 - Srdimport: create a separate JSON file for each monster
-- App: improve monster selection UI
+- App: improve UI for monster selection UI
 
 ### Fixed
 - Calculations: implement proper support for monster type class skills

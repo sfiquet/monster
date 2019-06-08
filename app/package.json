@@ -1,16 +1,16 @@
 {
   "name": "monster-workshop",
   "description": "Monster advancement app for Pathfinder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
-    "node": "~10.15.3",
+    "node": "~10.16.0",
     "npm": "~6.9.0"
   },
   "private": true,
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "express-handlebars": "^3.0.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
     "marked": "^0.6.2",
     "underscore.string": "^3.3.5"
   },

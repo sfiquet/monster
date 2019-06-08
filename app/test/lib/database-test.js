@@ -18,7 +18,7 @@ describe('Database', function(){
 					return done(err);
 				}
 				expect(list).to.be.an.instanceof(Array);
-				expect(list).to.have.length(5);
+				expect(list).to.have.length(32);
 				expect(list[0]).to.have.ownProperty('name');
 				expect(list[0]).to.have.ownProperty('id');
 				done();
@@ -27,12 +27,12 @@ describe('Database', function(){
 		});
 		it('returns a list of all monsters matching the search criteria', function(done){
 			var db = new Database();
-			db.findMonsterList('g', function(err, list){
+			db.findMonsterList('golem', function(err, list){
 				if (err) {
 					return done(err);
 				}
 				expect(list).to.be.an.instanceof(Array);
-				expect(list).to.have.length(4);
+				expect(list).to.have.length(8);
 				done();
 			});
 		});

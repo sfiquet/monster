@@ -1,8 +1,8 @@
 /* jshint node: true */
 'use strict';
 
-var sprintf = require('underscore.string/sprintf'),
-	numberFormat = require('underscore.string/numberFormat');
+const sprintf = require('sprintf-js').sprintf;
+const numberFormat = require('underscore.string/numberFormat');
 
 /**
  * formatModifier

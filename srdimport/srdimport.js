@@ -210,6 +210,9 @@ function createMonster(rawMonster) {
 		addProperty(monster, log, calc.calculateSkills(temp.mergedSkills, monsterObj));
 	}
 
+	// raise an error if there are extra HPs. Later we'll need to store them in the monster
+	addProperty(temp, log, calc.calculateExtraHP(rawMonster.hp, monsterObj.getHP()));
+
 	addProperty(monster, log, calc.calculateDiscrepancy('naturalArmor', rawMonster.ac, monsterObj.getAC()));
 	addProperty(monster, log, calc.calculateDiscrepancy('baseFort', rawMonster.fort, monsterObj.getFortitude()));
 	addProperty(monster, log, calc.calculateDiscrepancy('baseRef', rawMonster.ref, monsterObj.getReflex()));

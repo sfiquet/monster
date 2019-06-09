@@ -166,4 +166,16 @@ describe('Calc', function(){
 				{name: 'test', errors: [createMessage('negativeDiscrepancy', 'test', -3, 1)], warnings: [], data: undefined});
 		});
 	});
+
+	describe('calculateExtraHP', () => {
+		
+		it('generates a discrepancy value equal to the difference between the expected value and the calculated value for hp', () => {
+			expect(calc.calculateExtraHP(10, 10)).to.deep.equal({name: 'extraHP', errors: [], warnings: [], data: 0});
+		});
+
+		it('generates an error if there is a difference between the expected value and the calculated value for hp (temporary)', () => {
+			expect(calc.calculateExtraHP(15, 10)).to.deep.equal({name: 'extraHP', errors: [createMessage('extraHPNotHandled')], warnings: [], data: undefined});
+			expect(calc.calculateExtraHP(10, 15)).to.deep.equal({name: 'extraHP', errors: [createMessage('extraHPNotHandled')], warnings: [], data: undefined});
+		});
+	});
 });

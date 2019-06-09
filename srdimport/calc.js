@@ -94,5 +94,18 @@ function calculateDiscrepancy(key, targetValue, actualValue){
 	return {name: key, errors: errors, warnings: [], data: diff};
 }
 
+function calculateExtraHP(targetValue, actualValue){
+	let errors = [];
+	let diff = targetValue - actualValue;
+
+	if (diff !== 0){
+		errors.push(createMessage('extraHPNotHandled'));
+		diff = undefined;
+	}
+	
+	return {name: 'extraHP', errors: errors, warnings: [], data: diff};
+}
+
 exports.calculateSkills = calculateSkills;
 exports.calculateDiscrepancy = calculateDiscrepancy;
+exports.calculateExtraHP = calculateExtraHP;

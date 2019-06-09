@@ -1,8 +1,6 @@
 // parameter: optional port number
 // if omitted the server is created on port 8080
 
-/* jshint node: true */
-
 "use strict";
 
 var express				= require('express'), // create express app

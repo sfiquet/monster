@@ -8,7 +8,6 @@
 // Currently there is no way to mix and match functions and methods or methods from several objects.
 
 
-/* jshint node: true */
 "use strict";
 
 function Sum (obj) {

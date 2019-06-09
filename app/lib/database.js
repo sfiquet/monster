@@ -1,4 +1,3 @@
-/* jshint node: true */
 'use strict';
 
 var Monster = require('./monster');

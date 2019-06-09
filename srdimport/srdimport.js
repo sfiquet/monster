@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const convert = require('./convert');
 const calc = require('./calc');
+const shape = require('./shape');
 const Monster = require('../app/lib/monster');
 
 const maxRows = 2812;
@@ -216,11 +217,7 @@ function createMonster(rawMonster) {
 
 	// initial value for shape
 	// This is a best guess. All monsters should be checked manually before going live.
-	if (monster.type === 'humanoid' || monster.type === 'monstrous humanoid' || monster.type === 'fey') {
-		monster.shape = 'tall';
-	} else {
-		monster.shape = 'long';
-	}
+	monster.shape = shape.guessShape(monsterObj);
 
 	return {log: log, monster: monster};
 }

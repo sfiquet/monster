@@ -3,14 +3,14 @@
 
 var url = require('url');
 
-var NO_OPTIONS = 'original',
-	NO_MONSTER = 'no-monster',
-	ADVANCE_SEGMENT = 'advance',
-	MAX_TEMPLATE_USE = 3,
-	ADVANCE_SEG_ID = 1,
-	MONSTER_SEG_ID = 2,
-	OPTIONS_SEG_ID = 3,
-	EXTRA_SEG_ID = 4;
+const NO_OPTIONS = 'original';
+// const NO_MONSTER = 'no-monster';
+const ADVANCE_SEGMENT = 'advance';
+const MAX_TEMPLATE_USE = 3;
+// const ADVANCE_SEG_ID = 1;
+const MONSTER_SEG_ID = 2;
+const OPTIONS_SEG_ID = 3;
+// const EXTRA_SEG_ID = 4;
 
 exports.extractAdvanceOptions = extractAdvanceOptions;
 exports.extractAdvanceMonster = extractAdvanceMonster;

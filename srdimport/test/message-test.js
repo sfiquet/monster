@@ -31,6 +31,8 @@ describe('Message', function(){
 			// The error message will show in the test output
 			// it makes it easier to spot the problem
 			var message = createMessage('invalidBanana', 'your banana should be red');
+			expect(message.logKey).to.equal('invalidBanana');
+			expect(message.params).to.deep.equal(['your banana should be red']);
 		});
 	});
 

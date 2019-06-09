@@ -14,9 +14,6 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "no-console": "off",
-        "no-unused-vars": "warn",
-        "no-mixed-spaces-and-tabs": "warn",
-        "no-useless-escape": "warn"
+        "no-console": "off"
     }
 }

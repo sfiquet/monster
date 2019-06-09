@@ -66,16 +66,15 @@ OrderedSet.prototype.getKeys = function(){
  * getItemByKey
  * return the item identified by the key or undefined if not found
  */
- OrderedSet.prototype.getItemByKey = function(key){
- 	return this.set[key];
- };
+OrderedSet.prototype.getItemByKey = function(key){
+	return this.set[key];
+};
 
- /*
+/*
  * getItemByIndex
  * return the item identified by the index or undefined if out of bounds
  */
- OrderedSet.prototype.getItemByIndex = function(index){
- 	var key = this.order[index];
- 	return this.set[key];
- };
-
+OrderedSet.prototype.getItemByIndex = function(index){
+	var key = this.order[index];
+	return this.set[key];
+};

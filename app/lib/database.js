@@ -51,12 +51,11 @@ Database.prototype.findMonster = function(id, callback) {
  * Each list item is an object with 2 properties: name and id
  */
 Database.prototype.findMonsterList = function(searchString, callback) {
-	var list, i, size;
 	if (!this.monsterList) {
 		return callback(new Error('Database not initialised'), {});
 	}
 	
-	list = buildResultList(searchString, this.monsterList);
+	const list = buildResultList(searchString, this.monsterList);
 	
 	return callback(null, list);
 };

@@ -1,9 +1,8 @@
  /* jshint node: true */
 "use strict";
 
-var url 		= require('url'),
-	urlutil 	= require('./urlutil'),
-	Database 	= require('./database');
+const urlutil 	= require('./urlutil');
+const Database 	= require('./database');
 
 exports.get = getBrowsePage;
 

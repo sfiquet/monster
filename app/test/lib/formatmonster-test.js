@@ -81,14 +81,14 @@ describe('Formatting of monster data for display', function(){
 				result;
 			monster.optDefense = {
 				'DR': [
-		      {
-		        "value": 10,
-		        "negatedByAny": ["adamantine", "bludgeoning"]
-		      },
-		      {
-		        "value": 5,
-		        "negatedByAny": ["cold iron"]
-		      }
+					{
+						"value": 10,
+						"negatedByAny": ["adamantine", "bludgeoning"]
+					},
+					{
+						"value": 5,
+						"negatedByAny": ["cold iron"]
+					}
 				]
 			};
 			result = format.getOptionalDefense(monster);
@@ -102,15 +102,15 @@ describe('Formatting of monster data for display', function(){
 				result;
 			monster.optDefense = {
 				'resist': [
-		      {
-		      	"name": "cold",
-		        "value": 10,
-		      },
-		      {
-		      	"name": "fire",
-		        "value": 5,
-		        "comment": "(see below)"
-		      }
+					{
+						"name": "cold",
+						"value": 10,
+					},
+					{
+						"name": "fire",
+						"value": 5,
+						"comment": "(see below)"
+					}
 				]
 			};
 			result = format.getOptionalDefense(monster);
@@ -124,9 +124,9 @@ describe('Formatting of monster data for display', function(){
 				result;
 			monster.optDefense = {
 				'SR': {
-		        "value": 10,
-		        "comment": "vs lawful spells and creatures"
-		      }
+					"value": 10,
+					"comment": "vs lawful spells and creatures"
+				}
 			};
 			result = format.getOptionalDefense(monster);
 			expect(result).to.be.an.instanceof(Array);
@@ -135,8 +135,8 @@ describe('Formatting of monster data for display', function(){
 
 			monster.optDefense = {
 				'SR': {
-		        "value": 5,
-		      }
+					"value": 5,
+				}
 			};
 			result = format.getOptionalDefense(monster);
 			expect(result).to.be.an.instanceof(Array);

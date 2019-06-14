@@ -588,31 +588,21 @@ function getRacialModifiers(monster) {
  * getFeats
  */
 function getFeats(monster) {
-	var feats,
-		feat,
-		chunk,
-		chunks,
-		featObj;
-	var result = [];
-
-	feats = monster.getFeatsList();
+	const feats = monster.getFeatsList();
 	if (feats.length === 0) {
 		return;
 	}
 
-	feats.forEach(function(name){
-		chunk = {};
-		feat = monster.getFeat(name);
-		chunk.text = name;
+	return feats.map(feat => {
+		let chunk = { text: feat.name };
 		if (feat.url) {
 			chunk.url = feat.url;
 		}
-		featObj = { description: chunk };
+		let formatted = { description: chunk };
 
 		// add extra details here
 		if (feat.details) {
-			chunks = [];
-			feat.details.forEach(function(detail){
+			formatted.details = feat.details.map(detail => {
 				let name;
 				if (detail.specialty){
 					name = `${detail.name} [${detail.specialty}]`;
@@ -623,15 +613,12 @@ function getFeats(monster) {
 				if (detail.url){
 					chunk.url = detail.url;
 				}
-				chunks.push(chunk);
+				return chunk;
 			});
-			featObj.details = chunks;
 		}
 
-		result.push(featObj);
+		return formatted;
 	});
-
-	return result;
 }
 
 /**

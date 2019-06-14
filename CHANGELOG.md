@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+- Srdimport: Check for discrepancy between the HP in the Excel file and the calculated value
+
+### Changed
+- Srdimport: improve calculation of shape
+
+### Fixed
+- Feats: Fixed bug where only the last occurrence of a feat with details (e.g. Skill Focus) was taken into account
+
 ## 0.2.0 - 2019-06-08
 ### Added
 - Support complex content in Special Abilities (App)

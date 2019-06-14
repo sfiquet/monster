@@ -1073,6 +1073,41 @@ describe('Formatting of monster data for display', function(){
 					}
 				]);
 		});
+
+		it('formats separate Skill Focus feats correctly', () => {
+			const monster = new Monster({
+				feats: [
+					{
+						name: 'Skill Focus', 
+						url: 'url/skillfocus', 
+						details: [{name: 'Craft', specialty: 'traps', url: 'url/craft'}]
+					},
+					{
+						name: 'Skill Focus', 
+						url: 'url/skillfocus', 
+						details: [{name: 'Knowledge', specialty: 'nature', url: 'url/knowledge'}]
+					},
+				]
+			});
+			expect(format.getFeats(monster)).to.deep.equal(
+				[
+					{ 
+						description: { text: 'Skill Focus', url: 'url/skillfocus' },
+						details: 
+							[
+								{ text: 'Craft [traps]', url: 'url/craft' }
+							]
+					},
+					{ 
+						description: { text: 'Skill Focus', url: 'url/skillfocus' },
+						details: 
+							[
+								{ text: 'Knowledge [nature]', url: 'url/knowledge' }
+							]
+					}
+				]);
+
+		});
 	});
 
 	describe('getMonsterProfile', function(){

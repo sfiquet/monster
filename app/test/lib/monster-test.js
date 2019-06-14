@@ -1,8 +1,7 @@
 "use strict";
 
-var expect = require('chai').expect,
-	OrderedSet = require('../../lib/orderedset'),
-	Monster = require('../../lib/monster');
+const expect = require('chai').expect;
+const Monster = require('../../lib/monster');
 
 var tigerLiteral = {
 		name: 'Tiger',
@@ -124,7 +123,6 @@ describe('Monster', function(){
 			expect(myMonster.treasure).to.be.undefined;
 			expect(myMonster.speed).to.deep.equal({land: 30});
 			expect(myMonster.feats).to.deep.equal([]);
-			expect(myMonster.featSet).to.deep.equal(new OrderedSet([]));
 			expect(myMonster.melee).to.deep.equal({});
 			expect(myMonster.skills).to.deep.equal([]);
 			expect(myMonster.skillSet).to.deep.equal({});
@@ -270,7 +268,6 @@ describe('Monster', function(){
 			expect(myMonster.speed).to.deep.equal({land: 20, climb: 20});
 
 			expect(myMonster.feats).to.deep.equal([{name: 'Improved Initiative'}]);
-			expect(myMonster.featSet).to.deep.equal(new OrderedSet([{name: 'Improved Initiative'}]));
 
 			expect(myMonster.melee).to.deep.equal({
 				claw: {
@@ -1358,36 +1355,88 @@ describe('Monster', function(){
 			expect(monster.getFeatsList()).to.deep.equal([]);
 		});
 
-		it('return the correct feat names in the correct order', function(){
-			var tiger = new Monster(tigerLiteral);
-			expect(tiger.getFeatsList()).to.deep.equal(['Improved Initiative', 'Skill Focus']);
+		it('returns a copy of the monster\'s feats', function(){
+			const tiger = new Monster(tigerLiteral);
+			const feats = tiger.getFeatsList();
+			expect(feats).to.not.equal(tiger.feats);
+			expect(feats).to.deep.equal(tiger.feats);
 		});
 	});
 
-	describe('getFeat', function(){
-		it('returns undefined if the monster doesn\'t have that feat', function(){
-			var tiger = new Monster(tigerLiteral);
-			expect(tiger.getFeat('Improved Familiar')).to.be.undefined;
+	describe('hasFeat', () => {
+		it('returns true for simple feats if the monster has the feat', () => {
+			const monster = new Monster({feats: [{name:'Improved Initiative'}]});
+			expect(monster.feats).to.be.an('array').with.lengthOf(1);
+			expect(monster.hasFeat('Improved Initiative')).to.be.true;
 		});
 
-		it('returns an object describing the selected feat if the monster has it', function(){
-			var tiger = new Monster(tigerLiteral);
-			expect(tiger.getFeat('Improved Initiative')).to.deep.equal(
-				{
-					name: 'Improved Initiative',
-					url: 'url/improvedinit'
-				}
-			);
-			expect(tiger.getFeat('Skill Focus')).to.deep.equal(
-				{
-					name: 'Skill Focus',
-					url: 'url/skillfocus',
-					details: [{
-						name: 'Perception',
-						url: 'url/perception'
-					}]
-				}
-			);
+		it('returns false if the monster doesn\'t have the feat', () => {
+			const monster = new Monster({feats: [{name:'Improved Initiative'}]});
+			expect(monster.hasFeat('Acrobatic')).to.be.false;
+		});
+		
+		it('returns true for feats with details if the monster has the feat with the correct details', () => {
+			const monster = new Monster({feats: [{name:'Skill Focus', details: [{name: 'Perception'}]}]});
+			expect(monster.hasFeat('Skill Focus', 'Perception')).to.be.true;
+		});
+
+		it('returns false for feats with details if the monster has the feat but not with the given details', () => {
+			const monster = new Monster({feats: [{name:'Skill Focus', details: [{name: 'Perception'}]}]});
+			expect(monster.hasFeat('Skill Focus', 'Stealth')).to.be.false;
+		});
+		
+		it('returns true for feats with specialty details if the monster has the feat with the correct details and specialty', () => {
+			const monster = new Monster({feats: [{name:'Skill Focus', details: [{name: 'Knowledge', specialty: 'planes'}]}]});
+			expect(monster.hasFeat('Skill Focus', 'Knowledge', 'planes')).to.be.true;
+		});
+
+		it('returns false for feats with specialty details if the monster has the feat and details but not with the given specialty', () => {
+			const monster = new Monster({feats: [{name:'Skill Focus', details: [{name: 'Knowledge', specialty: 'planes'}]}]});
+			expect(monster.hasFeat('Skill Focus', 'Knowledge', 'geography')).to.be.false;			
+		});
+
+		it('returns the same value when detailed feats are represented grouped or separately', () => {
+			const grouped = new Monster({feats: [
+				{name:'Skill Focus', details: [
+					{name: 'Perception'},
+					{name: 'Stealth'}
+				]}
+			]});
+			const separate = new Monster({feats: [
+				{name:'Skill Focus', details: [{name: 'Perception'}]},
+				{name:'Skill Focus', details: [{name: 'Stealth'}]}
+			]});
+
+			expect(grouped.hasFeat('Skill Focus', 'Perception')).to.be.true;
+			expect(separate.hasFeat('Skill Focus', 'Perception')).to.be.true;
+
+			expect(grouped.hasFeat('Skill Focus', 'Stealth')).to.be.true;
+			expect(separate.hasFeat('Skill Focus', 'Stealth')).to.be.true;
+
+			expect(grouped.hasFeat('Skill Focus', 'Survival')).to.be.false;
+			expect(separate.hasFeat('Skill Focus', 'Survival')).to.be.false;
+		});
+
+		it('returns the same value when detailed feats with specialty are represented grouped or separately', () => {
+			const grouped = new Monster({feats: [
+				{name:'Skill Focus', details: [
+					{name: 'Knowledge', specialty: 'planes'},
+					{name: 'Knowledge', specialty: 'religion'}
+				]}
+			]});
+			const separate = new Monster({feats: [
+				{name:'Skill Focus', details: [{name: 'Knowledge', specialty: 'planes'}]},
+				{name:'Skill Focus', details: [{name: 'Knowledge', specialty: 'religion'}]}
+			]});
+
+			expect(grouped.hasFeat('Skill Focus', 'Knowledge', 'planes')).to.be.true;
+			expect(separate.hasFeat('Skill Focus', 'Knowledge', 'planes')).to.be.true;
+
+			expect(grouped.hasFeat('Skill Focus', 'Knowledge', 'religion')).to.be.true;
+			expect(separate.hasFeat('Skill Focus', 'Knowledge', 'religion')).to.be.true;
+			
+			expect(grouped.hasFeat('Skill Focus', 'Knowledge', 'local')).to.be.false;
+			expect(separate.hasFeat('Skill Focus', 'Knowledge', 'local')).to.be.false;
 		});
 	});
 
@@ -1436,6 +1485,27 @@ describe('Monster', function(){
 				});
 				expect(monster.getSkillBonusFromFeats('Knowledge', 'planes')).to.equal(6);
 				expect(monster.getSkillBonusFromFeats('Knowledge', 'religion')).to.equal(0);
+			});
+
+			it('works when skill focus is represented as separate feats', () => {
+				let monster = new Monster({name: 'monster', type: 'dragon', Int: 20,
+					skills: [
+						{name: 'Knowledge', specialty: 'planes', ranks: 10},
+						{name: 'Knowledge', specialty: 'religion', ranks: 2}
+					],
+					feats: [
+						{
+							name: 'Skill Focus',
+							details: [{name: 'Knowledge', specialty: 'planes'}]
+						},
+						{
+							name: 'Skill Focus',
+							details: [{name: 'Knowledge', specialty: 'religion'}]
+						}
+					]
+				});
+				expect(monster.getSkillBonusFromFeats('Knowledge', 'planes')).to.equal(6);
+				expect(monster.getSkillBonusFromFeats('Knowledge', 'religion')).to.equal(3);
 			});
 		});
 	});

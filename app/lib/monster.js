@@ -1,9 +1,9 @@
 'use strict';
 
-var Sum = require('./calculation'),
-	OrderedSet = require('./orderedset'),
-	ref = require('./reference'),
-	formatModifier = require('./format').formatModifier;
+const assert = require('assert');
+const Sum = require('./calculation');
+const ref = require('./reference');
+const formatModifier = require('./format').formatModifier;
 
 module.exports = Monster;
 
@@ -50,7 +50,6 @@ function Monster() {
 	this.senses = JSON.parse(JSON.stringify(properties.senses || []));
 	this.speed = JSON.parse(JSON.stringify(properties.speed || { land: 30 }));
 	this.feats = JSON.parse(JSON.stringify(properties.feats || []));
-	this.featSet = new OrderedSet(this.feats);
 	this.melee = JSON.parse(JSON.stringify(properties.melee || {}));
 
 	// skills is cloned in setSkills
@@ -697,25 +696,16 @@ Monster.prototype.getSkillBonus = function(skill, specialty) {
  * calculate additional bonuses to a specific skill originating from feats
  */
 Monster.prototype.getSkillBonusFromFeats = function(skill, specialty){
-	var mod = 0;
-	var i;
+	let mod = 0;
 
 	// Skill Focus
-	var skillFocus = this.getFeat('Skill Focus');
-	if (skillFocus && skillFocus.details) {
-		for (i = 0; i < skillFocus.details.length; i++) {
-			if (skillFocus.details[i].name === skill && skillFocus.details[i].specialty === specialty) {
-				// there is a skill focus feat for this skill
+	if (this.hasFeat('Skill Focus', skill, specialty)){
+		mod += 3
+		// additional bonus for at least 10 ranks in the skill
+		if (this.skillSet && this.skillSet[skill]) {
+			let skillObj = (specialty === undefined ? this.skillSet[skill] : this.skillSet[skill][specialty]);
+			if (skillObj.ranks >= 10){
 				mod += 3;
-
-				// additional bonus for at least 10 ranks in the skill
-				if (this.skillSet && this.skillSet[skill]) {
-					let skillObj = (specialty === undefined ? this.skillSet[skill] : this.skillSet[skill][specialty]);
-					if (skillObj.ranks >= 10)
-						mod += 3;
-				}
-
-				break;
 			}
 		}
 	}
@@ -791,18 +781,41 @@ Monster.prototype.getRacialModifier = function(skill, specialty){
 
 /**
  * getFeatsList
- * returns an array containing the names of the monster's feats
+ * returns a copy of the array containing the monster's feats
  */
 Monster.prototype.getFeatsList = function(){
-	return this.featSet.getKeys();
+	return JSON.parse(JSON.stringify(this.feats));
 };
 
 /**
- * getFeat
- * returns an object describing the given feat or undefined if not found
+ * hasFeat
+ * returns true/false
  */
-Monster.prototype.getFeat = function(featName){
-	return this.featSet.getItemByKey(featName);
+Monster.prototype.hasFeat = function(featName, detailName, specialty){
+	// check the parameters and the validity of the feats
+	assert.ok(typeof featName === 'string');
+	assert.ok(!detailName || typeof detailName === 'string');
+	assert.ok(!specialty || typeof specialty === 'string');
+	assert.ok(!specialty || (specialty && detailName));
+
+	const res = this.feats.findIndex(feat => {
+		if (feat.name !== featName){
+			return false;
+		} else if (!detailName && !feat.details){
+			return true;
+		}
+
+		const index = feat.details.findIndex(detail => {
+			if (detail.name !== detailName){
+				return false;
+			} else if (!specialty && !detail.specialty){
+				return true;
+			}
+			return detail.specialty === specialty;
+		});
+		return index >= 0;
+	});
+	return res >= 0;
 };
 
 /**

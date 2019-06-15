@@ -321,6 +321,8 @@ function importSourceData(sourceCode, dataPath) {
 		jsonStr, 
 		log,
 		count = 0;
+	let warningLog = [];
+	let successLog = [];
 
 	if (!sourceCode || !dataPath){
 		return 1;
@@ -372,6 +374,12 @@ function importSourceData(sourceCode, dataPath) {
 
 				let monsterFile = path.join(dataPath, 'work', source.folder, 'srd', `${rawMonster.name}.json`);
 				fs.writeFileSync(monsterFile, JSON.stringify(result.monster, null, 2));
+
+				if (result.log.length === 0){
+					successLog = successLog.concat(rawMonster.name);
+				} else {
+					warningLog = warningLog.concat({name: rawMonster.name, log: result.log});
+				}
 			}
 			log = result.log;
 		}
@@ -385,8 +393,24 @@ function importSourceData(sourceCode, dataPath) {
 	fs.writeSync(fdLog, '--------------------------------------------\n');
 	fs.writeSync(fdLog, 'Attempted to import ' + count + ' monsters.\n');
 	fs.writeSync(fdLog, monsterList.length + ' monsters successfully imported.\n');
-	fs.closeSync(fdLog);
+	fs.writeSync(fdLog, '--------------------------------------------\n');
 
+	fs.writeSync(fdLog, `${successLog.length} monsters imported without warnings:\n`);
+	successLog.sort().forEach(name => writeMonsterLog(fdLog, name, []));
+	
+	fs.writeSync(fdLog, '--------------------------------------------\n');
+	fs.writeSync(fdLog, `${warningLog.length} monsters imported with warnings:\n`);
+	warningLog.sort((a, b) => {
+		if (a.name < b.name) {
+			return -1;
+		} else if (a.name > b.name) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}).forEach(item => writeMonsterLog(fdLog, item.name, item.log));
+
+	fs.closeSync(fdLog);
 	fs.closeSync(fdcsv);
 
 	// write to json file

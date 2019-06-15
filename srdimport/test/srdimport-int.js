@@ -139,6 +139,19 @@ describe('Integration: SRD import', function(){
 				}
 				fs.closeSync(fd);
 			});
+
+			it('creates a CSV file', () => {
+				let csvFile = path.join(dataDir, 'work/b1.csv');
+				let fd;
+
+				try {
+					fd = fs.openSync(csvFile, 'r');
+				} catch(err) {
+					expect(err).to.be.undefined;
+					return;
+				}
+				fs.closeSync(fd);
+			});
 		});
 	});
 

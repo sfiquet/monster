@@ -255,6 +255,29 @@ function writeMonsterLog(fdLog, monsterName, log) {
 	});
 }
 
+function writeMonsterCSV(fdcsv, monsterId, monsterName, log){
+	
+	function writeLine(propName, type, message){
+		// use TAB as separator as data can contain commas or semicolons
+		fs.writeSync(fdcsv, `${monsterId}\t${monsterName}\t${type}\t${propName}\t${message.logKey}\t${message}\n`);
+	}
+
+	log.forEach(prop => {
+
+		if (prop.errors) {
+			prop.errors.forEach(error => {
+				writeLine(prop.name, 'ERROR', error)
+			});
+		}
+
+		if (prop.warnings){
+			prop.warnings.forEach(warning => {
+				writeLine(prop.name, 'WARNING', warning)
+			});
+		}
+	});
+}
+
 function isValidMonster(log){
 	// check whether the monster creation log has errors
 	if (log.length > 0 && log.find(item => item.errors && item.errors.length > 0)) {
@@ -311,6 +334,7 @@ function importSourceData(sourceCode, dataPath) {
 	let inputFile = path.join(dataPath, 'source/srd/d20pfsrd-Bestiary.xlsx');
 	let outputFile = path.join(dataPath, 'work', `${sourceCode}.json`);
 	let logFile = path.join(dataPath, 'work', `${sourceCode}.log`);
+	let csvFile = path.join(dataPath, 'work', `${sourceCode}.csv`);
 
 	worksheet = getWorksheet(inputFile);
 	if (!worksheet) {
@@ -325,7 +349,10 @@ function importSourceData(sourceCode, dataPath) {
 	createDir(path.join(dataPath, 'work', source.folder, 'edit'));
 
 	fdLog = fs.openSync(logFile, 'w');
-
+	const fdcsv = fs.openSync(csvFile, 'w');
+	// header line
+	fs.writeSync(fdcsv, 'id\tname\tmsgType\tproperty\tmsgCode\tmessage\n');
+	
 	rowGen = rowGenerator(worksheet, source.xl);
 	while ((row = rowGen.next().value) !== undefined) {
 	
@@ -351,12 +378,16 @@ function importSourceData(sourceCode, dataPath) {
 	
 		// write the content of the log
 		writeMonsterLog(fdLog, rawMonster.name, log);
+		// write to CSV file too
+		writeMonsterCSV(fdcsv, rawMonster.id, rawMonster.name, log);
 	}
 
 	fs.writeSync(fdLog, '--------------------------------------------\n');
 	fs.writeSync(fdLog, 'Attempted to import ' + count + ' monsters.\n');
 	fs.writeSync(fdLog, monsterList.length + ' monsters successfully imported.\n');
 	fs.closeSync(fdLog);
+
+	fs.closeSync(fdcsv);
 
 	// write to json file
 	if (outputFile) {

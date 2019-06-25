@@ -80,30 +80,6 @@ function checkRawMonster(rawMonster) {
 		log.push({name: 'AlternateNameForm', errors: [createMessage('alternateFormsNotHandled')]});
 	}
 
-	if (typeof rawMonster.speed === 'string') {
-		var errors = [],
-			low;
-
-		low = rawMonster.speed.toLowerCase();
-		
-		if (low.indexOf('fly') >= 0) {
-			errors.push(createMessage('flyNotHandled'));
-		
-		// Extra speeds in special conditions come between brackets.
-		// At this stage, we're not digging very deep.
-		// All fly speeds have parentheses for the manoeuverability but that 
-		// doesn't imply extra speed conditions.
-		// No point in wrongly reporting extra speed, only do this test when we
-		// don't have fly.
-		} else if (low.indexOf('(') >= 0) {
-			errors.push(createMessage('specialSpeedNotHandled'));
-		}
-
-		if (errors.length) {
-			log.push({name: 'Speed', errors: errors});
-		}
-	}
-
 	return log;
 }
 
@@ -364,61 +340,14 @@ function extractAbility(ability, value){
  * parse the speed string to build a speed object
  */
 function extractSpeed(speedStr){
-	var errors = [],
-		speed = {},
-		val,
-		chunks;
 
 	if (typeof speedStr !== 'string') {
-		errors.push(createMessage('invalidValue', speedStr));
-	
-	} else {
-
-		// split into comma-separated chunks
-		chunks = speedStr.split(',');
-
-		// look for the land speed in the first chunk
-		val = parseInt(chunks[0], 10);
-
-		// a integer value is found: this is our land speed
-		if (!isNaN(val)) {
-			speed.land = val;
-			chunks = chunks.slice(1);
-		}
-		
-		chunks.forEach(function(item){
-			var words,
-				key,
-				itemStr;
-			
-			itemStr = item.trim();
-			words = itemStr.split(' ');
-			key = '';
-
-			for (var i = 0; i < words.length; i++) {
-
-				val = parseInt(words[i], 10);
-				
-				if (!isNaN(val)) {
-					// found the value
-					key = words.slice(0, i).join(' ').toLowerCase();
-					speed[key] = val;
-					break;
-				}
-			}
-			// check whether we found any value
-			if (isNaN(val)) {
-				errors.push(createMessage('movementAbilitiesNotHandled'));
-			}
-		});
+		return {name: 'speed', errors: [createMessage('invalidValue', speedStr)], warnings: [], data: undefined};
 	}
 
-	// return undefined data in case of errors
-	if (errors.length) {
-		speed = undefined;
-	}
-
-	return {name: 'speed', errors: errors, warnings: [], data: speed};	
+	let result =  {name: 'speed'};
+	let parseRes = parse.parseSpeedString(speedStr);
+	return Object.assign(result, parseRes);
 }
 
 /**

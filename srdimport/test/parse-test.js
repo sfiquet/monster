@@ -6,12 +6,46 @@ var expect = require('chai').expect,
 var createMessage = msg.createMessage;
 
 describe('Parse', function(){
+	describe('splitOutsideBrackets', () => {
+		it('throws an assertion error if the parameter are not strings', function(){
+			expect(() => parse.splitOutsideBrackets()).to.throw();
+			expect(() => parse.splitOutsideBrackets(4)).to.throw();
+			expect(() => parse.splitOutsideBrackets({})).to.throw();
+			expect(() => parse.splitOutsideBrackets('test')).to.throw();
+			expect(() => parse.splitOutsideBrackets('test', 4)).to.throw();
+			expect(() => parse.splitOutsideBrackets('test', {})).to.throw();
+			expect(() => parse.splitOutsideBrackets(undefined, '.')).to.throw();
+			expect(() => parse.splitOutsideBrackets(4, ';')).to.throw();
+			expect(() => parse.splitOutsideBrackets({}, '-')).to.throw();
+		});
+
+		it('throws an assertion error if the separator has more than 1 character', () => {
+			expect(() => parse.splitOutsideBrackets('test', 'or')).to.throw();
+		});
+
+		it('returns an array containing the trimmed input string if no separator is found', function(){
+			expect(parse.splitOutsideBrackets('  this is a string  ', ';')).to.deep.equal(['this is a string']);
+			expect(parse.splitOutsideBrackets('  this  ( is a ) string  ', ';')).to.deep.equal(['this  ( is a ) string']);
+		});
+
+		it('returns an array of trimmed chunks if the separator is found', function(){
+			expect(parse.splitOutsideBrackets('  apples; oranges; tomatoes  ', ';')).to.deep.equal(['apples', 'oranges', 'tomatoes']);
+		});
+
+		it('ignores separators that are inside round brackets', function(){
+			expect(parse.splitOutsideBrackets(
+				'Alertness; Critical Focus; Extend Spell; Improved Critical (bite; claw); Iron Will', ';')).to.deep.equal(
+					['Alertness', 'Critical Focus', 'Extend Spell', 'Improved Critical (bite; claw)', 'Iron Will']);
+		});
+
+	});
+
 	describe('parseCommaSeparatedString', function(){
 		
-		it('returns undefined if the parameter is not a string', function(){
-			expect(parse.parseCommaSeparatedString()).to.be.undefined;
-			expect(parse.parseCommaSeparatedString(4)).to.be.undefined;
-			expect(parse.parseCommaSeparatedString({})).to.be.undefined;
+		it('throws an assertion error if the parameter is not a string', function(){
+			expect(() => parse.parseCommaSeparatedString()).to.throw();
+			expect(() => parse.parseCommaSeparatedString(4)).to.throw();
+			expect(() => parse.parseCommaSeparatedString({})).to.throw();
 		});
 
 		it('returns an array containing the trimmed input string if there is no comma', function(){
@@ -820,6 +854,155 @@ describe('Parse', function(){
 			expect(parse.parseSQString('camouflage, trackless step, water breathing, woodland stride')).to.deep.equal(
 				{errors:[], warnings: [], data: 
 					[[{text: 'camouflage'}], [{text: 'trackless step'}], [{text: 'water breathing'}], [{text: 'woodland stride'}]]});
+		});
+	});
+
+	describe('parseSpeedString', () => {
+		it('generates an error when there is a list of extra speeds delimited by a semicolon in the string (temporary)', () => {
+			expect(parse.parseSpeedString('30 ft.; 20 ft. in armor')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '20 ft. in armor')], warnings: [], data: undefined
+			});
+
+			expect(parse.parseSpeedString('30 ft., swim 30 ft.; 20 ft., swim 20 ft. in armor')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '20 ft., swim 20 ft. in armor')], warnings: [], data: undefined
+			});
+			
+			expect(parse.parseSpeedString('40 ft., fly 90 ft. (good); 30 ft., fly 60 ft. in armor')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '30 ft., fly 60 ft. in armor')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error when there are special abilities after a comma (temporary)', () => {
+			expect(parse.parseSpeedString('30 ft., sprint')).to.deep.equal({
+				errors: [createMessage('movementAbilitiesNotHandled', 'sprint')], warnings: [], data: undefined
+			});
+
+			expect(parse.parseSpeedString('40 ft., fly 200 ft. (poor), sand glide')).to.deep.equal({
+				errors: [createMessage('movementAbilitiesNotHandled', 'sand glide')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error when there are special abilities after a semicolon (temporary)', () => {
+			expect(parse.parseSpeedString('30 ft.; sprint')).to.deep.equal({
+				errors: [createMessage('movementAbilitiesNotHandled', 'sprint')], warnings: [], data: undefined
+			});
+
+			expect(parse.parseSpeedString('40 ft., fly 200 ft. (average); cloudwalking, graceful flight')).to.deep.equal({
+				errors: [createMessage('movementAbilitiesNotHandled', 'cloudwalking, graceful flight')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates errors when there is both a list of extra speeds and special abilities in the string (temporary)', () => {
+			expect(parse.parseSpeedString('40 ft., fly 200 ft. (average); 30 ft., fly 150 ft. in armor; cloudwalking, graceful flight')).to.deep.equal({
+				errors: [
+					createMessage('specialSpeedNotHandled', '30 ft., fly 150 ft. in armor'), 
+					createMessage('movementAbilitiesNotHandled', 'cloudwalking, graceful flight')
+				], 
+				warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error when there is a list of extra speeds delimited by parentheses in the string (temporary)', () => {
+			expect(parse.parseSpeedString('30 ft., swim 30 ft. (20 ft., swim 20 ft. in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft., swim 20 ft. in armor)')], warnings: [], data: undefined
+			});
+
+			expect(parse.parseSpeedString('30 ft., fly 30 ft. (good) (20 ft., fly 20 ft. [good] in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft., fly 20 ft. [good] in armor)')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates a speed object with all the correct speeds', () => {
+			expect(parse.parseSpeedString('30 ft., fly 40 ft. (poor), swim 30 ft.')).to.deep.equal({
+				errors: [], warnings: [], data: {land: 30, fly: {value: 40, maneuverability: 'poor'}, swim: 30}
+			});
+
+		});
+	});
+
+	describe('parseLandSpeedChunk', () => {
+		it('generates a land speed object', () => {
+			expect(parse.parseLandSpeedChunk('30 ft.')).to.deep.equal({errors: [], warnings: [], data: {land: 30}});
+		});
+
+		it('generates an error when the string contains an extra speed (temporary)', () => {
+			expect(parse.parseLandSpeedChunk('30 ft. (20 ft. in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [], data: undefined
+			});
+		});
+	});
+
+	describe('parseStandardSpeedChunk', () => {
+		it('generates a speed object of the correct type', () => {
+			expect(parse.parseStandardSpeedChunk('swim 30 ft.')).to.deep.equal({errors: [], warnings: [], data: {swim: 30}});
+			expect(parse.parseStandardSpeedChunk('burrow 30 ft.')).to.deep.equal({errors: [], warnings: [], data: {burrow: 30}});
+		});
+
+		it('accepts speed names with spaces', () => {
+			expect(parse.parseStandardSpeedChunk('water walk 30 ft.')).to.deep.equal({errors: [], warnings: [], data: {'water walk': 30}});
+		});
+
+		it('generates an error when the string is a movement ability (temporary)', () => {
+			expect(parse.parseStandardSpeedChunk('sand glide')).to.deep.equal({
+				errors: [createMessage('movementAbilitiesNotHandled', 'sand glide')], warnings: [], data: undefined
+			});
+
+		});
+
+		it('generates an error when the string contains an extra speed (temporary)', () => {
+			expect(parse.parseStandardSpeedChunk('swim 30 ft. (20 ft. in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error when the string contains a limitation (temporary)', () => {
+			expect(parse.parseStandardSpeedChunk('burrow (lava only) 30 ft.')).to.deep.equal({
+				errors: [createMessage('speedLimitationNotHandled', '(lava only)')], warnings: [], data: undefined
+			});
+		});
+	});
+
+	describe('parseFlySpeedChunk', () => {
+		it('generates a fly speed object', () => {
+			expect(parse.parseFlySpeedChunk('fly 30 ft. (average)')).to.deep.equal({
+				errors: [], warnings: [], data: {fly: {value: 30, maneuverability: 'average'}}
+			});
+		});
+
+		it('generates an error when the maneuverability is invalid', () => {
+			expect(parse.parseFlySpeedChunk('fly 30 ft. (ridiculous)')).to.deep.equal({
+				errors: [createMessage('invalidManeuverability', 'ridiculous')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates a warning when the maneuverability is absent', () => {
+			expect(parse.parseFlySpeedChunk('fly 30 ft.')).to.deep.equal({
+				errors: [], warnings: [createMessage('flySpeedWithoutManeuverability')], data: {fly: {value: 30}}
+			});
+		});
+		
+		it('generates an error when the string contains an extra speed (temporary)', () => {
+			expect(parse.parseFlySpeedChunk('fly 30 ft. (average) (20 ft. in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error and a warning when the string contains an extra speed but no maneuverability (temporary)', () => {
+			expect(parse.parseFlySpeedChunk('fly 30 ft. (20 ft. in armor)')).to.deep.equal({
+				errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [createMessage('flySpeedWithoutManeuverability')], data: undefined
+			});
+		});
+
+		it('generates an error when the parentheses contain comments in addition to the maneuverability (temporary)', () => {
+			expect(parse.parseFlySpeedChunk('fly 60 ft. (perfect; in fiery form only)')).to.deep.equal({
+				errors: [createMessage('flyCommentNotHandled', '(perfect; in fiery form only)')], warnings: [], data: undefined
+			});
+		});
+
+		it('generates an error and a warning when the parentheses contain comments but no valid maneuverability (temporary)', () => {
+			expect(parse.parseFlySpeedChunk('fly 60 ft. (see below)')).to.deep.equal({
+				errors: [createMessage('flyCommentNotHandled', '(see below)')], warnings: [createMessage('flySpeedWithoutManeuverability')], data: undefined
+			});
 		});
 	});
 });

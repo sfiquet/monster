@@ -79,29 +79,13 @@ describe('Convert', function(){
 				[{name: 'AlternateNameForm', errors: [createMessage('alternateFormsNotHandled')]}]);
 		});
 
-		it('generates an error when there is a fly speed (temporary)', function(){
-			expect(conv.checkRawMonster(
-				{speed: 'fly 60 ft. (poor)'})).to.deep.equal(
-				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
-
-			expect(conv.checkRawMonster(
-				{speed: 'Fly 60 ft. (poor)'})).to.deep.equal(
-				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
-
-			expect(conv.checkRawMonster(
-				{speed: '50 ft., fly 100 ft. (good)'})).to.deep.equal(
-				[{name: 'Speed', errors: [createMessage('flyNotHandled')]}]);
-		});
-
-		it('generates an error when there is extra details for speeds (temporary)', function(){
-			expect(conv.checkRawMonster(
-				{speed: '30 ft. (20 ft. in armor)'})).to.deep.equal(
-				[{name: 'Speed', errors: [createMessage('specialSpeedNotHandled')]}]);
-
-			expect(conv.checkRawMonster(
-				{speed: '20 ft., burrow (lava only) 30 ft.'})).to.deep.equal(
-				[{name: 'Speed', errors: [createMessage('specialSpeedNotHandled')]}]);
-		});
+		it('doesn\'t check the speed anymore', () => {
+			expect(conv.checkRawMonster({speed: 'fly 60 ft. (poor)'})).to.deep.equal([]);
+			expect(conv.checkRawMonster({speed: 'Fly 60 ft. (poor)'})).to.deep.equal([]);
+			expect(conv.checkRawMonster({speed: '50 ft., fly 100 ft. (good)'})).to.deep.equal([]);
+			expect(conv.checkRawMonster({speed: '30 ft. (20 ft. in armor)'})).to.deep.equal([]);
+			expect(conv.checkRawMonster({speed: '20 ft., burrow (lava only) 30 ft.'})).to.deep.equal([]);
+		})
 	});
 
 	describe('extractType', function(){
@@ -333,14 +317,80 @@ describe('Convert', function(){
 				{name: 'speed', errors: [], warnings: [], data: {swim: 60, jet: 240}});
 		});
 
+		it('generates an error when there is extra details for speeds (temporary)', function(){
+			expect(conv.extractSpeed('30 ft. (20 ft. in armor)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [], data: undefined});
+
+			expect(conv.extractSpeed('swim 30 ft. (20 ft. in armor)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('specialSpeedNotHandled', '(20 ft. in armor)')], warnings: [], data: undefined});
+
+			expect(conv.extractSpeed('30 ft., fly 30 ft. (clumsy) (20 ft., fly 20 ft. [clumsy] in armor)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('specialSpeedNotHandled', '(20 ft., fly 20 ft. [clumsy] in armor)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when there is a special condition limiting the use of the speed (temporary)', () => {
+			expect(conv.extractSpeed('20 ft., burrow (lava only) 30 ft.')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('speedLimitationNotHandled', '(lava only)')], warnings: [], data: undefined});			
+		});
+
 		it('generates an error when the value contains a special ability, i.e. a chunk without a numeric speed (temporary)', function(){
 			expect(conv.extractSpeed('20 ft., swim 30 ft., waverider')).to.deep.equal(
-				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled')], warnings: [], data: undefined});
+				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled', 'waverider')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the value contains a special ability after a semicolon (temporary)', function(){
+			expect(conv.extractSpeed('20 ft., swim 30 ft.; sprint')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled', 'sprint')], warnings: [], data: undefined});
 		});
 
 		it('generates an error when the value is not a string', function(){
 			expect(conv.extractSpeed(30)).to.deep.equal({name: 'speed', errors: [createMessage('invalidValue', 30)], warnings: [], data: undefined});
 		});
+
+		it('generates a speed object when the value contains a single fly speed', () => {
+			expect(conv.extractSpeed('fly 60 ft. (poor)')).to.deep.equal(
+				{name: 'speed', errors: [], warnings: [], data: {fly: {value: 60, maneuverability: 'poor'}}});
+		});
+
+		it('generates a speed object and a warning when the value contains a single fly speed without maneuverability', () => {
+			expect(conv.extractSpeed('fly 60 ft.')).to.deep.equal(
+				{name: 'speed', errors: [], warnings: [createMessage('flySpeedWithoutManeuverability')], data: {fly: {value: 60}}});
+		});
+
+		it('generates an error when the value contains both a single fly speed without maneuverability and extra speed (temporary)', () => {
+			expect(conv.extractSpeed('30 ft., fly 60 ft. (20 ft., fly 40 ft. in armor)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('specialSpeedNotHandled', '(20 ft., fly 40 ft. in armor)')], warnings: [createMessage('flySpeedWithoutManeuverability')], data: undefined});
+		});
+
+		it('generates a speed object when the value contains both a land speed and a fly speed', () => {
+			expect(conv.extractSpeed('50 ft., fly 100 ft. (good)')).to.deep.equal(
+				{name: 'speed', errors: [], warnings: [], data: {land: 50, fly: {value: 100, maneuverability: 'good'}}});
+		});
+
+		it('generates an error when the value contains both a fly speed and a special ability (temporary)', () => {
+			expect(conv.extractSpeed('40 ft., fly 200 ft. (average); cloudwalking')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled', 'cloudwalking')], warnings: [], data: undefined});
+
+			expect(conv.extractSpeed('40 ft., fly 200 ft. (average); cloudwalking, graceful flight')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('movementAbilitiesNotHandled', 'cloudwalking, graceful flight')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the fly details contain a single word that is not a valid maneuverability', () => {
+			expect(conv.extractSpeed('30 ft., fly 60 ft. (graceful)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('invalidManeuverability', 'graceful')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the fly details contain comments in addition to the maneuverability (temporary)', () => {
+			expect(conv.extractSpeed('30 ft., fly 60 ft. (perfect; in fiery form only)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('flyCommentNotHandled', '(perfect; in fiery form only)')], warnings: [], data: undefined});
+		});
+
+		it('generates an error when the fly details contain comments but no valid maneuverability (temporary)', () => {
+			expect(conv.extractSpeed('30 ft., fly 60 ft. (see below)')).to.deep.equal(
+				{name: 'speed', errors: [createMessage('flyCommentNotHandled', '(see below)')], 
+				warnings: [createMessage('flySpeedWithoutManeuverability')], data: undefined});
+		});
+
 	});
 
 	describe('extractFeats', function(){

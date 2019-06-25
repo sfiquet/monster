@@ -59,6 +59,36 @@ describe('Calc', function(){
 				[{name: 'Intimidate', ranks: 4}]});
 		});
 
+		it('treats Fly as  a class skill when the monster has a fly speed', () => {
+			let monsterObj, skills;
+			// construct doesn't have fly as a class skill
+			monsterObj = new Monster({
+				name: 'test',
+				type: 'construct',
+				size: 'Medium',
+				speed: {land: 30},
+				Dex: 15,
+				skills: [{name: 'Fly'}],
+			});
+			skills = [{name: 'Fly', modifier: 9}];
+			// no fly speed: ranks = 7
+			expect(calc.calculateSkills(skills, monsterObj)).to.deep.equal({name: 'skills', errors: [], warnings: [], data: 
+				[{name: 'Fly', ranks: 7}]});
+
+			monsterObj = new Monster({
+				name: 'test',
+				type: 'construct',
+				size: 'Medium',
+				speed: {land: 30, fly: {value: 60, maneuverability: 'average'}},
+				Dex: 15,
+				skills: [{name: 'Fly'}],
+			});
+			skills = [{name: 'Fly', modifier: 9}];
+			// fly speed: has +3 because of class skill bonus; ranks = 4
+			expect(calc.calculateSkills(skills, monsterObj)).to.deep.equal({name: 'skills', errors: [], warnings: [], data: 
+				[{name: 'Fly', ranks: 4}]});
+		});
+
 		it('takes the Skill Focus feat into account', function(){
 			var monsterObj, skills;
 			monsterObj = new Monster({

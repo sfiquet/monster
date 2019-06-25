@@ -987,12 +987,13 @@ describe('Formatting of monster data for display', function(){
 		
 		it('returns an array of text chunks', function(){
 			var monster = new Monster({
-				speed: { land: 30, climb: 20, swim: 10 },
+				speed: { land: 30, climb: 20, fly: {value: 20, maneuverability: 'good'}, swim: 10 },
 			});
 			
 			expect(format.getSpeed(monster)).to.deep.equal([
 					{ text: '30 ft.'}, 
 					{ text : 'climb 20 ft.' }, 
+					{ text: 'fly 20 ft. (good)'},
 					{ text: 'swim 10 ft.' }]);
 		});
 	});

@@ -650,9 +650,23 @@ function getSpeed(monster) {
 		return 0;
 	});
 	result = keys.reduce(function(prev, curr){
-		if (curr !== 'land') {
+		if (curr === 'fly'){
+			let speed;
+			if (typeof monster.speed[curr] === 'number'){
+				speed = monster.speed[curr];
+			} else {
+				speed = monster.speed[curr].value;
+			}
+			let text = `${curr} ${speed} ft.`;
+			if (monster.speed[curr].maneuverability) {
+				text += ` (${monster.speed[curr].maneuverability})`;
+			}
+			prev.push({ text });
+		
+		} else if (curr !== 'land') {
 			prev.push({ text: curr + ' ' + monster.speed[curr] + ' ft.' });
 		}
+		
 		return prev;
 	}, result);
 	

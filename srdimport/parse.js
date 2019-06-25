@@ -1,19 +1,25 @@
 'use strict';
 
-var message = require('./message'),
-	skillLib = require('./skill');
-var createMessage = message.createMessage;
+const assert = require('assert').strict;
+const message = require('./message');
+const skillLib = require('./skill');
+const createMessage = message.createMessage;
 
 /**
- * parseCommaSeparatedString
- * build a list of chunks that are comma-separated ignoring any commas that are 
- * within parentheses.
+ * splitOutsideBrackets
+ * splits the first argument into a list of chunks, using the second argument
+ * as the separator, ignoring any separators that are within parentheses.
+ * The separator must be a single character.
  *
- * Note: there can be square brackets (with or without commas) within the 
+ * Note: there can be square brackets (with or without separators) within the 
  * parentheses but it doesn't matter here. Further parsing can be done on
  * the chunks. There are no square brackets outside parentheses.
  */
-function parseCommaSeparatedString(dataStr) {
+function splitOutsideBrackets(dataStr, separator){
+	assert.equal(typeof (dataStr), 'string');
+	assert.equal(typeof (separator), 'string');
+	assert.equal(separator.length, 1);
+
 	var chunks = [];
 
 	if (typeof dataStr !== 'string') {
@@ -37,7 +43,7 @@ function parseCommaSeparatedString(dataStr) {
 		// look for comma and opening parens
 		} else {
 			
-			if (dataStr[i] === ',') {
+			if (dataStr[i] === separator) {
 				chunks.push(dataStr.slice(begin, i).trim());
 				begin = i+1;
 			
@@ -53,6 +59,20 @@ function parseCommaSeparatedString(dataStr) {
 	}
 
 	return chunks;
+
+}
+
+/**
+ * parseCommaSeparatedString
+ * build a list of chunks that are comma-separated ignoring any commas that are 
+ * within parentheses.
+ *
+ * Note: there can be square brackets (with or without commas) within the 
+ * parentheses but it doesn't matter here. Further parsing can be done on
+ * the chunks. There are no square brackets outside parentheses.
+ */
+function parseCommaSeparatedString(dataStr) {
+	return splitOutsideBrackets(dataStr, ',');
 }
 
 /**
@@ -1159,10 +1179,294 @@ function parseSQString(str){
 	return {errors: errors, warnings: warnings, data: SQArray};
 }
 
+function parseSpeedString(str){
+	let errors = [];
+	let warnings = [];
+	let data = {};
+
+	const chunks = splitOutsideBrackets(str, ';');
+
+	if (chunks.length === 1){
+		// normal case
+		const res = parseNormalSpeedString(chunks[0]);
+		errors = errors.concat(res.errors);
+		warnings = warnings.concat(res.warnings);
+		if (res.data){
+			data = res.data;
+		}
+	
+	} else if (chunks.length === 2){
+		// left is normal stuff, right is either alternative list of speeds or list of special abilities
+		const res = parseNormalSpeedString(chunks[0]);
+		errors = errors.concat(res.errors);
+		warnings = warnings.concat(res.warnings);
+
+		if (isNaN(parseInt(chunks[1], 10))) {
+			// special abilities
+			errors = errors.concat(createMessage('movementAbilitiesNotHandled', chunks[1]));
+
+		} else {
+			// alternative list of speeds
+			errors = errors.concat(createMessage('specialSpeedNotHandled', chunks[1]));
+		}
+	
+	} else if (chunks.length === 3){
+		// left: normal stuff, middle: alternative list, right: special abilities
+		const res = parseNormalSpeedString(chunks[0]);
+		errors = errors.concat(res.errors);
+		warnings = warnings.concat(res.warnings);
+
+		errors = errors.concat(createMessage('specialSpeedNotHandled', chunks[1]));
+		errors = errors.concat(createMessage('movementAbilitiesNotHandled', chunks[2]));
+	
+	} else {
+		// wrong format
+		errors = errors.concat(createMessage('invalidFormat', str));
+	}
+
+	if (errors.length !== 0){
+		data = undefined;
+	}
+	return {errors, warnings, data};
+}
+
+function parseNormalSpeedString(str){
+
+	const chunks = parseCommaSeparatedString(str);
+	let result = chunks.reduce((acc, item, id) => {
+		let res;
+		if (id === 0 && !isNaN(parseInt(item, 10))) {
+			res = parseLandSpeedChunk(item);
+
+		} else if (item.startsWith('fly')) {
+			res = parseFlySpeedChunk(item);
+
+		} else {
+			res = parseStandardSpeedChunk(item);
+		}
+
+		acc.errors = acc.errors.concat(res.errors);
+		acc.warnings = acc.warnings.concat(res.warnings);
+		if (res.data){
+			Object.assign(acc.data, res.data);
+		}
+		return acc;
+	}, { errors: [], warnings: [], data: {}});
+
+	if (result.errors.length !== 0){
+		result.data = undefined;
+	}
+
+	return result;
+}
+
+function parseLandSpeedChunk(str){
+	let errors = [];
+	let data = {};
+
+	// capture parentheses
+	let reParens = /\s*(\(|\))\s*/;
+	let parensChunks = str.split(reParens);
+
+	if (parensChunks.length === 1){
+		// no parens
+		const reSeparator = /\s*(\d+)\s*ft.\s*/;
+		const baseChunks = parensChunks[0].split(reSeparator);
+		if (baseChunks.length !== 3 || baseChunks[0] !== '' || baseChunks[2] !== ''){
+			errors = errors.concat(createMessage('invalidFormat', 'land speed', str));
+		} else {
+			data.land = parseInt(baseChunks[1], 10);
+		}
+
+	} else if (parensChunks.length === 5 && parensChunks[1] === '(' && parensChunks[3] === ')'){
+		// extra speeds - not handled yet
+			errors = errors.concat(createMessage('specialSpeedNotHandled', `(${parensChunks[2]})`));
+
+	} else {
+		// wrong format
+		errors = errors.concat(createMessage('invalidFormat', 'land speed', str));
+	}
+
+	if (errors.length !== 0){
+		data = undefined;
+	}
+
+	return {errors, warnings: [], data};
+}
+
+function parseStandardSpeedChunk(str){
+	let errors = [];
+	let data = {};
+
+	// capture parentheses
+	let reParens = /\s*(\(|\))\s*/;
+	let parensChunks = str.split(reParens);
+
+	if (parensChunks.length === 1){
+		// no parens
+		const baseChunks = parensChunks[0].split(/(^[A-Za-z]+[\sA-Za-z]*)\s*(\d+)\s*ft\.\s*/);
+		// 'swim 30 ft.' => ['', 'swim', '30', '']
+		if (baseChunks.length !== 4 || baseChunks[0] !== '' || baseChunks[3] !== ''){
+			errors = errors.concat(createMessage('movementAbilitiesNotHandled', str));
+		} else {
+			let name = baseChunks[1].trim().toLowerCase();
+			data[name] = parseInt(baseChunks[2], 10);
+		}
+
+	} else if (parensChunks.length === 5 && parensChunks[1] === '(' && parensChunks[3] === ')'){
+		// either limitation or extra speeds - not handled yet
+		if (parensChunks[0].includes(' ft.')){
+			errors = errors.concat(createMessage('specialSpeedNotHandled', `(${parensChunks[2]})`));
+
+		} else if (parensChunks[4].includes(' ft.')){
+			errors = errors.concat(createMessage('speedLimitationNotHandled', `(${parensChunks[2]})`));
+
+		} else {
+			errors = errors.concat(createMessage('invalidFormat', 'standard speed', str));
+		}
+
+	} else if (parensChunks.length === 9 && 
+		parensChunks[1] === '(' && parensChunks[3] === ')' && 
+		parensChunks[5] === '(' && parensChunks[7] === ')'){
+		// limitation and extra speeds - not handled yet
+			errors = errors.concat(createMessage('speedLimitationNotHandled', `(${parensChunks[2]})`));
+			errors = errors.concat(createMessage('specialSpeedNotHandled', `(${parensChunks[6]})`));
+
+	} else {
+		// wrong format
+		errors = errors.concat(createMessage('invalidFormat', 'standard speed', str));
+	}
+
+	if (errors.length !== 0){
+		data = undefined;
+	}
+	
+	return {errors, warnings: [], data};
+}
+
+function parseFlySpeedChunk(str){
+	let errors = [];
+	let warnings = [];
+	let data;
+	let fly = {};
+
+	// capture parentheses
+	let reParens = /\s*(\(|\))\s*/;
+	let parensChunks = str.split(reParens);
+
+	// deal with the first chunk
+	if (parensChunks.length > 0){
+		const baseChunks = parensChunks[0].split(/(^[a-z]+)\s*(\d+)\s*ft\.\s*/);
+		// 'fly 30 ft.' => ['', 'fly', '30', '']
+		if (baseChunks.length !== 4 || baseChunks[0] !== '' || baseChunks[3] !== ''){
+			errors = errors.concat(createMessage('invalidFormat', 'fly speed', str));
+
+		} else {
+			assert.ok(baseChunks[1] === 'fly');
+
+			fly.value = parseInt(baseChunks[2], 10);
+		}
+	}
+
+	// if there are no parentheses, there is no maneuverability: raise a warning
+	if (parensChunks.length === 1) {
+		warnings = warnings.concat(createMessage('flySpeedWithoutManeuverability'));
+	}
+
+	// deal with parentheses
+	else if (parensChunks.length === 5 && parensChunks[1] === '(' && parensChunks[3] === ')'){
+		// normal case: maneuverability details
+		// it could also be a case of extra speed with absent maneuverability, although that's an edge case
+		const parenStr = parensChunks[2];
+
+		if (isNaN(parseInt(parenStr, 10))){
+			const res = parseFlyDetailsChunk(parenStr);
+			errors = errors.concat(res.errors);
+			warnings = warnings.concat(res.warnings);
+			if (res.data){
+				Object.assign(fly, res.data);
+			}
+
+		} else {
+			// starts with a speed value: it's a special speed
+			// e.g. '20 ft. in armor'
+			warnings = warnings.concat(createMessage('flySpeedWithoutManeuverability'));
+			errors = errors.concat(createMessage('specialSpeedNotHandled', `(${parenStr})`));
+		}
+
+	// 2 sets of parentheses, one for fly details, one for special speed
+	} else if (parensChunks.length === 9 && 
+		parensChunks[1] === '(' && parensChunks[3] === ')' && 
+		parensChunks[5] === '(' && parensChunks[7] === ')'){
+		// extra speed - not handled yet
+			errors = errors.concat(createMessage('specialSpeedNotHandled', `(${parensChunks[6]})`));
+
+			// check the details anyway
+			const res = parseFlyDetailsChunk(parensChunks[2]);
+			errors = errors.concat(res.errors);
+			warnings = warnings.concat(res.warnings);
+			// no need to store the data, we already have an error
+
+	} else {
+		// wrong format
+		errors = errors.concat(createMessage('invalidFormat', 'fly speed', str));
+	}
+
+	if (errors.length !== 0){
+		data = undefined;
+	} else {
+		data = {fly};
+	}
+	
+	return {errors, warnings, data};
+}
+
+function parseFlyDetailsChunk(str){
+	let errors = [];
+	let warnings = [];
+	let data = {};
+	const validManeuverabilities = ['clumsy', 'poor', 'average', 'good', 'perfect'];
+
+	const details = str.split(';');
+	
+	if (details.length === 2){
+		// e.g. 'average; only in fiery form'
+		errors = errors.concat(createMessage('flyCommentNotHandled', `(${str})`));
+
+	} else if (details.length === 1){
+		const words = str.split(' ');
+		if (words.length === 1){
+			// e.g. 'average'
+
+			if (validManeuverabilities.includes(words[0])){
+				data.maneuverability = words[0];
+			
+			} else {
+				errors = errors.concat(createMessage('invalidManeuverability', words[0]));
+			}
+
+		} else {
+			// e.g. 'only at night' or 'see below'
+			warnings = warnings.concat(createMessage('flySpeedWithoutManeuverability'));
+			errors = errors.concat(createMessage('flyCommentNotHandled', `(${str})`));
+		}
+
+	} else {
+		errors = errors.concat(createMessage('invalidFormat', 'fly speed details', str));
+	}
+
+	if (errors.length !== 0){
+		data = undefined;
+	}
+
+	return {errors, warnings, data};
+}
+
 // ******************************************************************
 // Exports
 // ******************************************************************
 
+exports.splitOutsideBrackets = splitOutsideBrackets;
 exports.parseCommaSeparatedString = parseCommaSeparatedString;
 exports.parseOrSeparatedString = parseOrSeparatedString;
 exports.parseFeatChunk = parseFeatChunk;
@@ -1188,3 +1492,7 @@ exports.parseConditionalRacialMod = parseConditionalRacialMod;
 exports.parseRacialModChunk = parseRacialModChunk;
 exports.parseRacialModString = parseRacialModString;
 exports.parseSQString = parseSQString;
+exports.parseSpeedString = parseSpeedString;
+exports.parseLandSpeedChunk = parseLandSpeedChunk;
+exports.parseStandardSpeedChunk = parseStandardSpeedChunk;
+exports.parseFlySpeedChunk = parseFlySpeedChunk;

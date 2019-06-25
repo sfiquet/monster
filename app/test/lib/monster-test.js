@@ -622,6 +622,45 @@ describe('Monster', function(){
 			expect(tiger.getSkillBonus('Swim')).to.equal(14);
 		});
 
+		it('calculates untrained fly bonus when there is a fly speed', () => {
+			expect(tiger.getSkillBonus('Fly')).to.equal(0); // 2 Dex - 2 Large
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'good'} };
+			expect(tiger.getSkillBonus('Fly')).to.equal(4); // 2 Dex - 2 Large + 4 good
+		});
+
+		it('applies the correct size modifier to the fly bonus', () => {
+			tiger.size = 'Fine';
+			expect(tiger.getSkillBonus('Fly')).to.equal(10); // 2 Dex + 8 Fine
+			tiger.size = 'Colossal';
+			expect(tiger.getSkillBonus('Fly')).to.equal(-6); // 2 Dex - 8 Colossal
+			tiger.size = 'Huge';
+			expect(tiger.getSkillBonus('Fly')).to.equal(-2); // 2 Dex - 4 Huge
+		});
+
+		it('applies the correct maneuverability modifier to the fly bonus', () => {
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'clumsy'} };
+			expect(tiger.getSkillBonus('Fly')).to.equal(-8); // 2 Dex - 2 Large - 8 clumsy
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'poor'} };
+			expect(tiger.getSkillBonus('Fly')).to.equal(-4); // 2 Dex - 2 Large - 4 poor
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'average'} };
+			expect(tiger.getSkillBonus('Fly')).to.equal(0); // 2 Dex - 2 Large + 0 average
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'perfect'} };
+			expect(tiger.getSkillBonus('Fly')).to.equal(8); // 2 Dex - 2 Large + 8 perfect
+		});
+
+		it('uses the \'average\' maneuverability when maneuverability is not present', () => {
+			tiger.speed = { land: 30, fly: { value: 10 } };
+			expect(tiger.getSkillBonus('Fly')).to.equal(0); // 2 Dex - 2 Large
+			tiger.speed = { land: 30, fly: 10 };
+			expect(tiger.getSkillBonus('Fly')).to.equal(0); // 2 Dex - 2 Large
+		});
+
+		it('treats the Fly skill as a class skill when there is a fly speed', () => {
+			tiger.speed = { land: 30, fly: { value: 10, maneuverability: 'good'} };
+			tiger.setSkills([{name: 'Fly', ranks: 2}]);
+			expect(tiger.getSkillBonus('Fly')).to.equal(9); // 2 Dex - 2 Large + 4 good + 2 ranks + 3 class skill
+		});
+
 		it('calculates trained skill bonus for class skills', function() {
 			tiger.setSkills([{'name': 'Acrobatics', 'ranks': 4}]);
 			expect(tiger.getSkillBonus('Acrobatics')).to.equal(9); // 4 ranks + 3 class skills + 2 Dex
@@ -1155,6 +1194,29 @@ describe('Monster', function(){
 			expect(monster.isClassSkill('Knowledge', 'geography')).to.be.true;
 			expect(monster.isClassSkill('Knowledge', 'planes')).to.be.false;
 		});
+
+		it('returns true for Fly when the monster has a fly speed, ignoring the monster type', () => {
+			let nonflying = new Monster({ 
+				name: 'test',
+				type: 'construct',
+				size: 'Medium',
+				speed: {land: 30},
+				Dex: 15,
+				skills: [{name: 'Fly'}]
+			});
+			expect(nonflying.isClassSkill('Fly')).to.be.false;
+
+			let flying = new Monster({ 
+				name: 'test',
+				type: 'construct',
+				size: 'Medium',
+				speed: {land: 30, fly: {value: 60, maneuverability: 'average'}},
+				Dex: 15,
+				skills: [{name: 'Fly'}]
+			});
+			expect(flying.isClassSkill('Fly')).to.be.true;
+
+		});
 	});
 
 	describe('getSkillsList', function(){
@@ -1177,6 +1239,12 @@ describe('Monster', function(){
 			expect(list).to.have.length(2);
 			expect(list).to.deep.include({name: 'Climb'});
 			expect(list).to.deep.include({name: 'Swim'});
+		});
+
+		it('returns Fly when the monster has the corresponding speed', () => {
+			let tiger = new Monster(tigerLiteral);
+			tiger.speed = { land: 30, fly: {value: 20, maneuverability: 'clumsy'} };
+			expect(tiger.getSkillsList()).to.deep.equal([{name: 'Fly'}]);
 		});
 
 		it('returns the correct skills', function() {
@@ -1207,7 +1275,7 @@ describe('Monster', function(){
 			]);
 		});
 
-		it('adds Climb and Swim to the list when the monster has the corresponding speeds', function(){
+		it('adds Climb, Fly and Swim to the list when the monster has the corresponding speeds', function(){
 			var tiger = new Monster(tigerLiteral);
 			
 			tiger.setSkills([
@@ -1229,12 +1297,20 @@ describe('Monster', function(){
 				{'name': 'Survival', 'ranks': 5, 'racial': 2},
 				{'name': 'Swim'}
 			]);
-			tiger.speed = { land: 30, climb: 20, swim: 20 };
+			tiger.speed = { land: 30, fly: {value: 30, maneuverability: 'average'} };
+			expect(tiger.getSkillsList()).to.deep.equal([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2},
+				{'name': 'Fly'}
+			]);
+			tiger.speed = { land: 30, climb: 20, fly: {value: 20, maneuverability: 'average'}, swim: 20 };
 			expect(tiger.getSkillsList()).to.deep.equal([
 				{'name': 'Acrobatics', 'ranks': 3}, 
 				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
 				{'name': 'Survival', 'ranks': 5, 'racial': 2},
 				{'name': 'Climb'},
+				{'name': 'Fly'},
 				{'name': 'Swim'}
 			]);
 		});
@@ -1309,6 +1385,24 @@ describe('Monster', function(){
 				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
 				{'name': 'Swim', 'ranks': 5, 'racial': 2},
 				{'name': 'Climb'}
+			]);
+		});
+
+		it('only adds Fly when it is not already present in the list', () => {
+			var tiger = new Monster(tigerLiteral);
+			
+			tiger.setSkills([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Fly', 'ranks': 4},
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
+			]);
+			tiger.speed = { land: 30, fly: {value: 20, maneuverability: 'average'} };
+			expect(tiger.getSkillsList()).to.deep.equal([
+				{'name': 'Acrobatics', 'ranks': 3}, 
+				{'name': 'Fly', 'ranks': 4},
+				{'name': 'Stealth', 'ranks': 4, 'racial': 8}, 
+				{'name': 'Survival', 'ranks': 5, 'racial': 2}
 			]);
 		});
 	});

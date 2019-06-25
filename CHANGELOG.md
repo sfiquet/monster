@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+- Srdimport & App: Implement fly speed
 - Srdimport: Check for discrepancy between the HP in the Excel file and the calculated value
 - Srdimport: output log in CSV format to import into spreadsheet for analysis
 - Srdimport: add list of imported monsters at the end of the log file, with a section for warnings

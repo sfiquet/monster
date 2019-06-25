@@ -56,6 +56,26 @@ describe('Look-up tables', function(){
 		});
 	});
 	
+	describe('getManeuverabilityMod', () => {
+		it('returns the maneuverability modifier for valid maneuverability names', function(){
+			expect(ref.getManeuverabilityMod('clumsy')).to.equal(-8);
+			expect(ref.getManeuverabilityMod('poor')).to.equal(-4);
+			expect(ref.getManeuverabilityMod('average')).to.equal(0);
+			expect(ref.getManeuverabilityMod('good')).to.equal(4);
+			expect(ref.getManeuverabilityMod('perfect')).to.equal(8);
+		});
+
+		it('returns the average modifier if no parameter is given', () => {
+			expect(ref.getManeuverabilityMod()).to.equal(0);
+		});
+		
+		it('returns undefined for any other value', function(){
+			expect(ref.getManeuverabilityMod('Clumsy')).to.be.undefined;
+			expect(ref.getManeuverabilityMod('')).to.be.undefined;
+			expect(ref.getManeuverabilityMod(0)).to.be.undefined;
+		});
+	});
+
 	describe('getSizeMod', function(){
 		it('returns the size modifier for valid size names', function(){
 			expect(ref.getSizeMod('Fine')).to.equal(8);
@@ -91,6 +111,25 @@ describe('Look-up tables', function(){
 			expect(ref.getStealthSizeMod('fine')).to.be.undefined;
 			expect(ref.getStealthSizeMod('')).to.be.undefined;
 			expect(ref.getStealthSizeMod(0)).to.be.undefined;
+		});
+	});
+
+	describe('getFlySizeMod', () => {
+		it('returns the Fly size modifier for valid size names', function(){
+			expect(ref.getFlySizeMod('Fine')).to.equal(8);
+			expect(ref.getFlySizeMod('Diminutive')).to.equal(6);
+			expect(ref.getFlySizeMod('Tiny')).to.equal(4);
+			expect(ref.getFlySizeMod('Small')).to.equal(2);
+			expect(ref.getFlySizeMod('Medium')).to.equal(0);
+			expect(ref.getFlySizeMod('Large')).to.equal(-2);
+			expect(ref.getFlySizeMod('Huge')).to.equal(-4);
+			expect(ref.getFlySizeMod('Gargantuan')).to.equal(-6);
+			expect(ref.getFlySizeMod('Colossal')).to.equal(-8);
+		});
+		it('returns undefined for any other value', function(){
+			expect(ref.getFlySizeMod('fine')).to.be.undefined;
+			expect(ref.getFlySizeMod('')).to.be.undefined;
+			expect(ref.getFlySizeMod(0)).to.be.undefined;
 		});
 	});
 	

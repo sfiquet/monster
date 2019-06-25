@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('assert').strict;
 const Sum = require('./calculation');
 const ref = require('./reference');
 const formatModifier = require('./format').formatModifier;
@@ -678,6 +678,11 @@ Monster.prototype.getSkillBonus = function(skill, specialty) {
 		if (this.hasSpeed('swim')) {
 			mod += 8;
 		}
+	} else if (skill === 'Fly') {
+		mod += ref.getFlySizeMod(this.size);
+		if (this.speed['fly']){
+			mod += ref.getManeuverabilityMod(this.speed['fly'].maneuverability);
+		}
 	}
 
 	// add Stealth size modifier
@@ -716,13 +721,20 @@ Monster.prototype.getSkillBonusFromFeats = function(skill, specialty){
 /**
  * isClassSkill
  */
- Monster.prototype.isClassSkill = function(skill, specialty) {
+Monster.prototype.isClassSkill = function(skill, specialty) {
+	
+	// any monster with a fly speed treats Fly as a class skill
+	if (skill === 'Fly' && this.hasSpeed('fly')){
+		return true;
+	}
+
 	// check the class skills for the monster type
 	return ref.isClassSkillForType(this.type, skill, specialty);
+
 	// TO DO: 
 	// - add monster-specific class skills (aberrations and outsiders)
 	// - add class skills for class levels
- };
+};
 
 /**
  * hasSpeed
@@ -750,6 +762,9 @@ Monster.prototype.getSkillsList = function() {
 	
 	if (this.hasSpeed('climb') && (!this.skillSet || !this.skillSet['Climb'])) {
 		result.push({name: 'Climb'});
+	}
+	if (this.hasSpeed('fly') && (!this.skillSet || !this.skillSet['Fly'])) {
+		result.push({name: 'Fly'});
 	}
 	if (this.hasSpeed('swim') && (!this.skillSet || !this.skillSet['Swim'])) {
 		result.push({name: 'Swim'});

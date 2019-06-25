@@ -118,6 +118,26 @@ exports.getXP = function(cr) {
 };
 
 /**
+ * getManeuverabilityMod
+ * implements maneuverability modifiers for the Fly skill
+ */
+exports.getManeuverabilityMod = function(maneuverability){
+
+	var maneuverabilityTable = {
+		'clumsy': 	-8,
+		'poor': 		-4,
+		'average': 	0,
+		'good': 		4,
+		'perfect': 	8
+	};
+	
+	if (maneuverability === undefined){
+		return maneuverabilityTable['average'];
+	}
+	return maneuverabilityTable[maneuverability];
+};
+
+/**
  * getSizeMod
  * implements table 8-1 in Core Rulebook
  */
@@ -154,6 +174,27 @@ exports.getStealthSizeMod = function(size){
 		'Huge': 		-8,
 		'Gargantuan':	-12,
 		'Colossal': 	-16
+	};
+	
+	return sizeTable[size];
+};
+
+/**
+ * getFlySizeMod
+ * implements the size modifiers for the Fly skill
+ */
+exports.getFlySizeMod = function(size){
+
+	var sizeTable = {
+		'Fine': 		8,
+		'Diminutive': 	6,
+		'Tiny': 		4,
+		'Small': 		2,
+		'Medium': 		0,
+		'Large': 		-2,
+		'Huge': 		-4,
+		'Gargantuan':	-6,
+		'Colossal': 	-8
 	};
 	
 	return sizeTable[size];

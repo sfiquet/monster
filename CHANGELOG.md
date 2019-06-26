@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Srdimport: add list of imported monsters at the end of the log file, with a section for warnings
 
 ### Changed
+- Srdimport: Improve detection of missing message keys
 - Srdimport: improve calculation of shape
 
 ### Fixed

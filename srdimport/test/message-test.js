@@ -7,10 +7,8 @@ var createMessage = message.createMessage;
 describe('Message', function(){
 	describe('constructor', function(){
 
-		it('creates a default object', function(){
-			var message = createMessage();
-			expect(message.logKey).to.be.undefined;
-			expect(message.params).to.deep.equal([]);
+		it('throws an error when creating a default object', function(){
+			expect(() => createMessage()).to.throw();
 		});
 
 		it('creates an object with a log key and no parameters', function(){
@@ -25,13 +23,9 @@ describe('Message', function(){
 			expect(message.params).to.deep.equal([4.7, 4]);
 		});
 
-		it('logs an error message when the key is invalid', function(){
-			// not sure how to test this
-			// The error message will show in the test output
-			// it makes it easier to spot the problem
-			var message = createMessage('invalidBanana', 'your banana should be red');
-			expect(message.logKey).to.equal('invalidBanana');
-			expect(message.params).to.deep.equal(['your banana should be red']);
+		it('throws an error when the key is invalid', function(){
+			expect(() => createMessage('invalidBanana')).to.throw();
+			expect(() => createMessage('invalidBanana', 'your banana should be red')).to.throw();
 		});
 	});
 
@@ -39,11 +33,6 @@ describe('Message', function(){
 		it('calls the method', function(){
 			var message = createMessage('originalValueConverted', 4.7, 4);
 			expect(message.toString()).to.equal('Original value 4.7 converted to 4');
-		});
-
-		it('outputs the key as a message when the key is invalid', function(){
-			var message = createMessage('invalidBanana', 'your banana should be red');
-			expect(message.toString()).to.equal('invalidBanana: "your banana should be red"');
 		});
 	});
 });

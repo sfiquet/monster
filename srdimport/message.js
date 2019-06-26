@@ -1,6 +1,7 @@
 'use strict';
 
-var log = require('./log');
+const assert = require('assert').strict;
+const log = require('./log');
 
 // stores the logKey separately from the arguments so we can access it easily
 function Message(){
@@ -22,9 +23,8 @@ function createMessage(key){
 	obj.logKey = key;
 
 	// make the job of identifying undefined keys easier
-	if (!log.isValidKey(key)) {
-		console.log('Invalid message key:', key);
-	}
+	assert.ok(log.isValidKey(key), `Invalid message key: ${key}`);
+
 	obj.params = Array.prototype.slice.call(arguments, 1);
 
 	return obj;

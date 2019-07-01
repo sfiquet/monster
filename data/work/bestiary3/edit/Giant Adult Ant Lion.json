@@ -1,0 +1,38 @@
+{
+  "name": "Giant Adult Ant Lion",
+  "source": "PFRPG Bestiary 3",
+  "melee": {
+    "bite": {
+      "name": "bite",
+      "nbAttacks": 1,
+      "nbDice": 3,
+      "dieType": 8,
+      "type": "natural"
+    }
+  },
+  "skills": [],
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 8
+        }
+      ]
+    }
+  ]
+}

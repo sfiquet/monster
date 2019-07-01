@@ -1,0 +1,36 @@
+{
+  "name": "Fire Beetle",
+  "source": "PFRPG Bestiary",
+  "senses": [
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 8
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Luminescence (Ex)",
+      "description": [
+        {
+          "text": "A fire beetle's glowing glands provide light in a 10-foot radius. A dead fire beetle's luminescent glands continue to glow for 1d6 days after its death."
+        }
+      ]
+    }
+  ]  
+}

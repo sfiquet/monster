@@ -584,6 +584,64 @@
     ]
   },
   {
+    "name": "Beheaded",
+    "source": "PFRPG Bestiary 4",
+    "alignment": "NE",
+    "size": "Tiny",
+    "environment": "any",
+    "organization": "solitary, pair, or patrol (3-6)",
+    "treasure": "none",
+    "type": "undead",
+    "CR": "1/3",
+    "space": 2.5,
+    "reach": 0,
+    "racialHD": 1,
+    "Str": 11,
+    "Dex": 15,
+    "Wis": 11,
+    "Cha": 10,
+    "speed": {
+      "fly": {
+        "value": 40,
+        "maneuverability": "perfect"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "slam": {
+        "name": "slam",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 2,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 0,
+    "baseFort": 0,
+    "baseRef": 0,
+    "baseWill": 2,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "undead traits"
+      ]
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "cantFail": true
+      }
+    ]
+  },
+  {
     "name": "Black Pudding",
     "source": "PFRPG Bestiary",
     "alignment": "N",
@@ -1552,6 +1610,87 @@
     ]
   },
   {
+    "name": "Fire Beetle",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Small",
+    "environment": "any",
+    "organization": "solitary, cluster (2-6) or colony (7-12)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": "1/3",
+    "space": 5,
+    "reach": 5,
+    "racialHD": 1,
+    "Str": 10,
+    "Dex": 11,
+    "Con": 11,
+    "Wis": 10,
+    "Cha": 7,
+    "speed": {
+      "land": 30,
+      "fly": {
+        "value": 30,
+        "maneuverability": "poor"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "luminescence"
+        }
+      ]
+    ],
+    "skills": [],
+    "naturalArmor": 1,
+    "baseFort": 2,
+    "baseRef": 0,
+    "baseWill": 0,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "low-light vision"
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Luminescence (Ex)",
+        "description": [
+          {
+            "text": "A fire beetle's glowing glands provide light in a 10-foot radius. A dead fire beetle's luminescent glands continue to glow for 1d6 days after its death."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Flesh Golem",
     "source": "PFRPG Bestiary",
     "alignment": "N",
@@ -1902,6 +2041,72 @@
     ]
   },
   {
+    "name": "Giant Adult Ant Lion",
+    "source": "PFRPG Bestiary 3",
+    "alignment": "N",
+    "size": "Huge",
+    "environment": "warm deserts",
+    "organization": "solitary or cloud (2-12)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": 6,
+    "space": 15,
+    "reach": 10,
+    "racialHD": 10,
+    "Str": 24,
+    "Dex": 16,
+    "Con": 19,
+    "Wis": 11,
+    "Cha": 10,
+    "speed": {
+      "land": 30,
+      "fly": {
+        "value": 60,
+        "maneuverability": "good"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 3,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 8,
+    "baseFort": 7,
+    "baseRef": 3,
+    "baseWill": 3,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Giant Ant Lion",
     "source": "PFRPG Bestiary 3",
     "alignment": "N",
@@ -2007,6 +2212,357 @@
     ]
   },
   {
+    "name": "Giant Bee",
+    "source": "PFRPG Bestiary 2",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "temperate or warm plains",
+    "organization": "solitary, group (2-5), or nest (6-19)",
+    "treasure": "incidental",
+    "type": "vermin",
+    "CR": 1,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 3,
+    "Str": 11,
+    "Dex": 14,
+    "Con": 13,
+    "Wis": 12,
+    "Cha": 9,
+    "speed": {
+      "land": 20,
+      "fly": {
+        "value": 60,
+        "maneuverability": "good"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "sting": {
+        "name": "sting",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "extraDamage": [
+          "poison"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 1,
+    "baseFort": 3,
+    "baseRef": 1,
+    "baseWill": 1,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "weaknesses": [
+      "vulnerable to smoke"
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Poison (Ex)",
+        "description": [
+          {
+            "text": "Sting—injury; "
+          },
+          {
+            "text": "save",
+            "titleLevel": 3
+          },
+          {
+            "text": " Fort DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "; "
+          },
+          {
+            "text": "frequency",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1/round for 4 rounds; "
+          },
+          {
+            "text": "effect",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1d2 Str; "
+          },
+          {
+            "text": "cure",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1 save."
+          }
+        ]
+      },
+      {
+        "title": "Vulnerable to Smoke (Ex)",
+        "description": [
+          {
+            "text": "Smoke from particularly smoky fires or effects (such as that created by a "
+          },
+          {
+            "text": "pyrotechnics",
+            "isMagic": true
+          },
+          {
+            "text": " spell) causes a giant bee to become nauseated if it fails a DC 14 Fortitude save. This condition persists as long as the giant bee remains in the smoke, plus 1d4 rounds."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Giant Cockroach",
+    "source": "PFRPG Bestiary 2",
+    "alignment": "N",
+    "size": "Small",
+    "environment": "any land",
+    "organization": "solitary or intrusion (2-20)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": "1/2",
+    "space": 5,
+    "reach": 5,
+    "racialHD": 1,
+    "Str": 11,
+    "Dex": 12,
+    "Con": 19,
+    "Wis": 11,
+    "Cha": 2,
+    "speed": {
+      "land": 30,
+      "climb": 30,
+      "fly": {
+        "value": 40,
+        "maneuverability": "poor"
+      }
+    },
+    "feats": [
+      {
+        "name": "Diehard",
+        "special": [
+          "bonus"
+        ]
+      },
+      {
+        "name": "Endurance",
+        "special": [
+          "bonus"
+        ]
+      }
+    ],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "type": "natural"
+      }
+    },
+    "SQ": [
+      [
+        {
+          "text": "hold breath"
+        }
+      ]
+    ],
+    "skills": [
+      {
+        "name": "Perception",
+        "racial": 4
+      },
+      {
+        "name": "Stealth",
+        "racial": 4
+      }
+    ],
+    "naturalArmor": 2,
+    "baseFort": 2,
+    "baseRef": 0,
+    "baseWill": 0,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      },
+      {
+        "name": "tremorsense",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "weaknesses": [
+      "light sensitivity"
+    ]
+  },
+  {
+    "name": "Giant Fly",
+    "source": "PFRPG Bestiary 2",
+    "alignment": "N",
+    "size": "Medium",
+    "environment": "any temperate or tropical",
+    "organization": "solitary, pair, or swarm (3-12)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": 1,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 2,
+    "Str": 12,
+    "Dex": 17,
+    "Con": 16,
+    "Wis": 7,
+    "Cha": 2,
+    "speed": {
+      "land": 20,
+      "climb": 20,
+      "fly": {
+        "value": 60,
+        "maneuverability": "good"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 6,
+        "extraDamage": [
+          "disease"
+        ],
+        "type": "natural"
+      }
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "racial": 4
+      }
+    ],
+    "naturalArmor": 0,
+    "baseFort": 3,
+    "baseRef": 0,
+    "baseWill": 0,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "disease",
+        "mind-affecting effects"
+      ]
+    },
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
+          }
+        ]
+      }
+    ],
+    "specialAbilities": [
+      {
+        "title": "Disease (Ex)",
+        "description": [
+          {
+            "text": "Filth Fever",
+            "titleLevel": 2
+          },
+          {
+            "text": ": Bite—injury; "
+          },
+          {
+            "text": "save",
+            "titleLevel": 3
+          },
+          {
+            "text": " Fortitude DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Con"
+          },
+          {
+            "text": "; "
+          },
+          {
+            "text": "onset",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1d3 days; "
+          },
+          {
+            "text": "frequency",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1/day; "
+          },
+          {
+            "text": "effect",
+            "titleLevel": 3
+          },
+          {
+            "text": " 1d3 Dex damage and 1d3 Con damage; "
+          },
+          {
+            "text": "cure",
+            "titleLevel": 3
+          },
+          {
+            "text": " 2 consecutive saves. Some flies might carry other diseases, at the GM's discretion. The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Giant Maggot",
     "source": "PFRPG Bestiary 2",
     "alignment": "N",
@@ -2081,6 +2637,93 @@
           },
           {
             "text": " Fortitude save or be sickened for 1 minute (or until the target spends a full-round action with at least a gallon of water to wash off the filth). The save DC is Constitution-based."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Giant Stag Beetle",
+    "source": "PFRPG Bestiary",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "temperate forests",
+    "organization": "solitary, pair, or cluster (3-6)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": 4,
+    "space": 10,
+    "reach": 5,
+    "racialHD": 7,
+    "Str": 19,
+    "Dex": 10,
+    "Con": 15,
+    "Wis": 10,
+    "Cha": 9,
+    "speed": {
+      "land": 20,
+      "fly": {
+        "value": 20,
+        "maneuverability": "poor"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 2,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 8,
+    "baseFort": 5,
+    "baseRef": 2,
+    "baseWill": 2,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "trample",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 1,
+            "dieType": 6,
+            "strengthFactor": 1.5
+          },
+          {
+            "text": ", DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Str"
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
           }
         ]
       }
@@ -2411,6 +3054,93 @@
           },
           {
             "text": " spell."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Goliath Stag Beetle",
+    "source": "PFRPG Bestiary 2",
+    "alignment": "N",
+    "size": "Huge",
+    "environment": "warm forests or plains",
+    "organization": "solitary, pair, or herd (3-8)",
+    "treasure": "none",
+    "type": "vermin",
+    "CR": 8,
+    "space": 15,
+    "reach": 10,
+    "racialHD": 11,
+    "Str": 32,
+    "Dex": 10,
+    "Con": 21,
+    "Wis": 10,
+    "Cha": 4,
+    "speed": {
+      "land": 30,
+      "fly": {
+        "value": 30,
+        "maneuverability": "poor"
+      }
+    },
+    "feats": [],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 3,
+        "dieType": 8,
+        "type": "natural"
+      }
+    },
+    "skills": [],
+    "naturalArmor": 13,
+    "baseFort": 7,
+    "baseRef": 3,
+    "baseWill": 3,
+    "shape": "long",
+    "senses": [
+      {
+        "name": "darkvision",
+        "value": 60,
+        "unit": "ft."
+      }
+    ],
+    "optDefense": {
+      "immune": [
+        "mind-affecting effects"
+      ]
+    },
+    "specialAtk": [
+      {
+        "name": "trample",
+        "details": [
+          {
+            "calc": "damage",
+            "type": "weapon",
+            "nbDice": 3,
+            "dieType": 8,
+            "strengthFactor": 1.5
+          },
+          {
+            "text": ", DC "
+          },
+          {
+            "calc": "DC",
+            "baseStat": "Str"
+          }
+        ]
+      }
+    ],
+    "specialCMD": [
+      {
+        "name": "trip",
+        "components": [
+          {
+            "name": "legs",
+            "type": "body",
+            "bonus": 8
           }
         ]
       }
@@ -3089,7 +3819,7 @@
     "baseFort": 1,
     "baseRef": 1,
     "baseWill": 1,
-    "shape": "long",
+    "shape": "tall",
     "optDefense": {
       "immune": [
         "ooze traits"
@@ -3503,7 +4233,7 @@
     "baseFort": 7,
     "baseRef": 3,
     "baseWill": 3,
-    "shape": "long",
+    "shape": "tall",
     "senses": [
       {
         "name": "darkvision",

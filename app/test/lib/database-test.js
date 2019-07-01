@@ -17,7 +17,7 @@ describe('Database', function(){
 					return done(err);
 				}
 				expect(list).to.be.an.instanceof(Array);
-				expect(list).to.have.length(32);
+				expect(list).to.have.length(40);
 				expect(list[0]).to.have.ownProperty('name');
 				expect(list[0]).to.have.ownProperty('id');
 				done();

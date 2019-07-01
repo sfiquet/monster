@@ -1,0 +1,49 @@
+{
+  "name": "Giant Stag Beetle",
+  "source": "PFRPG Bestiary",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "trample",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 6,
+          "strengthFactor": 1.5
+        },
+        {
+          "text": ", DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 8
+        }
+      ]
+    }
+  ]
+}

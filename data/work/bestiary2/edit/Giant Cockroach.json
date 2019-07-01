@@ -1,0 +1,19 @@
+{
+  "name": "Giant Cockroach",
+  "source": "PFRPG Bestiary 2",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    },
+    {
+      "name": "tremorsense", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "weaknesses": [
+    "light sensitivity"
+  ]
+}

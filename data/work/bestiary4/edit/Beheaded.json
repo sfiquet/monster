@@ -1,0 +1,23 @@
+{
+  "name": "Beheaded",
+  "source": "PFRPG Bestiary 4",
+  "shape": "long",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "undead traits"
+    ]
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ]
+}

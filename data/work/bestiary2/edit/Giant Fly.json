@@ -1,0 +1,85 @@
+{
+  "name": "Giant Fly",
+  "source": "PFRPG Bestiary 2",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "disease", 
+      "mind-affecting effects"
+    ]
+  },
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 8
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Disease (Ex)",
+      "description": [
+        {
+          "text": "Filth Fever",
+          "titleLevel": 2
+        },
+        {
+          "text": ": Bite—injury; "
+        },
+        {
+          "text": "save",
+          "titleLevel": 3
+        },
+        {
+          "text": " Fortitude DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": "; "
+        },
+        {
+          "text": "onset",
+          "titleLevel": 3
+        },
+        {
+          "text": " 1d3 days; "
+        },
+        {
+          "text": "frequency",
+          "titleLevel": 3
+        },
+        {
+          "text": " 1/day; "
+        },
+        {
+          "text": "effect",
+          "titleLevel": 3
+        },
+        {
+          "text": " 1d3 Dex damage and 1d3 Con damage; "
+        },
+        {
+          "text": "cure",
+          "titleLevel": 3
+        },
+        {
+          "text": " 2 consecutive saves. Some flies might carry other diseases, at the GM's discretion. The save DC is Constitution-based."
+        }
+      ]
+    }
+  ]  
+}

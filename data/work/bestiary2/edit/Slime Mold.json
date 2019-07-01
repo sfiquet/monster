@@ -1,5 +1,6 @@
 {
   "name": "Slime Mold",
+  "source": "PFRPG Bestiary 2",
   "optDefense": {
     "immune": [
       "ooze traits"

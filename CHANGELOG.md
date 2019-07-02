@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Feats: Fixed bug where only the last occurrence of a feat with details (e.g. Skill Focus) was taken into account
 - Data: Add source in all edit files
+- Melee damage modifier: ignore strength multiplier when strength modifier is negative
 
 ## 0.2.0 - 2019-06-08
 ### Added

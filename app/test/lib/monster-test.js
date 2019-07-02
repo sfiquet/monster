@@ -734,52 +734,187 @@ describe('Monster', function(){
 	});
 	
 	describe('Melee weapons', function(){
-		it('calculates the attack bonus for a single natural weapon', function(){
-			var cube, tiger;
-		
-			cube = new Monster(cubeLiteral);
-			expect(cube.getMeleeWeaponAttackBonus('slam')).to.equal(2);
-			tiger = new Monster(tigerLiteral);
-			delete tiger.melee.bite;
-			expect(tiger.getMeleeWeaponAttackBonus('claw')).to.equal(9);
+
+		describe('getMeleeWeaponAttackBonus', () => {
+			
+			it('calculates the attack bonus for a single natural weapon', function(){
+				var cube, tiger;
+			
+				cube = new Monster(cubeLiteral);
+				expect(cube.getMeleeWeaponAttackBonus('slam')).to.equal(2);
+				tiger = new Monster(tigerLiteral);
+				delete tiger.melee.bite;
+				expect(tiger.getMeleeWeaponAttackBonus('claw')).to.equal(9);
+			});
+		});
+
+		describe('getNumberOfMeleeWeapons', () => {
+			it('counts the number of melee weapons', () => {
+				let monster = new Monster({name: 'test', melee: {}});
+				expect(monster.getNumberOfMeleeWeapons()).to.equal(0);
+
+				monster = new Monster({name: 'test', melee: {bite: {
+					name: 'bite',
+					nbAttacks: 1,
+					nbDice: 1,
+					dieType: 4,
+					type: 'natural'
+				}}});
+				expect(monster.getNumberOfMeleeWeapons()).to.equal(1);
+
+				monster = new Monster({name: 'test', melee: {
+					bite: {
+						name: 'bite',
+						nbAttacks: 1,
+						nbDice: 1,
+						dieType: 4,
+						type: 'natural'
+					},
+					claw: {
+						name: 'claw',
+						nbAttacks: 2,
+						nbDice: 1,
+						dieType: 4,
+						type: 'natural'
+					}
+				}});
+				expect(monster.getNumberOfMeleeWeapons()).to.equal(2);
+			});
+		});
+
+		describe('getDamageBonus', () => {
+			it('multiplies the Str bonus by the given strength multiplier', () => {
+				let monster = new Monster({name: 'test', Str: 15});
+				expect(monster.getDamageBonus(.5)).to.equal(1);
+				expect(monster.getDamageBonus(1)).to.equal(2);
+				expect(monster.getDamageBonus(1.5)).to.equal(3);
+			});
+
+			it('rounds down the result when not a whole number', () => {
+				let monster = new Monster({name: 'test', Str: 16});
+				expect(monster.getDamageBonus(.5)).to.equal(1);
+				expect(monster.getDamageBonus(1)).to.equal(3);
+				expect(monster.getDamageBonus(1.5)).to.equal(4);
+			});
+
+			it('ignores the strength multiplier when the Str modifier is negative', () => {
+				let monster = new Monster({name: 'test', Str: 7});
+				expect(monster.getDamageBonus(.5)).to.equal(-2);
+				expect(monster.getDamageBonus(1)).to.equal(-2);
+				expect(monster.getDamageBonus(1.5)).to.equal(-2);
+			});
+		});
+
+		describe('getDamageFactor', () => {
+			it('return 1.5 when the monster has a single natural melee weapon with a single attack', () => {
+				let monster = new Monster({name: 'test', melee: {bite: {
+					name: 'bite',
+					nbAttacks: 1,
+					nbDice: 1,
+					dieType: 4,
+					type: 'natural'
+				}}});
+				expect(monster.getDamageFactor('bite')).to.equal(1.5);
+			});
+
+			it('return 1 when the monster has a single natural melee weapon with multiple attacks', () => {
+				let monster = new Monster({name: 'test', melee: {claw: {
+					name: 'claw',
+					nbAttacks: 2,
+					nbDice: 1,
+					dieType: 4,
+					type: 'natural'
+				}}});
+				expect(monster.getDamageFactor('claw')).to.equal(1);				
+			});
+
+			it('returns undefined if the monster has a single melee weapon which is not a natural weapon', () => {
+				// note: at this stage the representation of artificial weapons is not properly defined
+				let monster = new Monster({name: 'test', melee: {longsword: {
+					name: 'longsword',
+					nbAttacks: 1,
+					nbDice: 1,
+					dieType: 8,
+					type: 'artificial'
+				}}});
+				expect(monster.getDamageFactor('longsword')).to.be.undefined;				
+
+			});
+
+			it('returns undefined if the monster has multiple melee weapons (natural or not)', () => {
+				let monster = new Monster({name: 'test', melee: {
+					bite: {
+						name: 'bite',
+						nbAttacks: 1,
+						nbDice: 1,
+						dieType: 4,
+						type: 'natural'
+					},
+					claw: {
+						name: 'claw',
+						nbAttacks: 2,
+						nbDice: 1,
+						dieType: 4,
+						type: 'natural'
+					}
+				}});
+				expect(monster.getDamageFactor('bite')).to.be.undefined;
+				expect(monster.getDamageFactor('claw')).to.be.undefined;
+			});
+		});
+
+		describe('getMeleeWeaponDamageBonus', () => {
+			
+			it('calculates the damage bonus for a single natural weapon', function(){
+				var cube, tiger;
+			
+				cube = new Monster(cubeLiteral);
+				// single attack
+				expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(0);
+				cube.Str = 14;
+				expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(3);
+				// multiple attacks
+				tiger = new Monster(tigerLiteral);
+				delete tiger.melee.bite;
+				expect(tiger.getMeleeWeaponDamageBonus('claw')).to.equal(6);
+			});
+
+			it('ignores the damage factor when the Strength modifier is negative', () => {
+				let monster = new Monster({ name: 'test', Str: 8, melee: {bite: {
+					name: 'bite',
+					nbAttacks: 1,
+					nbDice: 1,
+					dieType: 4,
+					type: 'natural'
+				}}});
+				expect(monster.getMeleeWeaponDamageBonus('bite')).to.equal(-1);
+			});
+			
+			it('rounds down the damage bonus if not a whole number', function(){
+				var cube;
+			
+				cube = new Monster(cubeLiteral);
+				cube.Str = 16;
+				expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(4);
+			});
 		});
 		
-		it('calculates the damage bonus for a single natural weapon', function(){
-			var cube, tiger;
-		
-			cube = new Monster(cubeLiteral);
-			// single attack
-			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(0);
-			cube.Str = 14;
-			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(3);
-			// multiple attacks
-			tiger = new Monster(tigerLiteral);
-			delete tiger.melee.bite;
-			expect(tiger.getMeleeWeaponDamageBonus('claw')).to.equal(6);
-		});
-		
-		it('rounds down the damage bonus if not a whole number', function(){
-			var cube;
-		
-			cube = new Monster(cubeLiteral);
-			cube.Str = 16;
-			expect(cube.getMeleeWeaponDamageBonus('slam')).to.equal(4);
-		});
-		
-		it('produces the melee weapon formula', function(){
-			var cube, tiger;
-		
-			cube = new Monster(cubeLiteral);
-			// single attack
-			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +2 (1d6 plus 1d6 acid)');
-			cube.Str = 14;
-			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid)');
-			cube.melee.slam.extraDamage.push('grab');
-			expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid plus grab)');
-			// multiple attacks
-			tiger = new Monster(tigerLiteral);
-			delete tiger.melee.bite;
-			expect(tiger.getMeleeWeaponFormula('claw')).to.equal('2 claws +9 (1d8+6 plus grab)');
+		describe('getMeleeWeaponFormula', () => {
+			it('produces the melee weapon formula', function(){
+				var cube, tiger;
+			
+				cube = new Monster(cubeLiteral);
+				// single attack
+				expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +2 (1d6 plus 1d6 acid)');
+				cube.Str = 14;
+				expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid)');
+				cube.melee.slam.extraDamage.push('grab');
+				expect(cube.getMeleeWeaponFormula('slam')).to.equal('slam +4 (1d6+3 plus 1d6 acid plus grab)');
+				// multiple attacks
+				tiger = new Monster(tigerLiteral);
+				delete tiger.melee.bite;
+				expect(tiger.getMeleeWeaponFormula('claw')).to.equal('2 claws +9 (1d8+6 plus grab)');
+			});
 		});
 	});
 	

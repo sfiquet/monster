@@ -885,7 +885,15 @@ Monster.prototype.getDamageBonus = function(strMult) {
 	if (!strMult) {
 		return 0;
 	}
-	var bonus = this.getStrMod() * strMult;
+	
+	let mod = this.getStrMod();
+	
+	// if the strength modifier is negative, ignore the multiplier
+	if (mod < 0){
+		return mod;
+	}
+
+	var bonus = mod * strMult;
 	// TO DO: add relevant bonuses: enhancement bonus, weapon specialisation bonus...
 	return Math.floor(bonus);
 };

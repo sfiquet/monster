@@ -1,6 +1,6 @@
 {
   "name": "srd-import",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Utility to import monsters from the SRD Excel file",
   "main": "srdimport.js",
   "scripts": {

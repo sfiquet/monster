@@ -5,7 +5,7 @@ As the application is entirely based on Open Game License (OGL) content, this pa
 
 ## Monsters
 
-Currently the database holds 32 monsters from the first 4 Bestiaries. More will be added as the application is developed. 
+Currently the database holds 40 monsters from the first 4 Bestiaries. More will be added as the application is developed. 
 
 The current monsters have the following types:
 - animal: 3
@@ -14,12 +14,12 @@ The current monsters have the following types:
 - monstrous humanoid: 1
 - ooze: 7
 - plant: 4
-- undead: 1
-- vermin: 4
+- undead: 2
+- vermin: 11
 
 Aberrations, humanoids and outsiders need special handling and are currently not supported.
 
-Dragons and feys are not specifically excluded but have stats that are not implemented yet, such as spells or fly speed.
+Dragons and feys are not specifically excluded but have stats that are not implemented yet: Dragons usually have subtypes, multiple attack types, spells, spell-like abilities and many feats. Feys tend to have weapons and/or ranged attacks.
 
 ## Calculation Rules
 In order to apply templates only core data is stored. Everything else is calculated by applying generic rules from the Core Rulebook and monster-specific rules from the Bestiaries.

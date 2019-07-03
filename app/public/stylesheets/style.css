@@ -15,7 +15,6 @@
 	width: 100%;
 	display: -webkit-flex;
 	display: flex;
-	/*flex-wrap: wrap;*/
 	justify-content: space-between;
 }
 .col-1 {
@@ -296,8 +295,12 @@ a:active, a:hover {
 	letter-spacing: 1px;
 	background-color: darkred;
 	color: white;
-	margin: 5px 0 5px 0;
-	padding: 2px 0 2px 5px;
+	margin: 5px 0;
+	align-items: center;
+}
+
+.profile-title-content {
+	padding: 2px 5px;
 }
 
 .section {
@@ -324,10 +327,14 @@ a:active, a:hover {
 	font-weight: bold;
 	margin: 0;
 }
-	
+
+.name {
+	text-align: left;
+}
+
 .cr {
 	text-align: right;
-	padding: 0 5px 0 0;
+	flex-shrink: 0;
 }
 
 .profile span.title-1 {

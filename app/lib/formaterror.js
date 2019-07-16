@@ -3,7 +3,7 @@ const template = require('./template');
 const capitalize = require('underscore.string/capitalize');
 
 exports.format = (error) => {
-  assert.ok(Error.prototype.isPrototypeOf(error));
+  assert.ok(Object.prototype.isPrototypeOf.call(Error.prototype, error));
 
   if (error.name === 'IncompatibleTemplateError'){
     return formatIncompatibleTemplateError(error);
@@ -12,7 +12,7 @@ exports.format = (error) => {
 };
 
 const formatIncompatibleTemplateError = (error) => {
-  assert.ok(Error.prototype.isPrototypeOf(error));
+  assert.ok(Object.prototype.isPrototypeOf.call(Error.prototype, error));
   assert.equal(error.name, 'IncompatibleTemplateError');
   assert.equal(typeof error.template, 'string');
   assert.ok(Array.isArray(error.history));

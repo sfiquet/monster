@@ -37,7 +37,7 @@ function OrderedSet() {
 	}
 
 	for (i = 0; i < data.length; i++) {
-		if (!data[i].hasOwnProperty('name')) {
+		if (!Object.prototype.hasOwnProperty.call(data[i], 'name')) {
 			console.log('OrderedObject constructor: All array items should have a "name" property');
 			console.log(data);
 			return;	// wrong format

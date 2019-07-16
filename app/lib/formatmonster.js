@@ -96,12 +96,12 @@ function getSenses(monster) {
 	return monster.senses.map(function(sense){
 		var s = sense.name;
 		
-		if (sense.hasOwnProperty('value')) {
+		if (Object.prototype.hasOwnProperty.call(sense, 'value')) {
 		
 			s += ' ' + sense.value;
 		}
 		
-		if (sense.hasOwnProperty('unit')) {
+		if (Object.prototype.hasOwnProperty.call(sense, 'unit')) {
 		
 			s += ' ' + sense.unit;
 		}
@@ -157,7 +157,7 @@ function getACModifiers(monster) {
 	
 		key = order[i];
 		
-		if (mods.hasOwnProperty(key) && mods[key] !== 0) {
+		if (Object.prototype.hasOwnProperty.call(mods, key) && mods[key] !== 0) {
 		
 			ACModifiers.push({ name: key, value: formatModifier(mods[key]) });
 		}

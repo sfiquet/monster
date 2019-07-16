@@ -107,7 +107,7 @@ Monster.prototype.setSkills = function(skillArray){
 		return;
 	}
 
-	if (skillArray.find(item => !item.hasOwnProperty('name'))) {
+	if (skillArray.find(item => !Object.prototype.hasOwnProperty.call(item, 'name'))) {
 			console.log('Wrong format array passed to setSkills: ');
 			console.log(skillArray);
 			return;	// wrong format
@@ -144,7 +144,7 @@ Monster.prototype.getAC = function() {
 		key;
 	
 	for (key in mods) {
-		if (mods.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(mods, key)) {
 			result += mods[key];
 		}
 	}
@@ -183,7 +183,7 @@ Monster.prototype.getTouchAC = function() {
 		key;
 	
 	for (key in mods) {
-		if (mods.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(mods, key)) {
 			if (key !== 'armor' && key !== 'shield' && key !== 'natural') {
 				result += mods[key];
 			}
@@ -870,7 +870,7 @@ Monster.prototype.getNumberOfMeleeWeapons = function() {
 		key;
 	
 	for (key in this.melee) {
-		if (this.melee.hasOwnProperty(key) && typeof this.melee[key] !== 'function') {
+		if (Object.prototype.hasOwnProperty.call(this.melee, key) && typeof this.melee[key] !== 'function') {
 			count += 1;
 		}
 	}

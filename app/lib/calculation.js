@@ -50,7 +50,7 @@ Sum.prototype.calculate = function() {
 
 	for (key in this.components) {
 
-		if (this.components.hasOwnProperty(key) && 
+		if (Object.prototype.hasOwnProperty.call(this.components, key) && 
 			typeof this.components[key] !== 'function') {
 			
 			result += this.components[key].func.apply(this.that, 

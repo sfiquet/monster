@@ -2,7 +2,7 @@ const assert = require('assert').strict;
 const Monster = require('../app/lib/monster');
 
 function guessShape(monster){
-  assert.ok(Monster.prototype.isPrototypeOf(monster));
+  assert.ok(Object.prototype.isPrototypeOf.call(Monster.prototype, monster));
 
   if (monster.compareSize('Medium') > 0 && monster.reach >= monster.space){
     return 'tall';

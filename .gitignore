@@ -10,7 +10,6 @@ data/work/*
 !data/work/bestiary4/
 
 data/work/*/*
-!data/work/*/ignore.json
 !data/work/*/edit/
 
 data/work/*/edit/*
@@ -18,6 +17,9 @@ data/work/*/edit/*
 
 data/built/
 
-build/test/testdata/create/output/
-build/test/testdata/ignore/output/
-build/test/testdata/update/output/database.json
+build/test/testdata/create/built/
+build/test/testdata/noedit/built/
+build/test/testdata/nosrd/built/
+build/test/testdata/update/repeat/built/
+build/test/testdata/update/overwrite/built/database.json
+build/test/testdata/update/remove/built/database.json

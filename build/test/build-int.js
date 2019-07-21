@@ -13,10 +13,8 @@ describe('Integration: Build', () => {
       expect(build.getSourceObjects('')).to.be.undefined;
     });
     
-    it('returns an empty array if the folder doesn\'t exist', () => {
-      let data = build.getSourceObjects('nofolder');
-      expect(data).to.be.an('array');
-      expect(data).to.be.empty;
+    it('throws an error if the folder doesn\'t exist', () => {
+      expect(() => build.getSourceObjects('nofolder')).to.throw();
     });
     
     it('throws an error if it cannot read the content of the folder', () => {
@@ -60,6 +58,14 @@ describe('Integration: Build', () => {
       }
       expect(errCaught).to.be.true;
     });
+
+    it('throws an error if the JSON data doesn\'t have the name property', function(){
+      expect(() => build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/wrongjson/noname'))).to.throw();
+    });
+
+    it('throws an error if the JSON data doesn\'t have the source property', function(){
+      expect(() => build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/wrongjson/nosource'))).to.throw();
+    });
     
     it('ignores files without a .json extension and directories', () => {
       let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/ignore'));
@@ -77,46 +83,42 @@ describe('Integration: Build', () => {
       expect(data[1].name).to.be.a('string');
       expect([data[0].name, data[1].name]).to.have.members(['Flesh Golem', 'Gelatinous Cube']);
     });
-
-    it('skips monster files that are present in the local ignore list', () => {
-      let localIgnoreList = ["Flesh Golem.json"];
-      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), [], localIgnoreList);
-      expect(data).to.be.an('array');
-      expect(data).to.have.lengthOf(1);
-      expect(data[0].name).to.be.a('string');
-      expect(data[0].name).to.equal('Gelatinous Cube');
-    });
-
-    it('skips monster files that match the general ignore list', () => {
-      let ignoreList = [{name: "Flesh Golem", source: "PFRPG Bestiary"}];
-      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), ignoreList);
-      expect(data).to.be.an('array').that.has.lengthOf(1);
-      expect(data[0].name).to.equal('Gelatinous Cube');
-    });
-
-    it('doesn\'t skip monster files when the match is partial', () => {
-      let ignoreList = [{name: "Flesh Golem", source: "PFRPG Bestiary 2"}];
-      let data = build.getSourceObjects(path.resolve('test/testdata/getSourceObjects/valid'), ignoreList);
-      expect(data).to.be.an('array').that.has.lengthOf(2);
-      expect(data[0].name).to.equal('Flesh Golem');
-      expect(data[1].name).to.equal('Gelatinous Cube');
-    });
   });
   
   describe('buildData', () => {
 
-    describe('Bad setup', () => {
-      
-      it('expects two non-empty string arguments', () => {
-        expect(build.buildData()).to.equal(1);
-        expect(build.buildData('')).to.equal(1);
-        expect(build.buildData('', '')).to.equal(1);
-        expect(build.buildData(path.resolve('test/testdata/update/input'), '')).to.equal(1);
-        expect(build.buildData('', path.resolve('test/testdata/update/output'))).to.equal(1);
+    describe('Invalid parameters', () => {
+      it('throws an error when called with no parameters', () => {
+        expect(() => build.buildData()).to.throw();
+      });
+
+      it('throws an error when called with one parameter', () => {
+        expect(() => build.buildData(path.resolve('test/testdata'))).to.throw();
+      });
+
+      it('throws an error when the parameters have wrong types', () => {
+        expect(() => build.buildData(path.resolve('test/testdata', {}))).to.throw();
+        expect(() => build.buildData([], {})).to.throw();
+        expect(() => build.buildData(13, ['bestiary1'])).to.throw();
+      });
+    });
+
+    
+    describe('Bad input data', () => {
+      it('throws an error when the data folder doesn\'t exist', () => {
+        expect(() => build.buildData(path.resolve('test/testdata/nope'), ['bestiary1'])).to.throw();
+      });
+
+      it('throws an error when an edit folder is missing', () => {
+        expect(() => build.buildData(path.resolve('test/testdata/noedit'), ['bestiary1'])).to.throw();
+      });
+
+      it('throws an error when a srd folder is missing', () => {
+        expect(() => build.buildData(path.resolve('test/testdata/nosrd'), ['bestiary1'])).to.throw();
       });
 
       it('throws an error when input files cannot be read', () => {
-        const file = path.resolve('test/testdata/permissions/input/srd/Worg.json');
+        const file = path.resolve('test/testdata/permissions/work/bestiary/srd/Worg.json');
         
         // set file permissions to write only
         // Note: this won't work on Windows - see Node.js documentation
@@ -124,7 +126,7 @@ describe('Integration: Build', () => {
 
         let errCaught = false;
         try {
-          build.buildData(path.resolve('test/testdata/permissions/input'), path.resolve('test/testdata/permissions/output'));
+          build.buildData(path.resolve('test/testdata/permissions'), ['bestiary']);
         } catch(err) {
           errCaught = true;
         }
@@ -136,14 +138,14 @@ describe('Integration: Build', () => {
       });
 
       it('throws an error when the output file cannot be produced', () => {
-        const file = path.resolve('test/testdata/permissions/output/database.json');
+        const file = path.resolve('test/testdata/permissions/built/database.json');
         
         // set file permissions to read only
         fs.chmodSync(file, 0o444);
 
         let errCaught = false;
         try {
-          build.buildData(path.resolve('test/testdata/permissions/input'), path.resolve('test/testdata/permissions/output'));
+          build.buildData(path.resolve('test/testdata/permissions'), ['bestiary']);
         } catch(err) {
           errCaught = true;
         }
@@ -157,22 +159,23 @@ describe('Integration: Build', () => {
       it('throws an error when an input file is not valid JSON', () => {
         let errCaught = false;
         try {
-          build.buildData(path.resolve('test/testdata/badjson/input'), path.resolve('test/testdata/badjson/output'));
+          build.buildData(path.resolve('test/testdata/badjson'), ['bestiary']);
         } catch(err) {
           errCaught = true;
         }
         expect(errCaught).to.be.true;
       });
-    })
+    });
+
 
     describe('Create output folder and database', () => {
       const testPath = 'test/testdata/create';
       let result;
       
       before(() => {
-        folder.deleteFolder(path.resolve(testPath, 'output'));
+        folder.deleteFolder(path.resolve(testPath, 'built'));
 
-        result = build.buildData(path.resolve(testPath, 'input'), path.resolve(testPath, 'output'));
+        result = build.buildData(path.resolve(testPath), ['bestiary1', 'bestiary2']);
       });
       
       it('returns 0 if successful', () => {
@@ -180,15 +183,15 @@ describe('Integration: Build', () => {
       });
 
       it('creates the output folder', () => {
-        expect(fs.existsSync(path.resolve(testPath, 'output'))).to.be.true;
+        expect(fs.existsSync(path.resolve(testPath, 'built'))).to.be.true;
       });
       
       it('creates the database.json file in the output folder' , () => {
-        expect(fs.existsSync(path.resolve(testPath, 'output/database.json'))).to.be.true;
+        expect(fs.existsSync(path.resolve(testPath, 'built/database.json'))).to.be.true;
       });
 
-      it('saves an array of monster objects coming from the given source folder in database.json', () => {
-        let dataStr = fs.readFileSync(path.resolve(testPath, 'output/database.json'), {encoding: 'utf8'});
+      it('saves an array of monster objects coming from the given source folders in database.json', () => {
+        let dataStr = fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'});
         expect(dataStr).to.be.a('string');
         let errCaught = false;
         let array;
@@ -202,77 +205,76 @@ describe('Integration: Build', () => {
         expect(array).to.have.lengthOf(2);
       });
 
-      it('creates new monsters by merging data from the srd and the edit folders', () => {
-        let data = JSON.parse(fs.readFileSync(path.resolve(testPath, 'output/database.json'), {encoding: 'utf8'}));
+      it('creates new monsters from the edit folders by merging data from the srd and the edit folders for each bestiary', () => {
+        let data = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
         expect(data).to.be.an('array');
         expect(data).to.have.lengthOf(2);
-        expect(data[0].name).to.equal('Flesh Golem');
-        expect(data[1].name).to.equal('Gelatinous Cube');
+        expect(data[0].name).to.equal('Gelatinous Cube');
         // gelatinous cube has properties from both srd and edit files
-        expect(data[1].type).to.equal('ooze');
-        expect(data[1].specialCMD).to.deep.equal([{ "name": "trip", "cantFail": true }]);
+        expect(data[0].type).to.equal('ooze');
+        expect(data[0].specialCMD).to.deep.equal([{ "name": "trip", "cantFail": true }]);
+        // giant bee doesn't have a srd file so comes fully from the edit file
+        expect(data[1].name).to.equal('Giant Bee');
+        // flesh golem doesn't have an edit file so is not included
       });
     });
 
-    describe('Update existing database', () => {
-      const testPath = 'test/testdata/update';
-      let result;
-      let data;
+    describe('Update overwrites the whole database', () => {
 
-      // hooks
-      before(() => {
-        fs.copyFileSync(path.resolve(testPath, 'output/database/database.json'), 
-          path.resolve(testPath, 'output/database.json'));
-        
-        result = build.buildData(path.resolve(testPath, 'input'), path.resolve(testPath, 'output'));
-        data = JSON.parse(fs.readFileSync(path.resolve(testPath, 'output/database.json'), {encoding: 'utf8'}));
-      });
-      
-      // tests
-      it('adds the new monsters to the existing database', () => {
-        expect(result).to.equal(0);
-        expect(data).to.be.an('array').that.has.lengthOf(4);
-        expect([ data[0].name, data[1].name, data[2].name, data[3].name ]).to.have.members(['Worg', 'Flesh Golem', 'Gelatinous Cube', 'Gelatinous Cube']);
-      });
-      
-      it('ignores srd files for monsters that are already in the database', () => {
-        expect(data[3].name).to.equal('Worg');
-        expect(data[3].size).to.equal('Medium'); // 'Large' in srd file
+      it('produces the same result with the same input', () => {
+        const testPath = 'test/testdata/update/repeat';
+
+        expect(build.buildData(path.resolve(testPath), ['bestiary'])).to.equal(0);
+        let data1 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data1).to.be.an('array');
+
+        expect(build.buildData(path.resolve(testPath), ['bestiary'])).to.equal(0);
+        let data2 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data2).to.be.an('array');
+
+        expect(data2).to.deep.equal(data1);
       });
 
-      it('adds monsters that have the same name as a database monster with a different source', () => {
-        expect(data[1].name).to.equal('Gelatinous Cube');
-        expect(data[1].source).to.equal('PFRPG Bestiary');
-        expect(data[1].size).to.equal('Large');
-        expect(data[2].name).to.equal('Gelatinous Cube');
-        expect(data[2].source).to.equal('PFRPG Bestiary 2');
-        expect(data[2].size).to.equal('Small');
+      it('doesn\'t keep previous monsters that are not in the input files', () => {
+        const testPath = 'test/testdata/update/remove';
+
+        fs.copyFileSync(path.resolve(testPath, 'built/database/database.json'), 
+          path.resolve(testPath, 'built/database.json'));
+
+        let data1 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data1).to.be.an('array');
+        expect(data1).to.have.lengthOf(1);
+        expect(data1[0].name).to.equal('Giant Bee');
+
+        expect(build.buildData(path.resolve(testPath), ['bestiary'])).to.equal(0);
+
+        let data2 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data2).to.be.an('array');
+        expect(data2).to.have.lengthOf(1);
+        expect(data2[0].name).to.equal('Gelatinous Cube');
       });
 
-    });
+      it('overwrites previous data', () => {
+        const testPath = 'test/testdata/update/overwrite';
 
-    describe('Ignore automatically generated monsters', () => {
-      const testPath = 'test/testdata/ignore';
-      let result;
-      let data;
-      
-      before(() => {
-        folder.deleteFolder(path.resolve(testPath, 'output'));
+        fs.copyFileSync(path.resolve(testPath, 'built/database/database.json'), 
+          path.resolve(testPath, 'built/database.json'));
 
-        result = build.buildData(path.resolve(testPath, 'input'), path.resolve(testPath, 'output'));
-        data = JSON.parse(fs.readFileSync(path.resolve(testPath, 'output/database.json'), {encoding: 'utf8'}));
-      });
-      
-      it('ignores monsters from the srd directory when they are listed in the ignore file', () => {
-        expect(result).to.equal(0);
-        expect(data).to.be.an('array').that.has.lengthOf(2);
-        expect(data[0].name).to.equal('Monster 1');
-        expect(data[1].name).to.equal('Monster 3');
-        expect(data[1].type).to.be.undefined;
-      });
-      
-      it('imports monsters from the edit directory even if they are listed in the ignore file', () => {
-        expect(data[1]).to.deep.equal({name: "Monster 3", CR: 3});
+        let data1 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data1).to.be.an('array');
+        expect(data1).to.have.lengthOf(1);
+        expect(data1[0].name).to.equal('Gelatinous Cube');
+        expect(data1[0].shape).to.equal('long');
+        expect(data1[0].CR).to.equal(3);
+
+        expect(build.buildData(path.resolve(testPath), ['bestiary'])).to.equal(0);
+
+        let data2 = JSON.parse(fs.readFileSync(path.resolve(testPath, 'built/database.json'), {encoding: 'utf8'}));
+        expect(data2).to.be.an('array');
+        expect(data2).to.have.lengthOf(1);
+        expect(data2[0].name).to.equal('Gelatinous Cube');
+        expect(data2[0].shape).to.equal('tall'); // from srd
+        expect(data2[0].CR).to.equal(4); // from edit
       });
     });
   });

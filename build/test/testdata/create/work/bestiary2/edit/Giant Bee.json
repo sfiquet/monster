@@ -1,0 +1,108 @@
+{
+  "name": "Giant Bee",
+  "source": "PFRPG Bestiary 2",
+  "alignment": "N",
+  "size": "Medium",
+  "environment": "temperate or warm plains",
+  "organization": "solitary, group (2-5), or nest (6-19)",
+  "treasure": "incidental",
+  "type": "vermin",
+  "CR": 1,
+  "space": 5,
+  "reach": 5,
+  "racialHD": 3,
+  "Str": 11,
+  "Dex": 14,
+  "Con": 13,
+  "Wis": 12,
+  "Cha": 9,
+  "speed": {
+    "land": 20,
+    "fly": {
+      "value": 60,
+      "maneuverability": "good"
+    }
+  },
+  "feats": [],
+  "melee": {
+    "sting": {
+      "name": "sting",
+      "nbAttacks": 1,
+      "nbDice": 1,
+      "dieType": 4,
+      "extraDamage": [
+        "poison"
+      ],
+      "type": "natural"
+    }
+  },
+  "skills": [],
+  "naturalArmor": 1,
+  "baseFort": 3,
+  "baseRef": 1,
+  "baseWill": 1,
+  "shape": "long",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "mind-affecting effects"
+    ]
+  },
+  "weaknesses": [
+    "vulnerable to smoke"
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "components": [
+        {
+          "name": "legs",
+          "type": "body",
+          "bonus": 8
+        }
+      ]
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Poison (Ex)",
+      "description": [
+        {"text": "Sting—injury; "},
+        {"text": "save", "titleLevel": 3},
+        {"text": " Fort DC "},
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {"text": "; "},
+        {"text": "frequency", "titleLevel": 3},
+        {"text": " 1/round for 4 rounds; "},
+        {"text": "effect", "titleLevel": 3},
+        {"text": " 1d2 Str; "},
+        {"text": "cure", "titleLevel": 3},
+        {"text": " 1 save."}
+      ]
+    },
+    {
+      "title": "Vulnerable to Smoke (Ex)",
+      "description": [
+        {
+          "text": "Smoke from particularly smoky fires or effects (such as that created by a "
+        },
+        {
+          "text": "pyrotechnics",
+          "isMagic": true
+        },
+        {
+          "text": " spell) causes a giant bee to become nauseated if it fails a DC 14 Fortitude save. This condition persists as long as the giant bee remains in the smoke, plus 1d4 rounds."
+        }
+      ]
+    }
+  ]  
+}

@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const assert = require('assert').strict;
 
-const outputFile = 'database.json';
+const WORK_DIR = 'work';
+const OUTPUT_DIR = 'built';
+const SRD_DIR = 'srd';
+const EDIT_DIR = 'edit';
+const OUTPUT_FILE = 'database.json';
 
 function createDir(dirPath){
   if (fs.existsSync(dirPath)) return;
@@ -14,13 +19,13 @@ function createDir(dirPath){
   }
 }
 
-function getSourceObjects(inputDir, generalIgnoreList, localIgnoreList) {
+function getSourceObjects(inputDir) {
   if (!inputDir)
     return;
 
   if (!fs.existsSync(inputDir)){
-    console.log(`Missing input directory: ${inputDir}`);
-    return [];
+    console.error(`Missing input directory: ${inputDir}`);
+    throw new Error(`Missing input directory: ${inputDir}`);
   }
 
   let files;
@@ -34,15 +39,7 @@ function getSourceObjects(inputDir, generalIgnoreList, localIgnoreList) {
   let monsters = [];
   for (const file of files) {
 
-    let include = false;
     if (path.extname(file) === '.json'){
-      include = true;
-      if (localIgnoreList && localIgnoreList.findIndex(item => item === file) >= 0){
-        include = false;
-      }
-    }
-
-    if (include) {
       let monsterStr;
       let monsterObj;
 
@@ -60,16 +57,17 @@ function getSourceObjects(inputDir, generalIgnoreList, localIgnoreList) {
         throw err;
       }
 
-      if (generalIgnoreList && generalIgnoreList.findIndex(item => {
-          return item.name === monsterObj.name && item.source === monsterObj.source;
-        }) >= 0){
-        
-        include = false;
+      // ensure this is really a monster object
+      if (!monsterObj.name){
+        console.error(`Missing name property in JSON file ${path.join(inputDir, file)}`);
+        throw new Error(`Missing name property in JSON file ${path.join(inputDir, file)}`);
       }
-      
-      if (include){
-        monsters.push(monsterObj);
+      if (!monsterObj.source){
+        console.error(`Missing source property in JSON file ${path.join(inputDir, file)}`);
+        throw new Error(`Missing source property in JSON file ${path.join(inputDir, file)}`);
       }
+
+      monsters.push(monsterObj);
     }
   }
 
@@ -106,18 +104,15 @@ function compareMonsters(a, b) {
 
 function mergeLists(srdMonsters, editMonsters) {
   if (!Array.isArray(srdMonsters) || !Array.isArray(editMonsters)) return;
-
-  let merged = srdMonsters.slice();
   
-  editMonsters.forEach(monster => {
-    let index = merged.findIndex(item => item.name === monster.name);
+  // Note: it is assumed that monsters have the same source
+  let merged = editMonsters.map(monster => {
+    let index = srdMonsters.findIndex(item => item.name === monster.name);
     
     if (index >= 0) {
-      merged[index] = merge(merged[index], monster);
-
-    } else {
-      merged.push(monster);
+      return merge(srdMonsters[index], monster);
     }
+    return monster;
   });
   
   merged.sort(compareMonsters);
@@ -125,74 +120,25 @@ function mergeLists(srdMonsters, editMonsters) {
   return merged;
 }
 
-function getIgnoreList(dirPath) {
-  let str;
-  let data;
-
-  try {
-    str = fs.readFileSync(path.join(dirPath, 'ignore.json'));
-  } catch(err){
-    if (err.code !== 'ENOENT'){
-      throw err;
-    }
-    return [];
-  }
-
-  try {
-    data = JSON.parse(str);
-  } catch(err){
-    console.error(`Error while parsing ${path.join(dirPath, 'ignore.json')}`);
-    throw err;
-  }
-
-  // check the format
-  if (!Array.isArray(data)) {
-    throw new Error('Wrong format in ignore file');
-  }
-
-  return data.map(item => {
-    if (typeof item !== 'string'){
-      throw new Error('Wrong format in ignore file');
-    }
-    return item.endsWith('.json') ? item : `${item}.json`;
-  });
+function buildBestiary(sourceDir){
+  let srdMonsters = getSourceObjects(path.join(sourceDir, SRD_DIR));
+  let editMonsters = getSourceObjects(path.join(sourceDir, EDIT_DIR));
+  return mergeLists(srdMonsters, editMonsters);
 }
 
-function buildData(sourceDir, outputDir) {
-  if (!sourceDir || !outputDir){
-    return 1;
-  }
+function buildData(baseDir, bestiaries) {
+  assert.ok(baseDir && typeof baseDir === 'string');
+  assert.ok(bestiaries && Array.isArray(bestiaries));
 
-  // read the contents of the current database
-  let allMonsters = [];
-  let dataStr;
-  try {
-    dataStr = fs.readFileSync(path.join(outputDir, outputFile), {encoding: 'utf8'});
-  } catch(err){
-    if (err.code !== 'ENOENT'){
-      throw err;
-    }
-  }
 
-  if (dataStr){
-    try {
-      allMonsters = JSON.parse(dataStr);
-    } catch(err) {
-      console.error(`Error while parsing JSON database: ${err} - ${path.join(outputDir, outputFile)}`);
-      throw err;
-    }
-  }
-
-  // build an ignore list from the content of the database - we don't want to import those again
-  let ignoreList = allMonsters.map(item => {
-    return {name: item.name, source: item.source};
-  });
+  const workDir = path.join(baseDir, WORK_DIR);
+  const outputDir = path.join(baseDir, OUTPUT_DIR);
 
   // get the data from the srd and edit subdirectories and merge them
-  let configIgnoreList = getIgnoreList(path.resolve(sourceDir));
-  let srdMonsters = getSourceObjects(path.join(sourceDir, 'srd'), ignoreList, configIgnoreList);
-  let editMonsters = getSourceObjects(path.join(sourceDir, 'edit'), ignoreList);
-  allMonsters = allMonsters.concat(mergeLists(srdMonsters, editMonsters));
+  let allMonsters = bestiaries.reduce((monsters, bestiary) => {
+    return monsters.concat(buildBestiary(path.join(workDir, bestiary)));
+  }, []);
+
   allMonsters.sort(compareMonsters);
 
   // create output dir if necessary
@@ -200,7 +146,7 @@ function buildData(sourceDir, outputDir) {
 
   // write to file
   try{
-    fs.writeFileSync(path.join(outputDir, outputFile), JSON.stringify(allMonsters, null, 2));
+    fs.writeFileSync(path.join(outputDir, OUTPUT_FILE), JSON.stringify(allMonsters, null, 2));
   } catch(err) {
     console.error(`Error while saving data: ${err}`);
     throw err;
@@ -211,11 +157,10 @@ function buildData(sourceDir, outputDir) {
 
 // only run the module if run directly
 if (require.main === module) {
-
-  let inputPath = process.argv.length > 2 ? process.argv[2] : '../data/work/bestiary1';
-  let outputPath = process.argv.length > 3 ? process.argv[3] : '../data/built';
-
-  return buildData(inputPath, outputPath);
+  const DATAPATH = '../data';
+  const BESTIARIES = ['bestiary1', 'bestiary2', 'bestiary3', 'bestiary4'];
+  
+  return buildData(DATAPATH, BESTIARIES);
 }
 
 exports.buildData = buildData;

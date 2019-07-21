@@ -35,11 +35,10 @@ describe('Database Build', () => {
       expect(build.mergeLists([], [])).to.be.an('array').that.is.empty;
     });
 
-    it('returns the content of the srd list if the edit list is empty', () => {
+    it('returns an empty list if the edit list is empty', () => {
       let srd = [{name: 'Tiger', type: 'animal'}];
       let merged = build.mergeLists(srd, []);
-      expect(merged).to.be.an('array').that.has.lengthOf(1);
-      expect(merged).to.deep.equal(srd);
+      expect(merged).to.be.an('array').that.has.lengthOf(0);
     });
 
     it('returns the content of the edit list if the srd list is empty', () => {
@@ -47,10 +46,9 @@ describe('Database Build', () => {
       let merged = build.mergeLists([], edit);
       expect(merged).to.be.an('array').that.has.lengthOf(1);
       expect(merged).to.deep.equal(edit);
-
     });
 
-    it('builds monsters from both the srd and the edit monster', () => {
+    it('builds monsters from both the srd and the edit monster, ignoring those without an edit file', () => {
       let srd = [
         {name: 'Gray Ooze', type: 'ooze'},
         {name: 'Tiger', type: 'Animal'}, 
@@ -61,7 +59,6 @@ describe('Database Build', () => {
       ];
       let expected = [
         {name: 'Flesh Golem', type: 'construct'},
-        {name: 'Gray Ooze', type: 'ooze'},
         {name: 'Tiger', type: 'animal'}, 
       ];
       let merged = build.mergeLists(srd, edit);
@@ -79,7 +76,6 @@ describe('Database Build', () => {
       ];
       let expected = [
         {name: 'Flesh Golem', type: 'construct'},
-        {name: 'Gray Ooze', type: 'ooze'},
         {name: 'Tiger', type: 'animal'}, 
       ];
       let merged = build.mergeLists(srd, edit);

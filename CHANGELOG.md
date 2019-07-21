@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Build: Create the whole database from files every time
 - Update libraries to latest version: Eslint, Marked and Xlsx
 
 ### Fixed

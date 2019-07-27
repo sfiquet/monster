@@ -1,7 +1,7 @@
 "use strict";
 
 const urlutil 	= require('./urlutil');
-const Database 	= require('./database');
+const database 	= require('./database');
 
 exports.get = getBrowsePage;
 
@@ -10,26 +10,14 @@ exports.get = getBrowsePage;
  * GET handler for the Advancement Search page
  */
 function getBrowsePage(req, res) {
-	var myDb;
-	
-	myDb = new Database();
-	
-	myDb.findMonsterList(req.params.search, function(err, list){
-		var linkList = [];
+	// build the list of links
+	let linkList = database
+		.findMonsterList(req.params.search)
+			.map(obj => ({ 
+				url: urlutil.buildAdvanceUrl(obj.name, req.params.options),
+				name: obj.name
+			}));
 		
-		if (err) {
-			console.log("Database Error: " + err);
-		} else {
-			// build the list of links
-			linkList = list.map(function(obj){
-				return { 
-					url: urlutil.buildAdvanceUrl(obj.id, req.params.options),
-					name: obj.name
-				};
-			});
-		}
-		
-		res.render('select-monster', { pageTitle: 'Select Monster', monsters: linkList });	
-	});
+	res.render('select-monster', { pageTitle: 'Select Monster', monsters: linkList });	
 }
 

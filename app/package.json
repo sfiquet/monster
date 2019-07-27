@@ -22,7 +22,10 @@
   },
   "scripts": {
     "start": "NODE_PATH=lib node app.js",
-    "test": "mocha --recursive --reporter spec",
+    "test": "npm run test:unit",
+    "test:unit": "mocha --recursive 'test/**/*-test.js'",
+    "test:int": "mocha --recursive 'test/**/*-int.js'",
+    "test:all": "npm run test:unit && npm run test:int",
     "lint": "eslint ."
   }
 }

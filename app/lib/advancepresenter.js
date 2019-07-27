@@ -1,6 +1,6 @@
 "use strict";
 
-const Database = require('./database');
+const database = require('./database');
 const format = require('./formatmonster');
 const formatOptions = require('./formatoptions');
 const formatError = require('./formaterror');
@@ -16,50 +16,37 @@ exports.getDefault = function getDefaultAdvancePage(req, res){
  * GET handler for Advancement page
  */
 exports.get = function getAdvancePage(req, res){
-	// helper function
-	function renderNoMonster(options, url){
-		res.render('advancement-form', { pageTitle: 'No Monster Selected', options: options, postTo: url });
-	}
-
 	const optDict = urlutil.extractAdvanceOptions(req.url);
 	const options = formatOptions.getOptions(optDict);
 		
-	// check whether a monster was given: no need to query the DB if not
-	if (req.params.monster === "no-monster") {
-		renderNoMonster(options, req.url);
-		return;
+	let baseMonster;
+	// only look for the monster if one was given in the first place
+	if (req.params.monster !== "no-monster") {
+		baseMonster = database.findMonster(req.params.monster);
 	}
-	
-	const myDB = new Database();
-	myDB.findMonster(req.params.monster, function(err, baseMonster){
-		if (err) {
-			// TO DO: probably needs better error handling than that
-			console.log('Database Error: ' + err);
+
+	// make sure we have a valid monster selection
+	if (!baseMonster) {
+		res.render('advancement-form', { pageTitle: 'No Monster Selected', options: options, postTo: req.url });
+
+	// format the data for the template
+	} else {
+		let name = baseMonster.name;
+		let title = name;
+		if (options) {
+			title += ' — ' + options;
 		}
-		
-		// make sure we have a valid monster selection
-		if (err || baseMonster === {}) {
-			renderNoMonster(options, req.url);
 
-		// format the data for the template
-		} else {
-			let name = baseMonster.name;
-			let title = name;
-			if (options) {
-				title += ' — ' + options;
-			}
-
-			const blueprint = bp.createBlueprint(optDict);
-			const {error, newMonster} = blueprint.reshape(baseMonster);
-			if (error){
-				res.render('advancement-form', { pageTitle: title, monster: name, options: options, error: formatError.format(error), postTo: req.url });
-				return;
-			}
-
-			const stats = format.getMonsterProfile(newMonster);
-			res.render('advancement-form', { pageTitle: title, monster: name, options: options, stats: stats, postTo: req.url });
+		const blueprint = bp.createBlueprint(optDict);
+		const {error, newMonster} = blueprint.reshape(baseMonster);
+		if (error){
+			res.render('advancement-form', { pageTitle: title, monster: name, options: options, error: formatError.format(error), postTo: req.url });
+			return;
 		}
-	});
+
+		const stats = format.getMonsterProfile(newMonster);
+		res.render('advancement-form', { pageTitle: title, monster: name, options: options, stats: stats, postTo: req.url });
+	}
 };
 
 /**

@@ -21,6 +21,7 @@ function Monster() {
 	var properties = arguments[0] || {};
 	
 	this.name = properties.name || 'Default';
+	this.source = properties.source || 'Unknown';
 	this.CR   =	properties.CR || 1;
 	this.alignment = properties.alignment || 'N';
 	this.size =	properties.size || 'Medium';

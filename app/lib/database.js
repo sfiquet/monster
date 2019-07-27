@@ -1,129 +1,55 @@
 'use strict';
 
-var Monster = require('./monster');
+const fs = require('fs');
+const assert = require('assert').strict;
+const Monster = require('./monster');
 
-module.exports = Database;
+// JSON database
+// implemented as a singleton
 
-/* 
-* This is a temporary mock of the database
-*/
+const BESTIARIES = ['PFRPG Bestiary', 'PFRPG Bestiary 2', 'PFRPG Bestiary 3', 'PFRPG Bestiary 4'];
+let monsterList;
 
-/**
- * Database constructor
- * The database connection itself must be created prior to starting the server
- */
-function Database(db){
-	if (!(this instanceof Database)) {
-		return new Database();
-	}
-	
-	this.db = db;
-	// temporary
-	this.monsterList = initMonsterList();
-}
+module.exports = {
+	initialise: (dbPath) => {
+		// those throw exceptions when the file can't be read or is not valid json
+		let json = fs.readFileSync(dbPath);
+		let data = JSON.parse(json);
+		
+		// check that this is an array of monsters
+		assert.ok(Array.isArray(data));
+		assert.ok(data.length != 0);
+		assert.ok(data[0].name !== undefined);
+		assert.ok(data[0].source !== undefined);
 
-/**
- * findMonster
- * returns a Monster object or an empty object if not found
- */
-Database.prototype.findMonster = function(id, callback) {
-	var monster, i, size;
-	if (!this.monsterList) {
-		return callback(new Error('Database not initialised'), {});
-	}
-	
-	size = this.monsterList.length;
-	for (i = 0; i < size; i++) {
-		if (this.monsterList[i].name === id) {
-			// found
-			monster = new Monster(this.monsterList[i]);
-			return callback(null, monster);
+		return monsterList = data;
+	},
+
+	findMonster: (name, source) => {
+		assert.ok(monsterList != undefined);
+		assert.ok(typeof name === 'string');
+		assert.ok(source === undefined || typeof source === 'string');
+
+		let monster = monsterList.find(item => item.name === name && (source ? item.source === source : BESTIARIES.includes(item.source)));
+		if (monster){
+			return new Monster(monster);
 		}
-	}
-	return callback(new Error('Monster not found: ' + id), {});
-};
-
-/**
- * findMonsterList
- * returns a list of monsters with names matching the searchString
- * (all monsters if no searchString is provided)
- * Each list item is an object with 2 properties: name and id
- */
-Database.prototype.findMonsterList = function(searchString, callback) {
-	if (!this.monsterList) {
-		return callback(new Error('Database not initialised'), {});
-	}
+	},
 	
-	const list = buildResultList(searchString, this.monsterList);
-	
-	return callback(null, list);
-};
+	findMonsterList: (searchString) => {
+		assert.ok(monsterList != undefined);
 
-/**************
-Temporary implementation
-**************/
-var initMonsterList = function(){
-	var fs = require('fs');
-	var json = fs.readFileSync(__dirname + '/database.json');
-	var list;
-	try {
-		list = JSON.parse(json);
-	} catch(e) {
-		console.log('Can\'t parse JSON file: ', e);
-		return;
-	}
-	return list;
-};
+		let selected = monsterList;
 
-// splits a string into word tokens
-var tokenize = function(myString){
-	return myString.match(/\w+/g);
-};
-
-// converts an array of strings to an array of regular expressions
-var toRegExp = function(strArray, flags){
-	var i = 0,
-	reArray = [],
-	len;
-	for (len = strArray.length; i < len; i += 1) {
-		reArray[i] = new RegExp(strArray[i], flags);
-	}
-	return reArray;
-};
-
-var buildResultList = function(searchString, monsterArray) {
-	var i = 0,
-		result = [],
-		tokens,
-		j,
-		maxMonsters,
-		maxTokens,
-		match;
-	
-	// no query: return everything
-	if (!searchString) {
-		for (maxMonsters = monsterArray.length; i < maxMonsters; i += 1) {
-			result.push({ name: monsterArray[i].name, id: monsterArray[i].name });
+		if (searchString) {
+			// transform the search string into an array of regular expressions
+			let tokens = searchString.match(/\w+/g).map(word => new RegExp(word, 'i'));
+			
+			// only keep the monsters whose name match all the tokens
+			// note: this won't work great if the tokens overlap in the string
+			selected = monsterList.filter(monster => tokens.every(tok => monster.name.search(tok) >= 0));
 		}
-		return result;
-	}
-	
-	// tokenize
-	tokens = toRegExp(tokenize(searchString), 'i');
-	maxTokens = tokens.length;
-	
-	// note: this won't work great if the tokens overlap in the string
-	for (maxMonsters = monsterArray.length; i < maxMonsters; i += 1) {
-		match = true;
-		for (j = 0; j < maxTokens; j += 1) {
-			if (monsterArray[i].name.search(tokens[j]) < 0) {
-				match = false;
-				break;
-			}
-		}
-		if (match) {
-			result.push({ name: monsterArray[i].name, id: monsterArray[i].name });
-		}
-	}
-	return result;
+		
+		return selected.map(monster => ({ name: monster.name, source: monster.source }));
+	},
 };

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Camel",
+    "alignment": "N",
+    "size": "Large",
+    "environment": "warm deserts",
+    "organization": "solitary",
+    "treasure": "none",
+    "type": "animal",
+    "CR": 1,
+    "space": 5,
+    "reach": 5,
+    "racialHD": 2,
+    "Str": 18,
+    "Dex": 16,
+    "Con": 14,
+    "Wis": 11,
+    "Int": 2,
+    "Cha": 4,
+    "speed": {
+      "land": 50
+    },
+    "feats": [
+      {
+        "name": "Endurance"
+      }
+    ],
+    "melee": {
+      "bite": {
+        "name": "bite",
+        "nbAttacks": 1,
+        "nbDice": 1,
+        "dieType": 4,
+        "type": "natural"
+      }
+    },

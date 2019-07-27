@@ -1,0 +1,143 @@
+{
+  "name": "Assassin Vine",
+  "source": "PFRPG Bestiary",
+  "alignment": "N",
+  "size": "Large",
+  "environment": "temperate forests",
+  "organization": "solitary, pair, or patch (3-6)",
+  "treasure": "incidental",
+  "type": "plant",
+  "CR": 3,
+  "space": 10,
+  "reach": 10,
+  "racialHD": 4,
+  "Str": 20,
+  "Dex": 10,
+  "Con": 16,
+  "Wis": 13,
+  "Cha": 9,
+  "speed": {
+    "land": 5
+  },
+  "feats": [],
+  "melee": {
+    "slam": {
+      "name": "slam",
+      "nbAttacks": 1,
+      "nbDice": 1,
+      "dieType": 8,
+      "extraDamage": [
+        "grab"
+      ],
+      "type": "natural"
+    }
+  },
+  "SQ": [
+    [
+      {
+        "text": "camouflage"
+      }
+    ]
+  ],
+  "skills": [],
+  "naturalArmor": 6,
+  "baseFort": 4,
+  "baseRef": 1,
+  "baseWill": 1,
+  "shape": "tall",
+  "senses": [
+    {
+      "name": "blindsight",
+      "value": 30,
+      "unit": "ft."
+    },
+    {
+      "name": "low-light vision"
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "electricity",
+      "plant traits"
+    ],
+    "resist": [
+      {
+        "name": "cold",
+        "value": 10
+      },
+      {
+        "name": "fire",
+        "value": 10
+      }
+    ]
+  },
+  "specialAtk": [
+    {
+      "name": "constrict",
+      "url": "http://legacy.aonprd.com/bestiary/universalMonsterRules.html#constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 8,
+          "strengthFactor": 1.5
+        }
+      ]
+    },
+    {
+      "name": "entangle"
+    }
+  ],
+  "specialCMB": [
+    {
+      "name": "grapple",
+      "components": [
+        {
+          "name": "grab",
+          "type": "melee",
+          "bonus": 4
+        }
+      ]
+    }
+  ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "specialAbilities": [
+    {
+      "title": "Camouflage (Ex)",
+      "description": [
+        {
+          "text": "Since an assassin vine looks like a normal plant when at rest, a DC 20 Perception check is required to notice it before it attacks for the first time. Anyone with ranks in Survival or Knowledge (nature) can use either of those skills instead of Perception to notice the plant."
+        }
+      ]
+    },
+    {
+      "title": "Entangle (Su)",
+      "description": [
+        {
+          "text": "An assassin vine can, as a free action, cause plants within 30 feet of it to animate and grasp at foes. This ability is otherwise similar to "
+        },
+        {
+          "text": "entangle",
+          "url": "http://legacy.aonprd.com/coreRulebook/spells/entangle.html#entangle",
+          "isMagic": true
+        },
+        {
+          "text": " (CL 4th, DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Wis"
+        },
+        {
+          "text": "). The save DC is Wisdom-based."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,754 @@
+[
+{
+  "name": "Black Pudding",
+  "source": "PFRPG Bestiary",
+  "CR": 7,
+  "alignment": "N",
+  "size": "Huge",
+  "type": "ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "split",
+      "ooze traits"
+    ]
+  },
+  "racialHD": 10,
+  "naturalArmor": 0,
+  "speed": {
+    "land": 20, 
+    "climb": 20
+  },
+  "space": 15,
+  "reach": 10,
+  "shape": "long",
+  "Str": 16,
+  "Dex": 1,
+  "Con": 22,
+  "Wis": 1,
+  "Cha": 1,
+  "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+  "specialCMD": [
+    {
+      "name": "bull rush",
+      "components": [
+        {
+          "name": "Suction",
+          "type": "special ability",
+          "bonus": 10
+        }
+      ]
+    },
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "SQ": [
+      [{"text": "ooze traits", "url": "http://paizo.com/pathfinderRPG/prd/monsters/creatureTypes.html#ooze"}], 
+      [{"text": "suction"}]
+    ],
+  "baseFort": 3,
+  "baseRef": 3,
+  "baseWill": 3,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 2, 
+      "dieType": 6,
+      "extraDamage": ["2d6 acid", "grab"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "constrict", 
+      "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 2,
+          "dieType": 6,
+          "strengthFactor": 1.5
+        },
+        {
+          "text": " plus 2d6 acid"
+        }
+      ]
+    }, 
+    {
+      "name": "corrosion"
+    }
+  ],
+  "environment": "any underground",
+  "organization": "solitary",
+  "treasure": "none",
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "A black pudding secretes a digestive acid that dissolves organic material and metal quickly, but does not affect stone. Each time a creature suffers damage from a black pudding's acid, its clothing and armor take the same amount of damage from the acid. A DC"
+        }, 
+        {
+          "calc": "DC", 
+          "baseStat": "Con"
+        }, 
+        {
+          "text": "Reflex save prevents damage to clothing and armor. A metal or wooden weapon that strikes a black pudding takes 2d6 acid damage unless the weapon's wielder succeeds on a DC"
+        },
+        {
+          "calc": "DC", 
+          "baseStat": "Con"
+        }, 
+        {
+          "text": "Reflex save. If a black pudding remains in contact with a wooden or metal object for 1 full round, it inflicts 21 points of acid damage (no save) to the object. The save DCs are Constitution-based."
+        }
+      ]
+    },
+    {
+      "title": "Corrosion (Ex)",
+      "description": [
+        {
+          "text": "An opponent that is being constricted by a black pudding suffers a –4 penalty on Reflex saves made to resist acid damage applying to clothing and armor."
+        }
+      ]
+    },
+    {
+      "title": "Split (Ex)",
+      "description": [
+        {
+          "text": "Slashing and piercing weapons deal no damage to a black pudding. Instead, the creature splits into two identical puddings, each with half of the original's current hit points (round down). A pudding with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+        }
+      ]
+    },
+    {
+      "title": "Suction (Ex)",
+      "description": [
+        {
+          "text": "The black pudding can create powerful suction against any surface as it climbs, allowing it to cling to inverted surfaces with ease. A black pudding can establish or release suction as a swift action, and as long as it is using suction, it moves at half speed. Because of the suction, a black pudding's CMD score gets a +10 circumstance bonus to resist bull rush, awesome blows, and other attacks and effects that attempt to physically move it from its location."
+        }
+      ]
+    }
+  ]
+},
+{
+  "name": "Gelatinous Cube",
+  "source": "PFRPG Bestiary",
+  "CR": 3,
+  "alignment": "N",
+  "size": "Large",
+  "type": "ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "electricity",
+      "ooze traits"
+    ]
+  },
+  "racialHD": 4,
+  "naturalArmor": 0,
+  "speed": {
+    "land": 15
+  },
+  "space": 10,
+  "reach": 5,
+  "shape": "long",
+  "Str": 10,
+  "Dex": 1,
+  "Con": 26,
+  "Wis": 1,
+  "Cha": 1,
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "SQ": [
+      [{"text": "transparent"}]
+    ],
+  "baseFort": 1,
+  "baseRef": 1,
+  "baseWill": 1,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 1, 
+      "dieType": 6,
+      "extraDamage": ["1d6 acid"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "engulf"
+    }, 
+    {
+      "name": "paralysis"
+    }
+  ],
+  "environment": "any underground",
+  "organization": "solitary",
+  "treasure": "incidental",
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "A gelatinous cube's acid does not harm metal or stone."
+        }
+      ]
+    },
+    {
+      "title": "Engulf (Ex)",
+      "description": [
+        {
+          "text": "Although it moves slowly, a gelatinous cube can simply engulf Large or smaller creatures in its path as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make attacks of opportunity against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity can attempt a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        },
+        {
+          "text": "Reflex save to avoid being engulfed—on a success, they are pushed back or aside (opponent's choice) as the cube moves forward. Engulfed creatures are subject to the cube's paralysis and acid, gain the pinned condition, are in danger of suffocating, and are trapped within its body until they are no longer pinned. The save DC is Strength-based."
+        }
+      ]
+    },
+    {
+      "title": "Paralysis (Ex)",
+      "description": [
+        {
+          "text": "A gelatinous cube secretes an anesthetizing slime. A target hit by a cube's melee or engulf attack must succeed on a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": "Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based."
+        }
+      ]
+    },
+    {
+      "title": "Transparent (Ex)",
+      "description": [
+        {
+          "text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
+        }
+      ]
+    }
+  ]
+},
+{
+  "name": "Gelatinous Cube",
+  "source": "Third Party",
+  "CR": 2,
+  "alignment": "N",
+  "size": "Medium",
+  "type": "ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "immune": [
+      "electricity",
+      "ooze traits"
+    ]
+  },
+  "racialHD": 4,
+  "naturalArmor": 0,
+  "speed": {
+    "land": 15
+  },
+  "space": 10,
+  "reach": 5,
+  "shape": "long",
+  "Str": 10,
+  "Dex": 1,
+  "Con": 26,
+  "Wis": 1,
+  "Cha": 1,
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "SQ": [
+      [{"text": "transparent"}]
+    ],
+  "baseFort": 1,
+  "baseRef": 1,
+  "baseWill": 1,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 1, 
+      "dieType": 6,
+      "extraDamage": ["1d6 acid"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "engulf"
+    }, 
+    {
+      "name": "paralysis"
+    }
+  ],
+  "environment": "any underground",
+  "organization": "solitary",
+  "treasure": "incidental",
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "A gelatinous cube's acid does not harm metal or stone."
+        }
+      ]
+    },
+    {
+      "title": "Engulf (Ex)",
+      "description": [
+        {
+          "text": "Although it moves slowly, a gelatinous cube can simply engulf Large or smaller creatures in its path as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make attacks of opportunity against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity can attempt a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Str"
+        },
+        {
+          "text": "Reflex save to avoid being engulfed—on a success, they are pushed back or aside (opponent's choice) as the cube moves forward. Engulfed creatures are subject to the cube's paralysis and acid, gain the pinned condition, are in danger of suffocating, and are trapped within its body until they are no longer pinned. The save DC is Strength-based."
+        }
+      ]
+    },
+    {
+      "title": "Paralysis (Ex)",
+      "description": [
+        {
+          "text": "A gelatinous cube secretes an anesthetizing slime. A target hit by a cube's melee or engulf attack must succeed on a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": "Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based."
+        }
+      ]
+    },
+    {
+      "title": "Transparent (Ex)",
+      "description": [
+        {
+          "text": "Due to its lack of coloration, a gelatinous cube is difficult to discern. A DC 15 Perception check is required to notice a motionless gelatinous cube. Any creature that fails to notice a gelatinous cube and walks into it is automatically engulfed."
+        }
+      ]
+    }
+  ]
+},
+{
+  "name": "Gray Ooze",
+  "source": "PFRPG Bestiary",
+  "CR": 4,
+  "alignment": "N",
+  "size": "Medium",
+  "type": "ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "ooze traits"
+    ],
+    "immune": [
+      "cold",
+      "fire"
+    ]
+  },
+  "racialHD": 4,
+  "naturalArmor": 0,
+  "speed": {
+    "land": 10
+  },
+  "shape": "long",
+  "Str": 16,
+  "Dex": 1,
+  "Con": 26,
+  "Wis": 1,
+  "Cha": 1,
+  "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "SQ": [
+      [{"text": "transparent"}]
+    ],
+  "baseFort": 1,
+  "baseRef": 1,
+  "baseWill": 1,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 1, 
+      "dieType": 6,
+      "extraDamage": ["1d6 acid", "grab"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "acid"
+    }, 
+    {
+      "name": "constrict",
+      "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 1,
+          "dieType": 6,
+          "strengthFactor": 0.5
+        },
+        {
+          "text": " plus 1d6 acid"
+        }
+      ]
+    }
+  ],
+  "environment": "cold marshes and underground",
+  "organization": "solitary",
+  "treasure": "none",
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "The digestive acid that covers a gray ooze dissolves metals and organic material, but not stone. Each slam and constrict attack deals 1d6 additional acid damage. Armor or clothing worn by a creature grappled by a gray ooze takes the same amount of acid damage unless the wearer succeeds on a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": "Reflex saving throw. A wooden or metal weapon that strikes a gray ooze takes 1d6 acid damage unless the weapon's wielder succeeds on a DC"
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Con"
+        },
+        {
+          "text": "Reflex save. The ooze's touch deals 12 points of acid damage per round to wooden or metal objects, but the ooze must remain in contact with the material for 1 full round in order to deal this damage. The save DCs are Constitution-based."
+        }
+      ]
+    },
+    {
+      "title": "Transparent (Ex)",
+      "description": [
+        {
+          "text": "Due to its lack of vivid coloration, a gray ooze is difficult to discern from its surroundings in most environments. A DC 15 Perception check is required to notice the gray ooze. Any creature that fails to notice a gray ooze and walks into it automatically suffers damage as if struck by the ooze's slam attack and is immediately subject to a grab attempt by the ooze."
+        }
+      ]
+    }
+  ]
+},
+{
+  "name": "Ochre Jelly",
+  "source": "PFRPG Bestiary",
+  "CR": 5,
+  "alignment": "N",
+  "size": "Large",
+  "type": "ooze",
+  "senses": [
+    {
+      "name": "blindsight", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "split"
+    ],
+    "immune": [
+      "electricity",
+      "mind-affecting effects",
+      "ooze traits",
+      "slashing and piercing damage"
+    ]
+  },
+  "racialHD": 6,
+  "naturalArmor": 0,
+  "speed": {
+    "land": 10, 
+    "climb": 10
+  },
+  "space": 10,
+  "reach": 5,
+  "shape": "long",
+  "Str": 14,
+  "Dex": 1,
+  "Con": 22,
+  "Wis": 1,
+  "Cha": 1,
+  "specialCMB": [
+      {
+        "name": "grapple",
+        "components": [
+          {
+            "name": "grab",
+            "type": "melee",
+            "bonus": 4
+          }
+        ]
+      }
+    ],
+  "specialCMD": [
+    {
+      "name": "trip",
+      "cantFail": true
+    }
+  ],
+  "baseFort": 2,
+  "baseRef": 2,
+  "baseWill": 2,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 2, 
+      "dieType": 4,
+      "extraDamage": ["1d4 acid", "grab"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "constrict",
+      "url": "http://paizo.com/pathfinderRPG/prd/monsters/universalMonsterRules.html#constrict",
+      "details": [
+        {
+          "calc": "damage",
+          "type": "weapon",
+          "nbDice": 2,
+          "dieType": 4,
+          "strengthFactor": 1.5
+        },
+        {
+          "text": " plus 1d4 acid"
+        }
+      ]
+    }
+  ],
+  "environment": "temperate underground or marshes",
+  "organization": "solitary",
+  "treasure": "none",
+  "specialAbilities": [
+    {
+      "title": "Acid (Ex)",
+      "description": [
+        {
+          "text": "An ochre jelly secretes a digestive acid that dissolves only flesh (not bone) when it strikes a foe—creatures not made of flesh (including most constructs and oozes, skeletal undead, plants, and incorporeal creatures) are immune to the ochre jelly's acid damage."
+        }
+      ]
+    },
+    {
+      "title": "Split (Ex)",
+      "description": [
+        {
+          "text": "Slashing weapons, piercing weapons, and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original creature's current hit point total, rounded down. A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 hit points."
+        }
+      ]
+    }
+  ]
+},
+{
+  "name": "Wight",
+  "source": "PFRPG Bestiary",
+  "CR": 3,
+  "alignment": "LE",
+  "size": "Medium",
+  "type": "undead",
+  "senses": [
+    {
+      "name": "darkvision", 
+      "value": 60,
+      "unit": "ft."
+    }
+  ],
+  "optDefense": {
+    "abilities": [
+      "undead traits"
+    ]
+  },
+  "weaknesses": [
+    "resurrection vulnerability"
+  ],
+  "racialHD": 4,
+  "naturalArmor": 4,
+  "speed": {
+    "land": 30
+  },
+  "space": 5,
+  "reach": 5,
+  "shape": "tall",
+  "Str": 12,
+  "Dex": 12,
+  "Int": 11,
+  "Wis": 13,
+  "Cha": 15,
+  "languages": "Common",
+  "SQ": [
+      [{"text": "create spawn"}]
+    ],
+  "baseFort": 1,
+  "baseRef": 1,
+  "baseWill": 4,
+  "melee": {
+    "slam": { 
+      "name": "slam", 
+      "type": "natural", 
+      "nbAttacks": 1, 
+      "nbDice": 1, 
+      "dieType": 4,
+      "extraDamage": ["energy drain"]
+    }
+  },
+  "specialAtk": [
+    {
+      "name": "create spawn"
+    },
+    {
+      "name": "energy drain",
+      "url": "http://paizo.com/pathfinderRPG/prd/bestiary/universalMonsterRules.html#energy-drain",
+      "details": [
+        {
+          "text": "1 level, DC "
+        },
+        {
+          "calc": "DC",
+          "baseStat": "Cha"
+        }
+      ]
+    }
+  ],
+  "feats": [
+    {
+      "name": "Blind-Fight",
+      "url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#blind-fight"
+    },
+    {
+      "name": "Skill Focus",
+      "url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/feats.html#skill-focus",
+      "details": [
+        {
+          "name": "Perception",
+          "url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/skills/perception.html#perception"
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Intimidate",
+      "ranks": 4
+    },
+    {
+      "name": "Knowledge (religion)",
+      "ranks": 4
+    },
+    {
+      "name": "Perception",
+      "ranks": 4
+    },
+    {
+      "name": "Stealth",
+      "ranks": 4, 
+      "racial": 8
+    }
+  ],
+  "environment": "any",
+  "organization": "solitary, pair, gang (3–6), or pack (7–12)",
+  "treasure": "standard",
+  "specialAbilities": [
+    {
+      "title": "Create Spawn (Su)",
+      "description": [
+        {
+          "text": "Any humanoid creature that is slain by a wight becomes a wight itself in only 1d4 rounds. Spawn so created are less powerful than typical wights, and suffer a –2 penalty on all d20 rolls and checks, as well as –2 hp per HD. Spawn are under the command of the wight that created them and remain enslaved until its death, at which point they lose their spawn penalties and become full-fledged and free-willed wights. They do not possess any of the abilities they had in life."
+        }
+      ]
+    },
+    {
+      "title": "Resurrection Vulnerability (Su)",
+      "description": [
+        {
+          "text": "A "
+        },
+        {
+          "text": "raise dead",
+          "url": "http://paizo.com/pathfinderRPG/prd/coreRulebook/spells/raiseDead.html#raise-dead",
+          "isMagic": true
+        },
+        {
+          "text": " or similar spell cast on a wight destroys it (Will negates). Using the spell in this way does not require a material component."
+        }
+      ]
+    }
+  ]
+}
+]

@@ -3,18 +3,19 @@
 
 "use strict";
 
-var express				= require('express'), // create express app
-	exphbs				= require('express-handlebars'),
-	bodyParser			= require('body-parser'),
-	path          = require('path'),
-	fs            = require('fs'),
-	marked            = require('marked'),
-	helpers				= require('./lib/helpers'),
-	advancePresenter	= require('./lib/advancepresenter'),
-	optionsPresenter	= require('./lib/optionspresenter'),
-	browsePresenter		= require('./lib/browsepresenter');
+const express = require('express'); // create express app
+const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
+const marked = require('marked');
+const database = require('./lib/database');
+const helpers = require('./lib/helpers');
+const advancePresenter = require('./lib/advancepresenter');
+const optionsPresenter = require('./lib/optionspresenter');
+const browsePresenter = require('./lib/browsepresenter');
 
-var app = express();
+const app = express();
 
 // set up handlebars as template engine
 app.engine('handlebars', exphbs({defaultLayout: 'main', helpers: helpers}));
@@ -115,7 +116,10 @@ function getAboutPage(req, res){
  * start the server
  */
 function start(){
-	var port = process.env.PORT || 8080;
+  // set up the database before doing anything
+  database.initialise(path.join(__dirname, 'database', 'database.json'));
+
+	const port = process.env.PORT || 8080;
 	app.listen(port, function(){
 		console.log('Listening on port %d', port);
 	});

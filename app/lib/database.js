@@ -43,7 +43,14 @@ module.exports = {
 
 		if (searchString) {
 			// transform the search string into an array of regular expressions
-			let tokens = searchString.match(/\w+/g).map(word => new RegExp(word, 'i'));
+			let tokens = searchString.split(/[^A-Za-z-]+/g)
+				.filter(item => item.length > 0)
+				.map(word => new RegExp(word, 'i'));
+			
+			// invalid search string: no match
+			if (tokens.length === 0){
+				return [];
+			}
 			
 			// only keep the monsters whose name match all the tokens
 			// note: this won't work great if the tokens overlap in the string

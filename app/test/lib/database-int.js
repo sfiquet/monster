@@ -68,6 +68,37 @@ describe('Database', function(){
 
 		it('returns an empty array when there is no match', function(){
 			expect(database.findMonsterList('wieurhisfdh')).to.be.an('array').that.is.empty;
+			expect(database.findMonsterList('-')).to.be.an('array').that.is.empty;
+		});
+
+		it('splits the search string on whitespaces and looks for each word separately', function(){
+			let list = database.findMonsterList('gel cub');
+			expect(list).to.be.an('array').with.lengthOf(1);
+			expect(list).to.deep.equal([{name: 'Gelatinous Cube', source: 'PFRPG Bestiary'}]);
+			
+			let list2 = database.findMonsterList('cub gel');
+			expect(list2).to.deep.equal(list);
+		});
+
+		it('accepts hyphens and alphabetical characters in the search string', function(){
+			database.initialise(path.join(__dirname, '../testdata/database3/database.json'));
+			
+			let list = database.findMonsterList('-');
+			expect(list).to.deep.equal([{name: 'Jack-o-Lantern', source: 'PFRPG Bestiary'}]);
+			
+			let list1 = database.findMonsterList('Jack-');
+			expect(list1).to.deep.equal([{name: 'Jack-o-Lantern', source: 'PFRPG Bestiary'}]);
+
+			let list2 = database.findMonsterList('-o');
+			expect(list2).to.deep.equal([{name: 'Jack-o-Lantern', source: 'PFRPG Bestiary'}]);
+		});
+
+		it('doesn\'t match other characters', function(){
+			// there is no need to match them as they are not present in monster names
+			// and they cannot be converted into regex without additional processing
+			expect(database.findMonsterList('(')).to.be.an('array').that.is.empty;
+			expect(database.findMonsterList('&')).to.be.an('array').that.is.empty;
+			expect(database.findMonsterList('^')).to.be.an('array').that.is.empty;
 		});
 	});
 

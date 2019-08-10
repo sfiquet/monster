@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - App: Rewrite database module
 - Build: Create the whole database from files every time
 - Update libraries to latest version: Eslint, Marked and Xlsx
+- App: add validation to search string input
 
 ### Fixed
+- Bug that caused an internal server error for non-alphabetical characters in search string
 
 ### Security
 - Fix lodash vulnerability (only affected dev tools)
